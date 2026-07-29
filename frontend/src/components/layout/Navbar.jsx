@@ -8,18 +8,24 @@ import {
   Database,
   Activity,
   Menu,
+  ChevronDown,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
 
 import { useTheme } from "../../context/ThemeContext";
 import { ChatHistoryContext } from "../../context/ChatHistoryContext";
 import { ToastContext } from "../../context/ToastContext";
+import { AuthContext } from "../../context/AuthContext";
 import api from "../../services/api";
 
 export default function Navbar({ onClearAllDocuments, filesCount, setSidebarOpen }) {
   const { theme, toggleTheme } = useTheme();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { clearHistory } = useContext(ChatHistoryContext);
   const { showToast } = useContext(ToastContext);
+  const { user, logout, setIsAuthModalOpen } = useContext(AuthContext);
 
   const checkHealth = async () => {
     setSettingsOpen(false);
@@ -62,25 +68,24 @@ export default function Navbar({ onClearAllDocuments, filesCount, setSidebarOpen
         </button>
 
         {/* Logo Icon Container */}
-        <div className="w-9 h-9 rounded-xl bg-black dark:bg-white flex items-center justify-center shadow-sm">
-          <FileText className="text-white dark:text-black" size={20} strokeWidth={2.2} />
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 border border-indigo-400/30">
+          <FileText className="text-white" size={20} strokeWidth={2.2} />
         </div>
-
 
         {/* Title & Tagline */}
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-lg font-bold text-foreground tracking-tight">
-              IntelliDocs AI
+            <h1 className="text-lg font-extrabold text-foreground tracking-tight">
+              IntelliDocs <span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 bg-clip-text text-transparent font-black">AI</span>
             </h1>
 
-            <span className="text-[11px] font-semibold bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md border border-border">
-              Beta
+            <span className="text-[10px] font-bold bg-indigo-600 text-indigo-100 px-2 py-0.5 rounded-md border border-indigo-500/50">
+              PRO
             </span>
           </div>
 
-          <p className="text-xs text-muted-foreground font-normal leading-none mt-0.5">
-            AI-powered Document Intelligence
+          <p className="text-xs text-muted-foreground font-medium leading-none mt-0.5">
+            Document Intelligence Platform
           </p>
         </div>
 
@@ -133,7 +138,7 @@ export default function Navbar({ onClearAllDocuments, filesCount, setSidebarOpen
                 onClick={() => setSettingsOpen(false)}
               ></div>
               
-              <div className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-lg z-50 p-1 flex flex-col gap-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-xl z-50 p-1.5 flex flex-col gap-1 overflow-hidden animate-pop-in">
                 
                 <div className="px-3 py-2 border-b border-border mb-1">
                   <h3 className="text-sm font-semibold text-foreground">Workspace Settings</h3>
@@ -171,6 +176,73 @@ export default function Navbar({ onClearAllDocuments, filesCount, setSidebarOpen
             </>
           )}
         </div>
+
+        {/* User Profile Pill (Beside Settings) */}
+        {user ? (
+          <div className="relative">
+            <button
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary transition-all duration-200 cursor-pointer shadow-sm"
+              title="User Account"
+            >
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-7 h-7 rounded-lg object-cover border border-border shrink-0"
+                />
+              ) : (
+                <div className="w-7 h-7 rounded-lg bg-primary text-primary-foreground font-bold text-xs flex items-center justify-center shrink-0">
+                  {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </div>
+              )}
+              <span className="text-xs font-bold text-foreground max-w-[100px] truncate hidden sm:inline">
+                {user.name}
+              </span>
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </button>
+
+            {userMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                <div className="absolute right-0 mt-2 w-64 bg-card border border-border rounded-2xl shadow-2xl z-50 p-2 overflow-hidden animate-pop-in">
+                  <div className="p-3 border-b border-border mb-1 flex items-center gap-3">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-xl object-cover border border-border" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground font-bold text-base flex items-center justify-center">
+                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-sm text-foreground truncate">{user.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        {user.provider === "google" ? "Google / Gmail Verified" : "Email Verified"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => { setUserMenuOpen(false); logout(); if (showToast) showToast("Logged out successfully.", "info"); }}
+                    className="w-full text-left px-3 py-2.5 hover:bg-rose-500/10 hover:text-rose-500 rounded-xl flex items-center gap-2.5 text-xs font-bold text-muted-foreground transition-colors cursor-pointer"
+                  >
+                    <LogOut size={15} />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          >
+            <UserIcon size={14} />
+            <span>Sign In</span>
+          </button>
+        )}
 
       </div>
 

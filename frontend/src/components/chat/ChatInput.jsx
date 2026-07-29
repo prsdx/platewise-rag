@@ -23,16 +23,20 @@ export default function ChatInput({
     <div className="flex flex-col gap-2">
       {/* Document Selector (if multiple files exist) */}
       {files.length > 0 && (
-        <div className="flex items-center gap-2 self-start">
-          <File size={16} className="text-muted-foreground" />
+        <div className="flex items-center gap-2 self-start mb-1">
+          <File size={14} className="text-indigo-500" />
           <select
             value={selectedDocument}
             onChange={(e) => setSelectedDocument(e.target.value)}
-            className="text-sm bg-transparent border border-border rounded-md px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white max-w-xs"
+            className="text-xs font-semibold bg-card border border-border rounded-lg px-3 py-1.5 text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs shadow-sm cursor-pointer"
           >
-            <option value="">All Documents</option>
+            <option value="" className="bg-background text-foreground font-medium py-1">
+              All Documents ({files.length})
+            </option>
             {files.map((f, i) => (
-              <option key={i} value={f.name}>{f.name}</option>
+              <option key={i} value={f.name} className="bg-background text-foreground font-medium py-1">
+                {f.name}
+              </option>
             ))}
           </select>
         </div>

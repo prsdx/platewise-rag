@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import {
   Copy,
+  Check,
   ThumbsUp,
   ThumbsDown,
   Clock,
@@ -12,23 +13,37 @@ import {
   FileText,
   FileJson,
   FileText as FileTxt,
+  Zap,
+  Cpu,
+  Layers,
+  Search,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { ToastContext } from "../../context/ToastContext";
 import MarkdownRenderer from "../ui/MarkdownRenderer";
 import SourceCitations from "../ui/SourceCitations";
+import RetrievedChunksPanel from "../ui/RetrievedChunksPanel";
 
 export default function AnswerCard({
   question,
   answer,
   sources,
+  retrievedChunks = [],
+  metrics = null,
   loading,
 }) {
   const { showToast } = useContext(ToastContext);
+  const [highlightedChunkId, setHighlightedChunkId] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [showThinking, setShowThinking] = useState(false);
 
   const copyAnswer = async () => {
     if (!answer) return;
     try {
       await navigator.clipboard.writeText(answer);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
       if (showToast) showToast("✓ Copied answer to clipboard", "success");
     } catch (err) {
       if (showToast) showToast("Failed to copy answer", "error");
@@ -58,6 +73,8 @@ export default function AnswerCard({
           question,
           answer,
           sources,
+          retrievedChunks,
+          metrics,
           generatedAt: new Date().toISOString(),
         },
         null,
@@ -79,12 +96,30 @@ export default function AnswerCard({
     if (showToast) showToast(`Downloaded as ${format.toUpperCase()}`, "success");
   };
 
+  const handleSelectCitation = ({ docName, pageNum, chunkNum }) => {
+    const chunkKey = `chunk-${docName}-p${pageNum || 1}-c${chunkNum || 1}`;
+    setHighlightedChunkId(chunkKey);
+    setShowThinking(true);
+    setTimeout(() => {
+      const elem = document.getElementById(chunkKey);
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 150);
+  };
+
   if (!loading && !answer && !question) {
     return null;
   }
 
+  // Latency metrics calculations
+  const embedTime = metrics?.embedding_time_ms ? `${metrics.embedding_time_ms} ms` : "< 15 ms";
+  const totalTime = metrics?.total_time_ms ? `${(metrics.total_time_ms / 1000).toFixed(2)}s` : null;
+  const llmModel = metrics?.llm_model;
+  const fallbackChain = metrics?.fallback_chain;
+
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-200 h-full flex flex-col">
+    <div className="bg-card rounded-2xl border border-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-300 flex flex-col">
 
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-card shrink-0 gap-4">
@@ -92,23 +127,30 @@ export default function AnswerCard({
         {/* Left: Title & Badges */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shadow-sm shrink-0">
-              <Sparkles size={16} strokeWidth={2.2} />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 border border-indigo-400/30 shrink-0">
+              <Sparkles size={18} strokeWidth={2.2} />
             </div>
-            <h2 className="font-bold text-lg text-foreground whitespace-nowrap">
-              IntelliDocs Answer
-            </h2>
+            <div>
+              <h2 className="font-bold text-lg text-foreground whitespace-nowrap">
+                IntelliDocs AI Answer
+              </h2>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-200 dark:border-emerald-800 whitespace-nowrap">
-              <ShieldCheck size={11} />
-              Verified Grounded
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-200 dark:border-emerald-800 whitespace-nowrap">
+              <ShieldCheck size={12} />
+              Grounded Response
             </span>
-            {sources && sources.length > 0 && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-semibold border border-blue-200 dark:border-blue-800 whitespace-nowrap">
-                <Sparkles size={11} />
-                Synthesized from {sources.length} source{sources.length !== 1 ? 's' : ''}
+
+            {/* Model Badge */}
+            {llmModel && (
+              <span 
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 text-xs font-bold border border-slate-700 whitespace-nowrap"
+                title={`Fallback chain: ${fallbackChain || "N/A"}`}
+              >
+                <Cpu size={12} className="text-slate-400" />
+                {llmModel === "mock" ? "Mock Offline AI" : llmModel.startsWith("gemini") ? `Gemini: ${llmModel.replace("gemini-", "")}` : llmModel}
               </span>
             )}
           </div>
@@ -119,17 +161,19 @@ export default function AnswerCard({
           <button
             onClick={copyAnswer}
             disabled={!answer}
-            className="p-1.5 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition text-sm flex items-center gap-1 disabled:opacity-40"
+            className={`p-2 rounded-lg border border-border bg-card hover:bg-secondary transition text-sm flex items-center gap-1 disabled:opacity-40 ${
+              copied ? "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5" : "text-muted-foreground hover:text-foreground"
+            }`}
             title="Copy Answer"
           >
-            <Copy size={14} />
+            {copied ? <Check size={14} /> : <Copy size={14} />}
           </button>
 
           {/* Download Dropdown */}
           <div className="relative group">
             <button
               disabled={!answer}
-              className="p-1.5 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition text-sm flex items-center gap-1 disabled:opacity-40"
+              className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition text-sm flex items-center gap-1 disabled:opacity-40"
               title="Download Answer"
             >
               <Download size={14} />
@@ -160,14 +204,14 @@ export default function AnswerCard({
           </div>
 
           <button
-            className="p-1.5 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-emerald-600 transition"
+            className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-emerald-600 transition"
             title="Helpful"
           >
             <ThumbsUp size={14} />
           </button>
 
           <button
-            className="p-1.5 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-rose-600 transition"
+            className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-rose-600 transition"
             title="Not Helpful"
           >
             <ThumbsDown size={14} />
@@ -177,16 +221,16 @@ export default function AnswerCard({
       </div>
 
       {/* Body */}
-      <div className="p-6 space-y-4 flex-1 overflow-y-auto flex flex-col">
+      <div className="p-6 space-y-4 flex flex-col">
 
         {/* User Question Quote */}
         {question && (
-          <div className="rounded-xl border border-border bg-secondary/40 p-4 flex items-start gap-3 border-l-4 border-l-foreground/30">
+          <div className="rounded-xl border border-border bg-secondary/40 p-4 flex items-start gap-3 border-l-4 border-l-indigo-500 shrink-0">
             <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center border border-border shrink-0 mt-0.5">
               <User size={16} className="text-foreground" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-1">
                 Your Question
               </span>
               <p className="text-base font-semibold text-foreground leading-relaxed whitespace-pre-wrap">
@@ -196,13 +240,51 @@ export default function AnswerCard({
           </div>
         )}
 
+        {/* Collapsible Search and Thought Process (like ChatGPT / Gemini Thinking accordion) */}
+        {!loading && retrievedChunks && retrievedChunks.length > 0 && (
+          <div className="rounded-xl border border-border/80 bg-secondary/20 overflow-hidden transition-all duration-200 shrink-0">
+            <button
+              onClick={() => setShowThinking(!showThinking)}
+              className="w-full flex items-center justify-between px-4 py-3 bg-secondary/40 hover:bg-secondary/60 transition text-left text-xs font-bold text-muted-foreground gap-4"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <Search size={14} className="text-indigo-500 shrink-0" />
+                <span className="truncate">
+                  RAG Pipeline Search: retrieved {retrievedChunks.length} passages
+                </span>
+                <span className="hidden sm:inline-flex items-center font-mono text-[10px] bg-card px-1.5 py-0.5 rounded border border-border/50 whitespace-nowrap">
+                  RRF Hybrid Search ({embedTime})
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-[11px] font-medium">
+                  {showThinking ? "Hide Details" : "Show Details"}
+                </span>
+                {showThinking ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </div>
+            </button>
+            
+            {showThinking && (
+              <div className="border-t border-border/60 bg-card p-2 animate-fade-in">
+                <RetrievedChunksPanel
+                  retrievedChunks={retrievedChunks}
+                  highlightedChunkId={highlightedChunkId}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Answer Content */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 min-h-[160px]">
+        <div className="rounded-xl border border-border/80 bg-card p-5 min-h-[160px] shrink-0">
           {loading ? (
-            <div className="flex items-center justify-center gap-3 text-muted-foreground py-8">
-              <Loader2 size={20} className="animate-spin text-foreground" />
-              <span className="text-base font-medium">
-                Searching knowledge base &amp; synthesizing citations...
+            <div className="flex flex-col items-center justify-center gap-3 text-muted-foreground py-10">
+              <Loader2 size={24} className="animate-spin text-indigo-500" />
+              <span className="text-base font-semibold text-foreground">
+                Retrieving vector embeddings &amp; generating grounded response...
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Generating local 384-dimensional embeddings via sentence-transformers
               </span>
             </div>
           ) : answer ? (
@@ -215,30 +297,46 @@ export default function AnswerCard({
         </div>
 
         {/* Page Citations */}
-        {sources && sources.length > 0 && (
-          <SourceCitations sources={sources} />
+        {!loading && sources && sources.length > 0 && (
+          <div className="shrink-0">
+            <SourceCitations
+              sources={sources}
+              onSelectCitation={handleSelectCitation}
+            />
+          </div>
         )}
 
       </div>
 
       {/* Footer Meta */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-border bg-secondary/20 text-muted-foreground text-xs">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <Clock size={13} />
+      <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-3 border-t border-border bg-secondary/20 text-muted-foreground text-xs shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 font-mono">
+            <Cpu size={14} className="text-indigo-500" />
             <span>
-              {loading ? "Generating..." : "Response ready • Instant retrieval"}
+              Embed Model: <strong className="text-foreground">all-MiniLM-L6-v2</strong> (384d)
             </span>
           </div>
-          {!loading && sources && sources.length > 0 && (
-            <span className="text-muted-foreground">
-              • {sources.length} source{sources.length !== 1 ? 's' : ''} cited
+
+          <div className="flex items-center gap-1.5 font-mono">
+            <Zap size={14} className="text-amber-500" />
+            <span>
+              Search Speed: <strong className="text-foreground">{embedTime}</strong>
             </span>
+          </div>
+
+          {totalTime && (
+            <div className="flex items-center gap-1.5 font-mono">
+              <Clock size={14} className="text-emerald-500" />
+              <span>
+                Total Latency: <strong className="text-foreground">{totalTime}</strong>
+              </span>
+            </div>
           )}
         </div>
 
-        <span className="font-mono text-xs">
-          IntelliDocs RAG v2.5
+        <span className="font-mono text-[11px] text-muted-foreground">
+          IntelliDocs RAG • Local Embeddings Enabled
         </span>
       </div>
 

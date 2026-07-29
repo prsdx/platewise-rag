@@ -95,7 +95,7 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
               onNewChat();
               if (setSidebarOpen) setSidebarOpen(false);
             }}
-            className="flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-semibold text-sm shadow-sm transition-all duration-150 active:scale-[0.99]"
+            className="flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl bg-gradient-to-r from-slate-800 via-zinc-800 to-slate-900 hover:from-slate-700 hover:to-zinc-800 text-white font-bold text-sm shadow-md shadow-slate-900/40 border border-slate-700/60 transition-all duration-150 active:scale-[0.99] hover:scale-[1.01]"
           >
             <Plus size={18} strokeWidth={2.5} />
             <span>New Conversation</span>
@@ -138,12 +138,12 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
 
       {/* Sidebar Tab Switcher */}
       <div className="px-4 pt-3 pb-2 border-b border-border/60">
-        <div className="flex p-1 rounded-xl bg-muted/80 border border-border">
+        <div className="flex p-1 rounded-xl bg-secondary/80 border border-border/80">
           <button
             onClick={() => setSidebarTab("conversations")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all duration-150 ${sidebarTab === "conversations"
-                ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-bold transition-all duration-150 ${sidebarTab === "conversations"
+                ? "bg-gradient-to-r from-slate-800 to-zinc-900 text-white shadow-sm border border-slate-700/60"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               }`}
           >
             <MessageSquare size={15} />
@@ -151,9 +151,9 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
           </button>
           <button
             onClick={() => setSidebarTab("documents")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition-all duration-150 ${sidebarTab === "documents"
-                ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-bold transition-all duration-150 ${sidebarTab === "documents"
+                ? "bg-gradient-to-r from-slate-800 to-zinc-900 text-white shadow-sm border border-slate-700/60"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               }`}
           >
             <Database size={15} />
@@ -166,21 +166,19 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
           CONVERSATIONS TAB
       ======================== */}
       {sidebarTab === "conversations" && (
-        <div className="flex-1 flex flex-col animate-fade-in min-h-0">
+        <div className="flex-1 overflow-y-auto flex flex-col animate-fade-in">
           {/* Recent Conversations */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <ChatHistory
-              onSelectHistory={(item) => {
-                setSearchQuery("");
-                onSelectHistory(item);
-                if (setSidebarOpen) setSidebarOpen(false);
-              }}
-              searchQuery={searchQuery}
-            />
-          </div>
+          <ChatHistory
+            onSelectHistory={(item) => {
+              setSearchQuery("");
+              onSelectHistory(item);
+              if (setSidebarOpen) setSidebarOpen(false);
+            }}
+            searchQuery={searchQuery}
+          />
 
           {/* Workspace Stats (2x2 Grid) */}
-          <div className="border-t border-border/60">
+          <div className="border-t border-border/60 mt-auto">
             <WorkspaceStats files={files} />
           </div>
         </div>
@@ -288,6 +286,28 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
         </div>
       )}
 
+      {/* Bottom Panel: Storage Telemetry */}
+      <div className="p-4 border-t border-border bg-secondary/15 shrink-0">
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase">
+            <span>Storage Used</span>
+            <span className="font-mono text-foreground font-semibold">
+              {formatSize(files.reduce((sum, f) => sum + (f.size || 0), 0))} / 100 MB
+            </span>
+          </div>
+          <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden border border-border/40">
+            <div
+              className="bg-primary h-full transition-all duration-500 rounded-full"
+              style={{
+                width: `${Math.min(
+                  100,
+                  (files.reduce((sum, f) => sum + (f.size || 0), 0) / (100 * 1024 * 1024)) * 100
+                )}%`,
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
       </aside>
     </>

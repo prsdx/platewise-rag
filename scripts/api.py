@@ -268,6 +268,9 @@ def get_upload_status(job_id: str):
 
 @app.post("/query")
 def ask_question(request: QueryRequest, x_session_id: str | None = Header(None)):
+    import time
+    start_total = time.perf_counter()
+
     if not request.question.strip():
         raise HTTPException(
             status_code=400,
@@ -281,13 +284,23 @@ def ask_question(request: QueryRequest, x_session_id: str | None = Header(None))
         session_id=x_session_id,
     )
 
-    documents = retrieved["documents"]
-    metadata = retrieved["metadata"]
+    documents = retrieved.get("documents", [])
+    metadata = retrieved.get("metadata", [])
+    retrieved_chunks = retrieved.get("retrieved_chunks", [])
+    retrieval_time_ms = retrieved.get("retrieval_time_ms", 0.0)
 
     if not documents:
+        total_time_ms = round((time.perf_counter() - start_total) * 1000, 2)
         return {
             "answer": "No relevant information found.",
             "sources": [],
+            "retrieved_chunks": [],
+            "metrics": {
+                "embedding_time_ms": retrieval_time_ms,
+                "total_time_ms": total_time_ms,
+                "model_name": "all-MiniLM-L6-v2",
+                "embedding_dim": 384,
+            },
         }
 
     context_parts = []
@@ -305,10 +318,13 @@ def ask_question(request: QueryRequest, x_session_id: str | None = Header(None))
 
     context = "\n\n".join(context_parts)
 
-    answer = generate_answer(
+    answer, llm_meta = generate_answer(
         question=request.question,
         context=context,
+        return_metadata=True,
     )
+
+    total_time_ms = round((time.perf_counter() - start_total) * 1000, 2)
 
     # Build structured source objects, de-duplicated by (document_name, page)
     seen = {}
@@ -333,6 +349,16 @@ def ask_question(request: QueryRequest, x_session_id: str | None = Header(None))
     return {
         "answer": answer,
         "sources": sources,
+        "retrieved_chunks": retrieved_chunks,
+        "metrics": {
+            "embedding_time_ms": retrieval_time_ms,
+            "total_time_ms": total_time_ms,
+            "model_name": "all-MiniLM-L6-v2",
+            "embedding_dim": 384,
+            "llm_model": llm_meta.get("model_used"),
+            "llm_provider": llm_meta.get("provider_used"),
+            "fallback_chain": llm_meta.get("fallback_chain"),
+        },
     }
 
 
@@ -355,10 +381,11 @@ def compare_documents(request: CompareRequest, x_session_id: str | None = Header
             detail=f"Could not retrieve content for comparison. Missing or empty: {', '.join(missing)}.",
         )
 
-    comparison = generate_document_comparison(
+    comparison, llm_meta = generate_document_comparison(
         documents=docs,
         comparison_type=request.comparison_type,
         custom_prompt=request.custom_prompt,
+        return_metadata=True,
     )
 
     return {
@@ -366,6 +393,11 @@ def compare_documents(request: CompareRequest, x_session_id: str | None = Header
         "documents": request.documents,
         "comparison_type": request.comparison_type,
         "custom_prompt": request.custom_prompt,
+        "metrics": {
+            "llm_model": llm_meta.get("model_used"),
+            "llm_provider": llm_meta.get("provider_used"),
+            "fallback_chain": llm_meta.get("fallback_chain"),
+        }
     }
 
 

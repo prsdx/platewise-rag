@@ -1,51 +1,53 @@
 import sys
 import os
 from pathlib import Path
-from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
 # Add scripts directory to Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.append(str(PROJECT_ROOT))
 sys.path.append(str(PROJECT_ROOT / "scripts"))
 
-from scripts.vector_store import GeminiEmbeddingFunction, GEMINI_API_KEY
+from scripts.vector_store import SentenceTransformerEmbeddingFunction, EMBEDDING_DIM
 
 
-def test_gemini_embedding_batch_logic():
+def test_sentence_transformer_embedding_init():
     """
-    Test GeminiEmbeddingFunction initialization and key handling.
+    Test SentenceTransformerEmbeddingFunction initialization.
     """
-    ef = GeminiEmbeddingFunction(api_key="test_key")
-    assert ef.model == "models/gemini-embedding-001"
-    assert "batchEmbedContents" in ef.url
+    ef = SentenceTransformerEmbeddingFunction()
+    assert ef.model_name == "all-MiniLM-L6-v2"
+    assert ef._model is not None
 
 
-def test_gemini_embedding_dimension():
+def test_sentence_transformer_embedding_dimension():
     """
-    Test the custom Gemini embedding function if an API key is present.
+    Test that the sentence-transformer embedding function produces 384-dim vectors.
+    No API key needed — runs entirely locally.
     """
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        return  # Skip test if no API key is configured
-
-    ef = GeminiEmbeddingFunction(api_key=api_key)
-    test_text = "Hello world, testing Gemini API embeddings."
-    try:
-        embeddings = ef([test_text])
-        assert len(embeddings) == 1
-        assert len(embeddings[0]) == 3072  # gemini-embedding-001 dimension is 3072
-    except Exception as e:
-        raise e
+    ef = SentenceTransformerEmbeddingFunction()
+    test_text = "Hello world, testing sentence-transformer embeddings."
+    embeddings = ef([test_text])
+    assert len(embeddings) == 1
+    assert len(embeddings[0]) == EMBEDDING_DIM  # all-MiniLM-L6-v2 dimension is 384
 
 
-def test_gemini_embedding_sanitization():
+def test_sentence_transformer_embedding_batch():
     """
-    Test that GeminiEmbeddingFunction strips leading/trailing newlines and carriage returns.
+    Test batch embedding generation.
     """
-    raw_key = "  pa-testkey123456789\n\r  "
-    ef = GeminiEmbeddingFunction(api_key=raw_key)
-    assert ef.api_key == "pa-testkey123456789"
-    assert "\n" not in ef.api_key
-    assert "\r" not in ef.api_key
+    ef = SentenceTransformerEmbeddingFunction()
+    texts = ["First document chunk.", "Second document chunk.", "Third document chunk."]
+    embeddings = ef(texts)
+    assert len(embeddings) == 3
+    for emb in embeddings:
+        assert len(emb) == EMBEDDING_DIM
 
 
+def test_sentence_transformer_empty_input():
+    """
+    Test that empty input is handled cleanly.
+    """
+    import pytest
+    ef = SentenceTransformerEmbeddingFunction()
+    with pytest.raises(ValueError):
+        ef([])

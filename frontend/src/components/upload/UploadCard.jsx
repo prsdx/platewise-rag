@@ -133,19 +133,19 @@ export default function UploadCard({ files = [], setFiles }) {
       {/* Dashed Dropzone Box */}
       <div
         {...getRootProps()}
-        className={`flex flex-col items-center justify-center text-center p-6 rounded-xl cursor-pointer transition-all duration-200 mb-4 ${
+        className={`group flex flex-col items-center justify-center text-center p-6 rounded-xl cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md ${
           isDragActive
-            ? "border-2 border-dashed border-black dark:border-white bg-secondary/80"
-            : "border border-dashed border-border hover:border-foreground/30 bg-card hover:bg-secondary/40"
+            ? "border-2 border-dashed border-primary bg-secondary/80 scale-[1.01]"
+            : "border border-dashed border-border hover:border-foreground/40 bg-card hover:bg-secondary/40"
         }`}
       >
         <input {...getInputProps()} />
 
-        <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center border border-border mb-3 transition-transform duration-200 group-hover:scale-105">
+        <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center border border-border mb-3 transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-1 shadow-sm">
           {uploading ? (
             <Loader2 size={22} className="animate-spin text-foreground" />
           ) : (
-            <UploadCloud size={22} className="text-foreground" />
+            <UploadCloud size={22} className="text-foreground animate-float" />
           )}
         </div>
 

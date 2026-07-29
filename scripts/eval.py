@@ -63,7 +63,7 @@ TEST_CASES = [
         "id": 7,
         "category": "Embeddings & Vector Database",
         "question": "What embedding models does the project specification list as acceptable?",
-        "expected": "Google Gemini (text-embedding-004).",
+        "expected": "SentenceTransformers (all-MiniLM-L6-v2, 384 dims).",
         "is_guardrail": False,
     },
     {

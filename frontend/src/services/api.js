@@ -1,4 +1,5 @@
 import axios from "axios";
+import { auth, isFirebaseConfigured } from "../config/firebase";
 
 // In production (Vercel), requests to /api/* are proxied to Render via vercel.json rewrites.
 // In local dev, Vite proxies /api/* to http://127.0.0.1:8000 via vite.config.js.
@@ -19,9 +20,28 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
-// Attach X-Session-ID header to every request
-api.interceptors.request.use((config) => {
+// Attach X-Session-ID + Authorization headers to every request
+api.interceptors.request.use(async (config) => {
   config.headers["X-Session-ID"] = getSessionId();
+
+  // Attach Firebase auth token if user is logged in
+  try {
+    if (isFirebaseConfigured && auth?.currentUser) {
+      const token = await auth.currentUser.getIdToken();
+      config.headers["Authorization"] = `Bearer ${token}`;
+    } else {
+      // Mock auth — attach mock token from localStorage
+      const mockUser = localStorage.getItem("intellidocs_mock_user");
+      if (mockUser) {
+        const parsed = JSON.parse(mockUser);
+        config.headers["Authorization"] = `Bearer mock_${parsed.uid}`;
+      }
+    }
+  } catch (err) {
+    // Silently fail — request proceeds without auth header
+    console.warn("Failed to attach auth token:", err);
+  }
+
   return config;
 });
 
