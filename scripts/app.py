@@ -103,7 +103,8 @@ if st.button("Generate Answer"):
         st.stop()
 
     try:
-        collection = client.get_collection("intellidocs")
+        from vector_store import get_collection
+        collection = get_collection()
     except Exception:
         st.error("No document found. Please upload a PDF first.")
         st.stop()

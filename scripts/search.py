@@ -118,9 +118,12 @@ _BM25_CACHE = LRUCache(maxsize=10)
 def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id=None):
     """
     Retrieve the most relevant chunks using Hybrid Search (BM25 + Dense vector similarity).
-    Dense search uses Gemini embeddings (text-embedding-004).
+    Dense search uses sentence-transformers (all-MiniLM-L6-v2, 384 dims).
     Results are merged using Reciprocal Rank Fusion (RRF).
+    Returns documents, metadata, detailed retrieved_chunks, and retrieval timing metrics.
     """
+    import time
+    start_time = time.perf_counter()
 
     try:
         collection = get_collection()
@@ -139,7 +142,12 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
 
     total_chunks = collection.count()
     if total_chunks == 0:
-        return {"documents": [], "metadata": []}
+        return {
+            "documents": [],
+            "metadata": [],
+            "retrieved_chunks": [],
+            "retrieval_time_ms": 0.0,
+        }
 
     # Build where clause
     conditions = []
@@ -160,7 +168,7 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
 
     try:
         vector_results = collection.query(
-            query_texts=[query],          # ChromaDB calls _EF([query]) internally
+            query_texts=[query],          # ChromaDB calls _EF_ST([query]) internally
             n_results=vector_n,
             where=where_clause,
             include=["documents", "metadatas"],
@@ -244,6 +252,8 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
 
     final_documents = []
     final_metadata = []
+    retrieved_chunks = []
+    max_rrf = 2.0 / 61.0  # Max theoretical RRF score (rank 1 in both vector & BM25)
 
     print("\n" + "=" * 80)
     print("RETRIEVED CHUNKS (HYBRID RRF)")
@@ -255,7 +265,24 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
         final_documents.append(doc_text)
         final_metadata.append(doc_meta)
 
-        print(f"\nChunk {i} (RRF Score: {score:.5f})")
+        vec_rank = vec_ids.index(cid) + 1 if cid in vec_ids else None
+        bm25_rank = bm25_ids.index(cid) + 1 if cid in bm25_ids else None
+        rel_score = min(99.9, round((score / max_rrf) * 100, 1))
+
+        retrieved_chunks.append({
+            "chunk_id": cid,
+            "document_name": doc_meta.get("document_name", "Unknown"),
+            "document_type": doc_meta.get("document_type", ""),
+            "page": doc_meta.get("page", 1),
+            "chunk": doc_meta.get("chunk", 1),
+            "score": rel_score,
+            "rrf_score": round(score, 5),
+            "dense_rank": vec_rank,
+            "bm25_rank": bm25_rank,
+            "text": doc_text,
+        })
+
+        print(f"\nChunk {i} (RRF Score: {score:.5f} | Relevance: {rel_score}%)")
         print("-" * 60)
         try:
             print(f"Document : {doc_meta.get('document_name')}")
@@ -264,10 +291,7 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
         print(f"Type     : {doc_meta.get('document_type')}")
         print(f"Chunk    : {doc_meta.get('chunk')}")
         print(f"Page     : {doc_meta.get('page')}")
-
-        vec_rank = vec_ids.index(cid) + 1 if cid in vec_ids else "N/A"
-        bm25_rank = bm25_ids.index(cid) + 1 if cid in bm25_ids else "N/A"
-        print(f"Dense Rank: {vec_rank} | BM25 Rank: {bm25_rank}")
+        print(f"Dense Rank: {vec_rank or 'N/A'} | BM25 Rank: {bm25_rank or 'N/A'}")
 
         print("\nPreview:\n")
         try:
@@ -275,11 +299,15 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, session_id
         except UnicodeEncodeError:
             print(doc_text[:500].encode('ascii', errors='replace').decode('ascii'))
 
+    retrieval_time_ms = round((time.perf_counter() - start_time) * 1000, 2)
+    print(f"\n[TIMING] Hybrid Retrieval Execution Time: {retrieval_time_ms} ms")
     print("=" * 80)
 
     return {
         "documents": final_documents,
         "metadata": final_metadata,
+        "retrieved_chunks": retrieved_chunks,
+        "retrieval_time_ms": retrieval_time_ms,
     }
 
 

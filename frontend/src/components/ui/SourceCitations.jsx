@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { FileText, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
+import { FileText, BookOpen, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 
-export default function SourceCitations({ sources = [] }) {
+export default function SourceCitations({ sources = [], onSelectCitation = null }) {
   const [isExpanded, setIsExpanded] = useState(true);
 
   if (!sources || sources.length === 0) {
@@ -53,6 +53,22 @@ export default function SourceCitations({ sources = [] }) {
     chunks: Array.from(group.chunks).sort((a,b) => a-b)
   }));
 
+  const handleCitationClick = (docName, pageNum, chunkNum) => {
+    if (onSelectCitation) {
+      onSelectCitation({ docName, pageNum, chunkNum });
+    } else {
+      const chunkIdKey = `chunk-${docName}-p${pageNum || 1}-c${chunkNum || 1}`;
+      const elem = document.getElementById(chunkIdKey);
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth", block: "center" });
+        elem.classList.add("ring-4", "ring-indigo-500/50");
+        setTimeout(() => {
+          elem.classList.remove("ring-4", "ring-indigo-500/50");
+        }, 2000);
+      }
+    }
+  };
+
   return (
     <div className="mt-4 pt-4 border-t border-border/60">
 
@@ -66,7 +82,7 @@ export default function SourceCitations({ sources = [] }) {
           <h4 className="font-bold text-xs text-foreground tracking-tight">
             Source Citations
           </h4>
-          <span className="text-[10px] font-semibold bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md border border-border">
+          <span className="text-[10px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md border border-indigo-200 dark:border-indigo-800">
             {groupedSources.length} document{groupedSources.length !== 1 ? "s" : ""}
           </span>
         </div>
@@ -85,26 +101,29 @@ export default function SourceCitations({ sources = [] }) {
           {groupedSources.map((source) => (
             <div
               key={source.id}
-              className="p-3 rounded-xl bg-secondary/30 border border-border/60 hover:border-border transition-all flex items-start justify-between gap-3"
+              onClick={() => handleCitationClick(source.name, source.pages[0], source.chunks[0])}
+              className="p-3 rounded-xl bg-secondary/30 hover:bg-indigo-500/5 border border-border/60 hover:border-indigo-500/40 transition-all cursor-pointer group flex items-start justify-between gap-3"
+              title="Click to view & scroll to retrieved chunk"
             >
               <div className="flex items-start gap-2.5 min-w-0 flex-1">
                 <FileText
                   size={15}
-                  className="text-foreground mt-0.5 shrink-0"
+                  className="text-indigo-500 group-hover:scale-110 transition-transform mt-0.5 shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-foreground text-xs truncate">
+                  <p className="font-semibold text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 text-xs truncate flex items-center gap-1.5 transition-colors">
                     {source.name}
+                    <ExternalLink size={11} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </p>
 
                   <div className="flex items-center gap-2 mt-1 text-[10px] text-muted-foreground flex-wrap">
                     {source.pages && source.pages.length > 0 && (
-                      <span className="bg-card border border-border px-1.5 py-0.5 rounded font-mono">
+                      <span className="bg-card border border-border/80 px-1.5 py-0.5 rounded font-mono group-hover:border-indigo-500/30 transition-colors">
                         Page{source.pages.length > 1 ? "s" : ""} {source.pages.join(", ")}
                       </span>
                     )}
                     {source.chunks && source.chunks.length > 0 && (
-                      <span className="bg-card border border-border px-1.5 py-0.5 rounded font-mono">
+                      <span className="bg-card border border-border/80 px-1.5 py-0.5 rounded font-mono group-hover:border-indigo-500/30 transition-colors">
                         Chunk{source.chunks.length > 1 ? "s" : ""} {source.chunks.join(", ")}
                       </span>
                     )}
@@ -112,8 +131,8 @@ export default function SourceCitations({ sources = [] }) {
                 </div>
               </div>
 
-              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 shrink-0">
-                Verified
+              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800 shrink-0 flex items-center gap-1">
+                Verified Link
               </span>
             </div>
           ))}

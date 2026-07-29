@@ -1,9 +1,9 @@
 import chromadb
 import scripts.vector_store
 
-class MockGeminiEmbeddingFunction(chromadb.EmbeddingFunction):
+class MockSentenceTransformerEmbeddingFunction(chromadb.EmbeddingFunction):
     def __call__(self, input: chromadb.Documents) -> chromadb.Embeddings:
-        return [[0.0] * 3072 for _ in input]
+        return [[0.0] * 384 for _ in input]
 
-if not scripts.vector_store._EF_GEMINI:
-    scripts.vector_store._EF_GEMINI = MockGeminiEmbeddingFunction()
+if not scripts.vector_store._EF_ST:
+    scripts.vector_store._EF_ST = MockSentenceTransformerEmbeddingFunction()

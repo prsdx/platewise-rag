@@ -7,7 +7,7 @@ from datetime import datetime
 import chromadb
 import os
 from dotenv import load_dotenv
-import requests
+from sentence_transformers import SentenceTransformer
 
 # Load .env
 ENV_PATH = Path(__file__).resolve().parent / ".env"
@@ -30,111 +30,35 @@ UPLOAD_DIR = Path("/tmp/uploads") if _IS_CLOUD else BASE_DIR / "data" / "uploads
 print(f"[DB] ChromaDB path: {DB_PATH} | Cloud mode: {_IS_CLOUD}")
 
 # ------------------------------------------------
-# Embedding Functions
+# Embedding Function (Local Sentence-Transformers)
 # ------------------------------------------------
 
-def _clean_env_var(val: str | None) -> str | None:
-    if not val:
-        return None
-    cleaned = str(val).strip().replace("\n", "").replace("\r", "").replace("\t", "").strip()
-    return cleaned if cleaned else None
+# Embedding dimension for all-MiniLM-L6-v2
+EMBEDDING_DIM = 384
 
-class GeminiEmbeddingFunction(chromadb.EmbeddingFunction):
+class SentenceTransformerEmbeddingFunction(chromadb.EmbeddingFunction):
     """
-    Custom ChromaDB Embedding Function that calls Google Gemini API.
-    Uses 'models/gemini-embedding-001' model with 3072 dimensions.
-    Sends batched requests (max 100 texts per batch) with exponential backoff retries (2s, 4s, 8s).
+    Local ChromaDB Embedding Function using sentence-transformers.
+    Uses 'all-MiniLM-L6-v2' model with 384 dimensions.
+    Runs entirely on-device — no API key, no network calls, no rate limits.
     """
-    def __init__(self, api_key: str):
-        self.api_key = _clean_env_var(api_key) or ""
-        self.model = "models/gemini-embedding-001"
-        self.url = f"https://generativelanguage.googleapis.com/v1beta/{self.model}:batchEmbedContents"
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+        self.model_name = model_name
+        self._model = SentenceTransformer(model_name)
 
     def __call__(self, input: chromadb.Documents) -> chromadb.Embeddings:
         if not input:
             return []
-        
-        clean_key = _clean_env_var(self.api_key) or ""
-        if not clean_key:
-            raise RuntimeError("Embedding failed, please try again")
+        embeddings = self._model.encode(list(input), show_progress_bar=False)
+        return embeddings.tolist()
 
-        embeddings = []
-        batch_size = 50  # 50 chunks per batch request
-        max_retries = 5
-
-        for i in range(0, len(input), batch_size):
-            batch = input[i:i + batch_size]
-            
-            # Delay between consecutive batch requests to respect free-tier rate limits
-            if i > 0:
-                time.sleep(1.0)
-
-            batch_success = False
-            requests_payload = [
-                {
-                    "model": self.model,
-                    "content": {"parts": [{"text": text}]}
-                }
-                for text in batch
-            ]
-
-            for attempt in range(max_retries):
-                try:
-                    response = requests.post(
-                        f"{self.url}?key={clean_key}",
-                        headers={"Content-Type": "application/json"},
-                        json={"requests": requests_payload},
-                        timeout=35,
-                    )
-                    
-                    if response.status_code in (429, 500, 502, 503, 504):
-                        retry_after = response.headers.get("Retry-After")
-                        if retry_after:
-                            try:
-                                wait_time = float(retry_after)
-                            except ValueError:
-                                wait_time = 2.0 ** (attempt + 1)
-                        else:
-                            wait_time = max(4.0, 2.0 ** (attempt + 1))
-                        
-                        print(f"[WARN] Gemini Embedding HTTP {response.status_code} (attempt {attempt + 1}/{max_retries}). Waiting {wait_time:.1f}s...")
-                        time.sleep(wait_time)
-                        continue
-
-                    response.raise_for_status()
-                    data = response.json()
-                    raw_embeddings = data.get("embeddings", [])
-                    for item in raw_embeddings:
-                        embeddings.append(item["values"])
-                    batch_success = True
-                    break
-
-                except requests.exceptions.RequestException as e:
-                    print(f"[WARN] Gemini embedding attempt {attempt + 1}/{max_retries} failed: {e}")
-                    if attempt < max_retries - 1:
-                        time.sleep(2 * (attempt + 1))
-                    else:
-                        break
-
-            if not batch_success:
-                print(f"[ERROR] Gemini batch embedding failed after {max_retries} attempts.")
-                raise RuntimeError("Embedding failed, please try again")
-
-        return embeddings
-
-GEMINI_API_KEY = _clean_env_var(os.getenv("GEMINI_API_KEY"))
-
-# Initialize embedding function
-_EF_GEMINI = None
-
-if GEMINI_API_KEY:
-    try:
-        _EF_GEMINI = GeminiEmbeddingFunction(api_key=GEMINI_API_KEY)
-        print("Gemini Cloud Embedding Function initialized (gemini-embedding-001, 3072 dims).")
-    except Exception as e:
-        print(f"[WARN] Failed to initialize Gemini Embedding Function: {e}")
-else:
-    print("[WARN] GEMINI_API_KEY not set.")
+# Initialize embedding function (no API key needed)
+_EF_ST = None
+try:
+    _EF_ST = SentenceTransformerEmbeddingFunction()
+    print(f"Sentence-Transformer Embedding Function initialized (all-MiniLM-L6-v2, {EMBEDDING_DIM} dims).")
+except Exception as e:
+    print(f"[ERROR] Failed to initialize Sentence-Transformer Embedding Function: {e}")
 
 # ------------------------------------------------
 # Chroma Collection
@@ -142,12 +66,12 @@ else:
 
 def get_collection():
     """
-    Returns the ChromaDB collection configured with Gemini embeddings.
+    Returns the ChromaDB collection configured with sentence-transformer embeddings.
     """
     client = chromadb.PersistentClient(path=str(DB_PATH))
-    if _EF_GEMINI is None:
-        raise RuntimeError("Embedding failed, please try again")
-    return client.get_or_create_collection("intellidocs_gemini", embedding_function=_EF_GEMINI)
+    if _EF_ST is None:
+        raise RuntimeError("Embedding function not initialized. Check sentence-transformers installation.")
+    return client.get_or_create_collection("intellidocs_st", embedding_function=_EF_ST)
 
 
 
@@ -196,7 +120,7 @@ def _split_text_by_pages(text):
 
 def process_document(file_path, session_id=None):
     """
-    Extract text, create chunks, generate embeddings (via ONNX — no API needed)
+    Extract text, create chunks, generate embeddings (via sentence-transformers — no API needed)
     and store them inside ChromaDB.
 
     Works with:
@@ -268,7 +192,7 @@ def process_document(file_path, session_id=None):
     # by the ONNX embedding function, no API call needed
     # --------------------------------------------
 
-    print("Storing chunks (ONNX embeddings generated in-process)...")
+    print("Storing chunks (sentence-transformer embeddings generated in-process)...")
     collection = get_collection()
 
     # Remove existing chunks for this document if re-uploaded
@@ -298,7 +222,7 @@ def process_document(file_path, session_id=None):
             meta_entry["session_id"] = session_id
         metadatas.append(meta_entry)
 
-    # ChromaDB calls _EF_GEMINI(all_chunks) internally (batched up to 100 chunks per API call)
+    # ChromaDB calls _EF_ST(all_chunks) internally (local, no API call needed)
     try:
         collection.add(
             ids=ids,
