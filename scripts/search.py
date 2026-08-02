@@ -395,7 +395,7 @@ if __name__ == "__main__":
     from scripts.llm import generate_answer
 
     print("\n" + "=" * 60)
-    print("IntelliDocs AI")
+    print("PlateWise — Food Knowledge Assistant")
     print("=" * 60)
 
     while True:

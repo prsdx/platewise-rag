@@ -23,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------
 
 st.set_page_config(
-    page_title="IntelliDocs-AI",
-    page_icon="📄",
+    page_title="PlateWise",
+    page_icon="🍽️",
     layout="wide",
 )
 
-st.title("📄 IntelliDocs-AI")
-st.caption("Retrieval-Augmented Generation (RAG) powered by ChromaDB + Gemini")
+st.title("🍽️ PlateWise — Food Knowledge Assistant")
+st.caption("RAG-powered Q&A over restaurant menus, food safety policies, delivery FAQs, and more.")
 
 # ------------------------------------------------
 # Upload Folder
@@ -89,7 +89,7 @@ client = chromadb.PersistentClient(path=str(db_path))
 # ------------------------------------------------
 
 query = st.text_input(
-    "💬 Ask a question (e.g., 'Compare the two documents on Machine Learning')"
+    "💬 Ask a question (e.g., 'Which dishes on this menu are vegan?')"
 )
 
 # ------------------------------------------------

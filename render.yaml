@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: intellidocs-api
+    name: platewise-api
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -12,3 +12,5 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: gemini-3.1-flash-lite
+      - key: PLATEWISE_API_KEY
+        sync: false

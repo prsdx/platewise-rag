@@ -10,10 +10,10 @@ from llm import generate_answer
 
 def test_rag_pipeline_answer():
     """
-    Test generating an answer using the fallback chain.
+    Test generating an answer using the LLM fallback chain with food-domain context.
     """
-    context = "PyMuPDF is used to extract text and tables from PDFs in IntelliDocs-AI."
-    question = "Which parser is used for PDFs?"
+    context = "PyMuPDF is used to extract text from PDFs. PlateWise uses it to parse restaurant menus."
+    question = "Which parser is used for PDF menus?"
 
     answer = generate_answer(question, context)
 

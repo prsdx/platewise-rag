@@ -1,0 +1,147 @@
+================================================================================
+SPICE GARDEN — RESTAURANT MENU
+Authentic Indian Cuisine | FSSAI Lic. No. 11223344556677
+================================================================================
+
+ADDRESS: 42, MG Road, Koramangala, Bengaluru — 560034
+PHONE:   +91-80-4567-8901
+HOURS:   11:00 AM – 11:00 PM (All days)
+
+DIETARY LEGEND:
+  [V]  = Vegetarian
+  [VG] = Vegan
+  [GF] = Gluten-Free
+  [S]  = Contains Soy
+  [N]  = Contains Nuts
+
+================================================================================
+STARTERS / APPETISERS
+================================================================================
+
+Veg Seekh Kebab [V, GF]
+  Minced cottage cheese and vegetables skewered and grilled in tandoor.
+  Price: ₹220 | Calories: ~280 kcal
+
+Chicken Malai Tikka [GF]
+  Boneless chicken marinated in cream, cheese, and mild spices, tandoor-grilled.
+  Price: ₹320 | Calories: ~350 kcal
+
+Paneer Tikka [V, GF]
+  Cubes of fresh cottage cheese marinated in yoghurt and spices, char-grilled.
+  Price: ₹280 | Calories: ~310 kcal
+  Allergens: Dairy
+
+Samosa (2 pcs) [V, VG-option]
+  Crispy pastry stuffed with spiced potatoes and peas. Can be made vegan on request.
+  Price: ₹120 | Calories: ~200 kcal
+  Allergens: Gluten (wheat)
+
+Soup of the Day [V, GF]
+  Ask your server. Daily rotation of tomato shorba, dal soup, or mulligatawny.
+  Price: ₹110
+
+================================================================================
+MAIN COURSE — VEGETARIAN
+================================================================================
+
+Dal Makhani [V, GF]
+  Slow-cooked black lentils simmered overnight with butter and cream.
+  Price: ₹280 | Calories: ~380 kcal
+  Allergens: Dairy
+
+Palak Paneer [V, GF]
+  Cottage cheese cubes in a spiced spinach gravy.
+  Price: ₹300 | Calories: ~360 kcal
+  Allergens: Dairy
+
+Kadai Paneer [V, GF]
+  Paneer and bell peppers tossed in a robust kadai masala.
+  Price: ₹320 | Calories: ~390 kcal
+  Allergens: Dairy
+
+Chana Masala [V, VG, GF]
+  Hearty chickpea curry cooked in a tangy tomato-onion sauce.
+  Price: ₹240 | Calories: ~300 kcal
+  Note: Fully vegan — no dairy or animal products used.
+
+Aloo Gobi [V, VG, GF]
+  Dry-style potato and cauliflower stir-fry with cumin and turmeric.
+  Price: ₹220 | Calories: ~250 kcal
+
+Veg Biryani [V, VG, GF]
+  Fragrant basmati rice cooked dum-style with seasonal vegetables and whole spices.
+  Price: ₹280 | Calories: ~450 kcal
+
+================================================================================
+MAIN COURSE — NON-VEGETARIAN
+================================================================================
+
+Butter Chicken [GF]
+  Tender chicken in a velvety tomato-cream sauce. A timeless favourite.
+  Price: ₹380 | Calories: ~480 kcal
+  Allergens: Dairy
+
+Chicken Biryani [GF]
+  Aromatic basmati rice slow-cooked with bone-in chicken and caramelised onions.
+  Price: ₹350 | Calories: ~520 kcal
+
+Mutton Rogan Josh [GF]
+  Slow-braised mutton in a Kashmiri-style red gravy rich with whole spices.
+  Price: ₹450 | Calories: ~560 kcal
+
+Goan Fish Curry [GF]
+  Fresh sea fish cooked in a coconut-tamarind gravy. Mild heat.
+  Price: ₹420 | Calories: ~400 kcal
+  Allergens: Fish, Coconut
+
+Chicken Chettinad [GF]
+  South Indian style chicken curry with freshly ground Chettinad spices. Spicy.
+  Price: ₹400 | Calories: ~490 kcal
+
+================================================================================
+BREADS
+================================================================================
+
+Butter Naan [V]               ₹60  | Allergens: Gluten, Dairy
+Garlic Naan [V]               ₹75  | Allergens: Gluten, Dairy
+Tandoori Roti [V, VG-option]  ₹40  | Allergens: Gluten (wheat)
+Paratha [V]                   ₹80  | Allergens: Gluten, Dairy
+Missi Roti [V]                ₹55  | Allergens: Gluten (chickpea flour)
+
+================================================================================
+DESSERTS
+================================================================================
+
+Gulab Jamun (2 pcs) [V]
+  Soft milk-solid dumplings soaked in rose-scented sugar syrup.
+  Price: ₹140 | Allergens: Dairy, Gluten
+
+Kheer [V, GF]
+  Creamy rice pudding with cardamom, saffron, and nuts.
+  Price: ₹140 | Allergens: Dairy, Nuts
+
+Kulfi [V, GF]
+  Traditional Indian ice cream. Flavours: Malai, Mango, Pistachio.
+  Price: ₹120 | Allergens: Dairy, Nuts
+
+================================================================================
+BEVERAGES
+================================================================================
+
+Mango Lassi [V, GF]           ₹120  | Allergens: Dairy
+Rose Lassi [V, GF]            ₹110  | Allergens: Dairy
+Masala Chaas [V, VG, GF]      ₹80
+Soft Drinks (Pepsi/7UP/Sprite)₹60
+Water (500 ml)                ₹40
+
+================================================================================
+NOTES
+================================================================================
+- All prices are inclusive of taxes.
+- We use refined sunflower oil. No trans fats.
+- Jain options available (no root vegetables) — please ask staff.
+- All our dairy products are sourced from certified Grade-A dairies.
+- Cross-contamination risk: Our kitchen handles nuts, dairy, gluten, and fish.
+  If you have a severe allergy, please inform us before ordering.
+- FSSAI compliance certificate available on request.
+================================================================================

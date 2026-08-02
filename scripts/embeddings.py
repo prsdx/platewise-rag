@@ -9,5 +9,5 @@ if pdf_path.exists():
     text = extract_document(pdf_path)
     chunks = chunk_text(text)
     ef = SentenceTransformerEmbeddingFunction()
-    print("IntelliDocs-AI - Embedding Generator (all-MiniLM-L6-v2, 384 dims)")
+    print("PlateWise — Embedding Generator (all-MiniLM-L6-v2, 384 dims)")
     print(f"Total Chunks: {len(chunks)}")
