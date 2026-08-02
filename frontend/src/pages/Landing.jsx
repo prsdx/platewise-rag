@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { openRazorpayCheckout } from '../services/razorpay';
 import {
-  ArrowRight, Search, ShieldCheck, Zap, Database, PlayCircle, LogIn, CheckCircle2, ChevronDown, ChevronUp, FileText, Cpu, LayoutGrid, ExternalLink, Sun, Moon
+  ArrowRight, Search, ShieldCheck, Zap, Database, PlayCircle, LogIn, CheckCircle2, ChevronDown, ChevronUp, FileText, Cpu, LayoutGrid, ExternalLink, Sun, Moon, Twitter, Mail, Github
 } from 'lucide-react';
 
 export default function Landing() {
@@ -326,8 +326,8 @@ export default function Landing() {
       </section>
 
       {/* ── 12. Footer ──────────────────────────────────────────── */}
-      <footer className="py-8 px-6 border-t border-border bg-background text-center text-sm text-muted-foreground flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto">
-        <div className="flex items-center gap-2 mb-4 md:mb-0">
+      <footer className="py-8 px-6 border-t border-border bg-background text-center text-sm text-muted-foreground flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto gap-4">
+        <div className="flex items-center gap-2">
           <div className="w-5 h-5 rounded-[6px] bg-primary/20 flex items-center justify-center border border-primary/30">
             <span className="font-bold text-primary text-[10px]">P</span>
           </div>
@@ -336,16 +336,33 @@ export default function Landing() {
           <span>© 2026</span>
         </div>
         
-        <div className="flex items-center gap-6">
-          <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-          <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-          <a href="#" className="flex items-center gap-1.5 hover:text-foreground transition-colors">
-            <ExternalLink size={16} /> Repository
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          <a 
+            href="https://github.com/shubham-prasad/PlateWise" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors font-medium"
+          >
+            <Github size={15} /> GitHub Repo
+          </a>
+          <a 
+            href="https://x.com/prsd_x" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors font-medium text-emerald-400"
+          >
+            <Twitter size={15} /> @prsd_x
+          </a>
+          <a 
+            href="mailto:prsdx.dev@gmail.com" 
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors font-medium"
+          >
+            <Mail size={15} /> prsdx.dev@gmail.com
           </a>
         </div>
         
-        <div className="mt-4 md:mt-0 font-medium">
-          Built by <a href="#" className="text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors">Shubh</a>
+        <div className="font-medium">
+          Built by <a href="https://x.com/prsd_x" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors">@prsd_x</a>
         </div>
       </footer>
 

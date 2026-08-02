@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { Mail, Lock, User, Eye, EyeOff, Sparkles, ArrowLeft, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, Sparkles, ArrowLeft, CheckCircle2, AlertCircle, Shield, X } from 'lucide-react';
 import { ToastContext } from '../../context/ToastContext';
 
 // ── Firebase error code → user-friendly message mapping ────────────
@@ -63,10 +63,16 @@ export default function AuthModal() {
   const [animDirection, setAnimDirection] = useState('right'); // for slide transitions
   const formRef = useRef(null);
 
-  // Auto-clear error when user types
+  // Close modal on Escape key press
   useEffect(() => {
-    if (error) setError('');
-  }, [email, password, confirmPassword, fullName]);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isAuthModalOpen) {
+        setIsAuthModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isAuthModalOpen, setIsAuthModalOpen]);
 
   // If user is logged in or modal is closed, don't show modal
   if (user || !isAuthModalOpen) return null;
@@ -181,26 +187,42 @@ export default function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm"
+      onClick={() => setIsAuthModalOpen(false)}
+    >
       {/* Subtle background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-slate-500/5 blur-3xl animate-pulse-glow" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-zinc-500/5 blur-3xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
       </div>
 
-      <div className="relative w-full max-w-[420px] bg-card border border-border rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up">
+      <div 
+        className="relative w-full max-w-[420px] bg-card border border-border rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* ── Header ────────────────────────────────────────────── */}
         <div className="relative px-8 pt-8 pb-6">
           {/* Back button for non-login modes */}
-          {mode !== 'login' && (
+          {mode !== 'login' ? (
             <button
               onClick={() => switchMode('login')}
-              className="absolute top-8 left-8 w-8 h-8 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground flex items-center justify-center transition-all"
+              className="absolute top-6 left-6 w-8 h-8 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground flex items-center justify-center transition-all"
+              title="Back to Sign In"
             >
               <ArrowLeft size={16} />
             </button>
-          )}
+          ) : null}
+
+          {/* Close modal X button */}
+          <button
+            onClick={() => setIsAuthModalOpen(false)}
+            className="absolute top-6 right-6 w-8 h-8 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground flex items-center justify-center transition-all"
+            title="Close and return to landing page"
+          >
+            <X size={16} />
+          </button>
 
           <div className="flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/30 mb-4 border border-indigo-400/30">
@@ -562,11 +584,18 @@ export default function AuthModal() {
 
         </div>
 
-        {/* ── Footer Brand ──────────────────────────────────────── */}
-        <div className="px-8 py-4 border-t border-border bg-secondary/30">
-          <p className="text-[10px] text-muted-foreground text-center font-medium">
-            Secured by <span className="font-bold">PlateWise</span> • Your data stays private
+        {/* ── Footer Brand & Landing Page Link ─────────────────── */}
+        <div className="px-8 py-4 border-t border-border bg-secondary/30 flex items-center justify-between">
+          <p className="text-[10px] text-muted-foreground font-medium">
+            Secured by <span className="font-bold text-foreground">PlateWise</span>
           </p>
+          <button
+            type="button"
+            onClick={() => setIsAuthModalOpen(false)}
+            className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"
+          >
+            ← Return to Landing Page
+          </button>
         </div>
       </div>
     </div>

@@ -226,6 +226,16 @@ export default function Sidebar({
             </button>
           </div>
         </div>
+
+        {/* Footer Contacts */}
+        <div className="px-3 py-2 border-t border-border/50 bg-background/50 flex items-center justify-between text-[10px] text-muted-foreground">
+          <a href="https://x.com/prsd_x" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition">
+            @prsd_x
+          </a>
+          <a href="mailto:prsdx.dev@gmail.com" className="hover:text-foreground transition">
+            prsdx.dev@gmail.com
+          </a>
+        </div>
       </aside>
     </>
   );
