@@ -9,11 +9,11 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
 # Load .env
-ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=ENV_PATH)
 
-from scripts.chunker import chunk_text
-from scripts.document_processor import extract_document
+from app.services.chunker import chunk_text
+from app.services.document_processor import extract_document
 
 # ------------------------------------------------
 # Paths

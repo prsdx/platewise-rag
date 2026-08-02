@@ -19,7 +19,10 @@ from pydantic import BaseModel
 
 from supabase import create_client, Client
 import os
+from dotenv import load_dotenv
 
+# Load environment variables early so Supabase and DB config can read them
+load_dotenv(BASE_DIR / ".env")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
@@ -44,9 +47,9 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
-from scripts.vector_store import process_document, clear_database, delete_document_from_db, get_all_documents
-from scripts.search import retrieve_relevant_chunks, retrieve_multiple_documents
-from scripts.llm import generate_answer, generate_document_comparison
+from app.services.vector_store import process_document, clear_database, delete_document_from_db, get_all_documents
+from app.services.search import retrieve_relevant_chunks, retrieve_multiple_documents
+from app.services.llm import generate_answer, generate_document_comparison
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os as _os

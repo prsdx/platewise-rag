@@ -7,10 +7,10 @@ import os
 from dotenv import load_dotenv
 
 # Load .env
-ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=ENV_PATH)
 
-from scripts.vector_store import get_collection, _model
+from app.services.vector_store import get_collection, _model
 
 # ------------------------------------------------
 # BM25 Keyword Search Implementation
