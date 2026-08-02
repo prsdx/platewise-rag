@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://platewise-backend.onrender.com/:path*"
+      "destination": "https://platewise-api.onrender.com/:path*"
     },
     {
       "source": "/(.*)",

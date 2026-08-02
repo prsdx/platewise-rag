@@ -4,14 +4,14 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn scripts.api:app --host 0.0.0.0 --port 10000
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
       - key: GEMINI_API_KEY
         sync: false
-      - key: GEMINI_MODEL
-        value: gemini-3.1-flash-lite
+      - key: GROQ_API_KEY
+        sync: false
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
@@ -19,4 +19,20 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: ALLOWED_ORIGINS
-        value: "http://localhost:5173,https://platewise.vercel.app"
+        value: "http://localhost:5173,https://platewise-rag.vercel.app"
+      - key: ENABLE_QUERY_DECOMPOSITION
+        value: "true"
+      - key: ENABLE_SELF_CORRECT
+        value: "true"
+      - key: ENABLE_STRUCTURED_EXTRACTION
+        value: "true"
+      - key: ENABLE_CONFIDENCE_SCORING
+        value: "true"
+      - key: ENABLE_SEMANTIC_CACHING
+        value: "true"
+      - key: SIMILARITY_THRESHOLD_SELF_CORRECT
+        value: "0.35"
+      - key: CONFIDENCE_THRESHOLD_LOW
+        value: "0.25"
+      - key: CACHE_SIMILARITY_THRESHOLD
+        value: "0.92"
