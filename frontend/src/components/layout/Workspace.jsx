@@ -40,6 +40,7 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
   const [mode, setMode] = useState("chat");
 
   // Chat States
+  const [inputValue, setInputValue] = useState("");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [sources, setSources] = useState([]);
@@ -47,6 +48,7 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState("");
+  const [selectedModel, setSelectedModel] = useState("gemini-3.1-flash-lite");
 
   // Compare States
   const [compareLoading, setCompareLoading] = useState(false);
@@ -57,6 +59,7 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
   useEffect(() => {
     if (activeHistoryItem) {
       setQuestion(activeHistoryItem.question || "");
+      setInputValue("");
       setAnswer(activeHistoryItem.answer || "");
       setSources(activeHistoryItem.sources || []);
       setRetrievedChunks(activeHistoryItem.retrievedChunks || []);
@@ -73,14 +76,18 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
   }, [files]);
 
   const executeQuestion = async (queryText) => {
-    const q = queryText !== undefined ? queryText : question;
+    const q = queryText !== undefined ? queryText : inputValue;
     if (!q || !q.trim()) return;
 
+    setQuestion(q);
+    setInputValue("");
     setLoading(true);
 
     try {
-      console.log("Sending question:", q, "Document:", selectedDocument || "All");
-      const response = await askQuestion(q, selectedDocument || null);
+      console.log("Sending question:", q, "Document:", selectedDocument || "All", "Model:", selectedModel);
+      const response = await askQuestion(q, selectedDocument || null, selectedModel, (text) => {
+        setAnswer(text);
+      });
       
       const ans = response.answer || "";
       const srcs = response.sources || [];
@@ -272,82 +279,65 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
                     <div className="flex-1 flex flex-col min-h-[400px]">
 
                       {/* ── Hero Banner with Mascot ─────────────────── */}
-                      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-500/10 via-violet-500/8 to-blue-500/10 border border-indigo-500/20 p-6 md:p-8 mb-5">
+                      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/8 to-green-500/10 border border-emerald-500/20 p-6 md:p-8 mb-5">
                         
                         {/* Decorative floating elements */}
-                        <div className="absolute top-4 left-8 w-20 h-20 rounded-full bg-indigo-400/10 blur-2xl animate-pulse-glow" />
-                        <div className="absolute bottom-2 left-1/3 w-16 h-16 rounded-full bg-violet-400/10 blur-2xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
-                        <div className="absolute top-6 right-1/4 w-3 h-3 rounded-full bg-indigo-400/30 animate-float" />
-                        <div className="absolute bottom-8 left-1/4 w-2 h-2 rounded-full bg-violet-400/40 animate-float" style={{ animationDelay: '1.5s' }} />
-                        <div className="absolute top-1/2 left-[15%] w-1.5 h-1.5 rounded-full bg-blue-400/30 animate-float" style={{ animationDelay: '2s' }} />
+                        <div className="absolute top-4 left-8 w-20 h-20 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow" />
+                        <div className="absolute bottom-2 left-1/3 w-16 h-16 rounded-full bg-teal-400/10 blur-2xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
+                        <div className="absolute top-6 right-1/4 w-3 h-3 rounded-full bg-emerald-400/30 animate-float" />
+                        <div className="absolute bottom-8 left-1/4 w-2 h-2 rounded-full bg-teal-400/40 animate-float" style={{ animationDelay: '1.5s' }} />
+                        <div className="absolute top-1/2 left-[15%] w-1.5 h-1.5 rounded-full bg-green-400/30 animate-float" style={{ animationDelay: '2s' }} />
 
                         <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
                           {/* Left: Text Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2">
-                              <Sparkles size={20} className="text-indigo-500" />
-                              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">AI-Powered Workspace</span>
+                              <Sparkles size={20} className="text-emerald-500" />
+                              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">AI-Powered Workspace</span>
                             </div>
                             <h3 className="text-xl md:text-2xl font-extrabold text-foreground mb-2">
                               Welcome back{user?.name ? `, ${user.name}` : ''}! 👋
                             </h3>
                             <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-                              Leverage AI to understand your documents faster and smarter. Upload files, ask questions, and get context-grounded answers instantly.
+                              Leverage PlateWise AI to analyze restaurant compliance, delivery SLAs, and dietary guidelines. Ask a question below to get started.
                             </p>
                           </div>
 
-                          {/* Right: Robot Mascot (Inline SVG — no white background) */}
+                          {/* Right: PlateWise Cloche (Inline SVG) */}
                           <div className="shrink-0 hidden md:block">
                             <div className="relative">
-                              <div className="absolute inset-0 bg-indigo-400/20 rounded-full blur-3xl scale-75" />
+                              <div className="absolute inset-0 bg-emerald-400/20 rounded-full blur-3xl scale-75" />
                               <svg className="relative w-36 h-36 animate-float drop-shadow-lg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                {/* Glow */}
                                 <defs>
                                   <radialGradient id="botGlow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stopColor="#818cf8" stopOpacity="0.3"/>
-                                    <stop offset="100%" stopColor="#818cf8" stopOpacity="0"/>
+                                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.3"/>
+                                    <stop offset="100%" stopColor="#10b981" stopOpacity="0"/>
                                   </radialGradient>
                                   <linearGradient id="bodyGrad" x1="60" y1="50" x2="140" y2="180">
-                                    <stop offset="0%" stopColor="#6366f1"/>
-                                    <stop offset="100%" stopColor="#7c3aed"/>
-                                  </linearGradient>
-                                  <linearGradient id="faceGrad" x1="70" y1="70" x2="130" y2="130">
-                                    <stop offset="0%" stopColor="#eef2ff"/>
-                                    <stop offset="100%" stopColor="#c7d2fe"/>
+                                    <stop offset="0%" stopColor="#10b981"/>
+                                    <stop offset="100%" stopColor="#059669"/>
                                   </linearGradient>
                                 </defs>
                                 <circle cx="100" cy="100" r="95" fill="url(#botGlow)"/>
-                                {/* Antenna */}
-                                <line x1="100" y1="38" x2="100" y2="52" stroke="#818cf8" strokeWidth="3" strokeLinecap="round"/>
-                                <circle cx="100" cy="33" r="6" fill="#a78bfa"/>
-                                <circle cx="100" cy="33" r="3" fill="#c4b5fd">
-                                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-                                </circle>
-                                {/* Body */}
-                                <rect x="58" y="52" width="84" height="95" rx="28" fill="url(#bodyGrad)"/>
-                                {/* Face screen */}
-                                <rect x="68" y="62" width="64" height="48" rx="16" fill="url(#faceGrad)"/>
-                                {/* Eyes */}
-                                <circle cx="87" cy="84" r="7" fill="#4f46e5"/>
-                                <circle cx="113" cy="84" r="7" fill="#4f46e5"/>
-                                <circle cx="89" cy="82" r="2.5" fill="white"/>
-                                <circle cx="115" cy="82" r="2.5" fill="white"/>
-                                {/* Smile */}
-                                <path d="M90 96 Q100 104 110 96" stroke="#4f46e5" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                                {/* Ears */}
-                                <rect x="46" y="72" width="14" height="22" rx="7" fill="#818cf8"/>
-                                <rect x="140" y="72" width="14" height="22" rx="7" fill="#818cf8"/>
-                                {/* Arms */}
-                                <rect x="40" y="108" width="20" height="12" rx="6" fill="#818cf8"/>
-                                <rect x="140" y="108" width="20" height="12" rx="6" fill="#818cf8"/>
-                                {/* Belly light */}
-                                <circle cx="100" cy="128" r="8" fill="#a78bfa" opacity="0.5"/>
-                                <circle cx="100" cy="128" r="4" fill="#c4b5fd">
-                                  <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
-                                </circle>
-                                {/* Feet */}
-                                <rect x="72" y="145" width="22" height="14" rx="7" fill="#4f46e5"/>
-                                <rect x="106" y="145" width="22" height="14" rx="7" fill="#4f46e5"/>
+                                
+                                {/* Food Cloche Cover */}
+                                <path d="M40 140 Q40 60 100 60 Q160 60 160 140" fill="url(#bodyGrad)" stroke="#064e3b" strokeWidth="4"/>
+                                {/* Handle */}
+                                <circle cx="100" cy="50" r="10" fill="#064e3b"/>
+                                <rect x="96" y="50" width="8" height="15" fill="#064e3b"/>
+                                {/* Plate Base */}
+                                <ellipse cx="100" cy="140" rx="75" ry="15" fill="#d1fae5" stroke="#064e3b" strokeWidth="4"/>
+                                <ellipse cx="100" cy="145" rx="70" ry="12" fill="#a7f3d0"/>
+                                
+                                {/* Steam (Animated) */}
+                                <path d="M85 100 Q95 80 85 60" stroke="#ffedd5" strokeWidth="4" strokeLinecap="round">
+                                  <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+                                  <animate attributeName="d" values="M85 100 Q95 80 85 60; M85 100 Q75 80 85 60; M85 100 Q95 80 85 60" dur="2s" repeatCount="indefinite"/>
+                                </path>
+                                <path d="M115 110 Q125 90 115 70" stroke="#ffedd5" strokeWidth="4" strokeLinecap="round">
+                                  <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+                                  <animate attributeName="d" values="M115 110 Q125 90 115 70; M115 110 Q105 90 115 70; M115 110 Q125 90 115 70" dur="2.5s" repeatCount="indefinite"/>
+                                </path>
                               </svg>
                             </div>
                           </div>
@@ -356,12 +346,12 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
                         {/* Feature Cards Row */}
                         <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
                           {[
-                            { icon: Brain, title: "AI-Powered Analysis", desc: "Extract insights with advanced AI models.", color: "indigo" },
-                            { icon: BookOpen, title: "Multi-Format Support", desc: "PDF, DOCX, PPTX, TXT, and more.", color: "violet" },
-                            { icon: Shield, title: "Secure & Private", desc: "Documents processed securely on-device.", color: "emerald" },
-                            { icon: Bot, title: "Smart & Contextual", desc: "Context-aware answers with citations.", color: "blue" },
+                            { icon: Brain, title: "AI-Powered Analysis", desc: "Extract insights with advanced AI models.", color: "emerald" },
+                            { icon: BookOpen, title: "Multi-Format Support", desc: "PDF, DOCX, PPTX, TXT, CSV and more.", color: "teal" },
+                            { icon: Shield, title: "Secure & Private", desc: "Documents processed securely on-device.", color: "green" },
+                            { icon: Bot, title: "Smart & Contextual", desc: "Context-aware answers with citations.", color: "cyan" },
                           ].map((feat, i) => (
-                            <div key={i} className="p-3.5 rounded-xl bg-card/80 backdrop-blur-sm border border-border/60 hover:border-indigo-400/30 hover:shadow-sm transition-all group">
+                            <div key={i} className={`p-3.5 rounded-xl bg-card/80 backdrop-blur-sm border border-border/60 hover:border-${feat.color}-400/30 hover:shadow-sm transition-all group`}>
                               <div className={`w-8 h-8 rounded-lg bg-${feat.color}-500/10 text-${feat.color}-600 dark:text-${feat.color}-400 flex items-center justify-center border border-${feat.color}-500/20 mb-2.5 group-hover:scale-110 transition-transform`}>
                                 <feat.icon size={16} />
                               </div>
@@ -375,21 +365,21 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
                       {/* ── Suggestion Chips ─────────────────────────── */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
                          {[
-                           { text: "Summarize this document", icon: FileText },
-                           { text: "Compare uploaded files", icon: GitCompare },
-                           { text: "What are the key findings?", icon: Sparkles },
-                           { text: "Extract important topics", icon: Layers },
-                           { text: "Explain like I'm a beginner", icon: Zap },
-                           { text: "Generate quiz questions", icon: MessageSquare }
+                           { text: "Check FSSAI compliance requirements", icon: Shield },
+                           { text: "What is the peak hour surge policy?", icon: Zap },
+                           { text: "Are there any vegan pizzas?", icon: Sparkles },
+                           { text: "Summarize allergen guidelines", icon: Layers },
+                           { text: "Compare refund policies", icon: GitCompare },
+                           { text: "List Italian restaurants in directory", icon: FileText }
                          ].map((chip, idx) => {
                             const Icon = chip.icon;
                             return (
                               <button
                                 key={idx}
                                 onClick={() => handleSuggestionClick(chip.text)}
-                                className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-secondary hover:border-indigo-400/30 transition-all text-left group"
+                                className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-secondary hover:border-emerald-400/30 transition-all text-left group"
                               >
-                                <Icon size={16} className="text-indigo-400 shrink-0 group-hover:scale-110 transition-transform" />
+                                <Icon size={16} className="text-emerald-500 shrink-0 group-hover:scale-110 transition-transform" />
                                 <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">{chip.text}</span>
                               </button>
                             );
@@ -410,16 +400,17 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
                   )}
                 </div>
 
-                {/* Input Area */}
                 <div className="shrink-0">
                   <ChatInput
-                    question={question}
-                    setQuestion={setQuestion}
-                    onSubmit={() => executeQuestion(question)}
+                    question={inputValue}
+                    setQuestion={setInputValue}
+                    onSubmit={() => executeQuestion()}
                     loading={loading}
                     files={files}
                     selectedDocument={selectedDocument}
                     setSelectedDocument={setSelectedDocument}
+                    selectedModel={selectedModel}
+                    setSelectedModel={setSelectedModel}
                   />
                   
                   {/* Disclaimer */}

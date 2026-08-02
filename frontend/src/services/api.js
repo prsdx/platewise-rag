@@ -1,10 +1,10 @@
 import axios from "axios";
-import { auth, isFirebaseConfigured } from "../config/firebase";
+import { supabase } from "../config/supabase";
 
 // In production (Vercel), requests to /api/* are proxied to Render via vercel.json rewrites.
 // In local dev, Vite proxies /api/* to http://127.0.0.1:8000 via vite.config.js.
 // This means ALL requests are same-origin → CORS is completely eliminated.
-const API_URL = "/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Persistent Session ID generator per browser/device
 function getSessionId() {
@@ -24,11 +24,11 @@ const api = axios.create({
 api.interceptors.request.use(async (config) => {
   config.headers["X-Session-ID"] = getSessionId();
 
-  // Attach Firebase auth token if user is logged in
+  // Attach Supabase auth token if user is logged in
   try {
-    if (isFirebaseConfigured && auth?.currentUser) {
-      const token = await auth.currentUser.getIdToken();
-      config.headers["Authorization"] = `Bearer ${token}`;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      config.headers["Authorization"] = `Bearer ${session.access_token}`;
     } else {
       // Mock auth — attach mock token from localStorage
       const mockUser = localStorage.getItem("platewise_mock_user");
@@ -111,22 +111,84 @@ export async function uploadDocuments(files, onProgress = () => {}) {
 }
 
 /**
- * Ask a question.
+ * Ask a question with streaming response.
  */
-export async function askQuestion(question, documentName = null) {
-  try {
-    const response = await api.post("/query", {
-      question,
-      document_name: documentName,
-    });
+export async function askQuestion(question, documentName = null, modelId = null, onChunk = () => {}) {
+  const sessionId = getSessionId();
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Session-ID": sessionId,
+  };
 
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.detail ||
-      "Failed to generate answer."
-    );
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      headers["Authorization"] = `Bearer ${session.access_token}`;
+    } else {
+      const mockUser = localStorage.getItem("platewise_mock_user");
+      if (mockUser) {
+        const parsed = JSON.parse(mockUser);
+        headers["Authorization"] = `Bearer mock_${parsed.uid}`;
+      }
+    }
+  } catch (err) {}
+
+  const response = await fetch(`${API_URL}/query`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ question, document_name: documentName, model_id: modelId }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || "Failed to generate answer.");
   }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let done = false;
+  let fullAnswer = "";
+  let finalSources = [];
+  let finalChunks = [];
+  let finalMetrics = null;
+  let buffer = "";
+
+  while (!done) {
+    const { value, done: readerDone } = await reader.read();
+    done = readerDone;
+    if (value) {
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n\n");
+      buffer = lines.pop(); // Keep the last incomplete chunk in the buffer
+      
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          try {
+            const data = JSON.parse(line.substring(6));
+            if (data.type === "metadata") {
+              finalSources = data.sources || [];
+              finalChunks = data.retrieved_chunks || [];
+            } else if (data.type === "chunk") {
+              fullAnswer += data.text;
+              onChunk(fullAnswer);
+            } else if (data.type === "done") {
+              finalMetrics = data.metrics || null;
+            }
+          } catch (e) {
+            // ignore JSON parse error for genuinely malformed lines, but incomplete ones are now handled by buffer!
+            console.error("SSE JSON Parse Error on line:", line, e);
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    answer: fullAnswer,
+    sources: finalSources,
+    retrieved_chunks: finalChunks,
+    metrics: finalMetrics,
+  };
 }
 
 /**

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
@@ -8,33 +9,28 @@ import { ToastProvider } from "./context/ToastContext";
 import { ChatHistoryProvider } from "./context/ChatHistoryContext";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import AuthModal from "./components/auth/AuthModal";
+import Landing from "./pages/Landing";
 import { getDocuments, clearAllDocuments } from "./services/api";
-import { useContext } from "react";
 
-function MainApp() {
-  // Stores uploaded documents
+function Dashboard() {
   const [files, setFiles] = useState([]);
   const [activeHistoryItem, setActiveHistoryItem] = useState(null);
   const [chatKey, setChatKey] = useState(0);
   const { user } = useContext(AuthContext);
-
-  // Sidebar toggle state — closed by default on mobile, open on desktop via CSS
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Fetch indexed documents on startup
   useEffect(() => {
     const fetchDocs = async () => {
       try {
         const docs = await getDocuments();
         setFiles(docs || []);
       } catch (err) {
-        console.error("Error fetching indexed documents on mount:", err);
+        console.error("Error fetching indexed documents:", err);
       }
     };
     fetchDocs();
   }, []);
 
-  // Close sidebar when resizing to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1280) {
@@ -65,21 +61,19 @@ function MainApp() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
-      {/* Show AuthModal if not logged in — self-managed via context */}
-      <AuthModal />
+  // ── Protection ──
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
 
-      {/* Top Navigation */}
+  return (
+    <div className="min-h-screen bg-slate-50 transition-colors duration-300">
       <Navbar
         onClearAllDocuments={handleClearAllDocuments}
         filesCount={files.length}
         setSidebarOpen={setSidebarOpen}
       />
-
-      {/* Main Layout */}
       <div className="flex h-[calc(100vh-64px)] overflow-hidden">
-        {/* Sidebar — always visible on xl+, drawer on smaller screens */}
         <Sidebar
           files={files}
           setFiles={setFiles}
@@ -89,8 +83,6 @@ function MainApp() {
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         />
-
-        {/* Workspace — takes full width on mobile */}
         <Workspace
           key={chatKey}
           files={files}
@@ -99,10 +91,26 @@ function MainApp() {
           onNewChat={handleNewChat}
         />
       </div>
-
-      {/* Toast Container */}
-      <ToastContainer />
     </div>
+  );
+}
+
+function MainApp() {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
+  }
+
+  return (
+    <BrowserRouter>
+      <AuthModal />
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

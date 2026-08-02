@@ -84,21 +84,26 @@ export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHisto
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 xl:relative xl:translate-x-0 w-[320px] sm:w-[360px] bg-sidebar border-r border-border flex flex-col transition-transform duration-300 ease-in-out overflow-hidden shrink-0 shadow-xl xl:shadow-none h-full ${
+      <aside className={`fixed inset-y-0 left-0 z-50 xl:relative xl:translate-x-0 w-[280px] sm:w-[320px] bg-sidebar border-r border-border flex flex-col transition-transform duration-300 ease-in-out overflow-hidden shrink-0 shadow-xl xl:shadow-none h-full ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
 
         {/* Primary Action: New Conversation */}
-        <div className="p-4 border-b border-border/60 flex items-center gap-2">
+        <div className="p-3 border-b border-border/60 flex items-center gap-2">
           <button
             onClick={() => {
               onNewChat();
               if (setSidebarOpen) setSidebarOpen(false);
             }}
-            className="flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl bg-gradient-to-r from-slate-800 via-zinc-800 to-slate-900 hover:from-slate-700 hover:to-zinc-800 text-white font-bold text-sm shadow-md shadow-slate-900/40 border border-slate-700/60 transition-all duration-150 active:scale-[0.99] hover:scale-[1.01]"
+            className="flex-1 flex items-center justify-between py-2.5 px-3 rounded-lg bg-card hover:bg-secondary text-foreground font-semibold text-sm border border-border transition-all duration-150 group"
           >
-            <Plus size={18} strokeWidth={2.5} />
-            <span>New Conversation</span>
+            <span className="flex items-center gap-2">
+              <Plus size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+              New Chat
+            </span>
+            <span className="text-[10px] text-muted-foreground font-mono bg-background border border-border px-1.5 rounded-md hidden sm:block">
+              ⌘ N
+            </span>
           </button>
 
           {/* Close Sidebar Button (Mobile/Tablet only) */}
