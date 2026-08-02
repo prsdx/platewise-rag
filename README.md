@@ -1,277 +1,99 @@
-# 🍽️ PlateWise — Restaurant & Food Knowledge Assistant
+# PlateWise 2.0 - AI Document Intelligence SaaS
 
-> **An AI-powered Retrieval-Augmented Generation (RAG) system for the food-delivery industry.
-> Ask natural-language questions about restaurant menus, food safety, delivery SLAs, refund
-> policies, and FSSAI compliance — and get cited, grounded answers.**
+![PlateWise Banner](https://img.shields.io/badge/PlateWise-AI_Document_Intelligence-4f46e5?style=for-the-badge)
 
-<p align="center">
+PlateWise is a production-ready, AI-native SaaS application designed to transform raw documents (PDFs, DOCX, TXT) into actionable intelligence. It uses advanced Hybrid RAG (Retrieval-Augmented Generation), Supabase for multi-tenant isolation, and a dynamic LLM cascade supporting both proprietary (Google Gemini, OpenAI, Claude) and open-source models (Llama 3, Mixtral via Groq).
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
-![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?logo=react)
-![ChromaDB](https://img.shields.io/badge/Vector%20DB-ChromaDB-green)
-![SentenceTransformers](https://img.shields.io/badge/Embeddings-SentenceTransformers-orange)
-![Gemini](https://img.shields.io/badge/LLM-Google%20Gemini-4285F4?logo=google)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+Built originally for food delivery operations and restaurant compliance, the engine is fully generalized for any document-heavy enterprise workflow.
 
-</p>
+## 🚀 Key Features
+
+- **Hybrid RAG Retrieval Engine:** Combines `pgvector` semantic embeddings with BM25 keyword search using Reciprocal Rank Fusion (RRF) for unparalleled accuracy.
+- **Dynamic LLM Cascade:** Intelligently routes queries. Automatically falls back on quota limits. Supports Gemini 1.5/3.5, GPT-4o, Claude 3.5, and Groq-powered Open Source models.
+- **Premium UI/UX:** Built with React & Tailwind CSS. Features "Quiet Chrome" design, smooth micro-animations, and dynamic dashboards inspired by top-tier SaaS (Linear, Vercel).
+- **Secure Authentication:** Integrated with Supabase Auth for Magic Links, Email/Password, and Google OAuth.
+- **Multi-Tenant Architecture:** Fully isolated PostgreSQL database preventing data leakage between users.
 
 ---
 
-## 🎯 What is PlateWise?
+## 🛠 Tech Stack
 
-PlateWise is a **Food Knowledge Hub** — a RAG system built for a food-delivery company's
-internal support and operations team. It ingests:
-
-- 🍛 **Restaurant menus** (PDF) — with dietary tags (V/VG/GF) and allergen info
-- 📋 **Policy documents** (DOCX/TXT) — refund, cancellation, delivery SLA, FSSAI compliance
-- ❓ **FAQ documents** (TXT/MD) — customer and restaurant partner FAQs
-- 📊 **Structured data** (CSV) — restaurant directory with cuisine, rating, delivery time
-
-**Example queries it handles well:**
-- *"Which dishes on the Spice Garden menu are vegan?"*
-- *"What's the refund policy if an order arrives more than 30 minutes late?"*
-- *"Does this restaurant have a valid FSSAI hygiene certificate on file?"*
-- *"Summarize the cancellation policy for restaurant partners."*
-- *"Which restaurants in Bengaluru have a rating above 4.5?"*
+- **Frontend:** React 18, Vite, Tailwind CSS, Lucide Icons, React Router
+- **Backend:** Python 3.12, FastAPI, Uvicorn, LangChain/LlamaIndex paradigms
+- **Database / Auth:** Supabase (PostgreSQL + pgvector + GoTrue Auth)
+- **AI Inference:** Google GenAI SDK, Groq SDK
+- **Document Parsers:** PyMuPDF, python-docx, python-pptx
 
 ---
 
-## 🏗️ Architecture
+## ⚙️ Local Development Setup
 
-```
-User Query
-    │
-    ▼
-React Frontend (Vite SPA)
-    │  POST /query/stream  (SSE streaming)
-    │  X-API-Key header
-    ▼
-FastAPI Backend  ──  Auth Middleware (X-API-Key)
-    │
-    ├── POST /upload    → Ingestion Pipeline
-    │       │
-    │       ├── PDF Reader    (PyMuPDF)
-    │       ├── DOCX Reader   (python-docx)
-    │       ├── TXT/MD Reader (native)
-    │       └── CSV Reader    (pandas → row-to-text)
-    │               │
-    │               └── Recursive Sentence Chunker (800 chars / 2-sentence overlap)
-    │                       │
-    │                       └── SentenceTransformer Embeddings (all-MiniLM-L6-v2, 384d)
-    │                               │
-    │                               └── ChromaDB (persistent HNSW vector store)
-    │
-    └── POST /query/stream → Hybrid Retrieval → LLM Generation
-            │
-            ├── Dense Vector Search  (ChromaDB cosine similarity)
-            ├── BM25 Keyword Search  (pure-Python Okapi BM25)
-            └── Reciprocal Rank Fusion (RRF k=60)
-                    │
-                    └── Top-k Context Chunks
-                            │
-                            └── Gemini LLM Fallback Cascade
-                                    ├── gemini-3.1-flash-lite  (primary)
-                                    ├── gemini-3.5-flash       (429 fallback)
-                                    ├── gemini-2.5-flash       (429 fallback)
-                                    └── mock extractor         (offline fallback)
-                                            │
-                                            └── Streamed Answer + Citations (SSE)
-```
+Follow these instructions to get PlateWise running on your local machine.
 
----
+### 1. Prerequisites
+- Node.js (v18+)
+- Python (3.10+)
+- A [Supabase](https://supabase.com/) account (Free tier is fine)
+- A [Groq API Key](https://console.groq.com) (Free)
+- A [Google Gemini API Key](https://aistudio.google.com/) (Free)
 
-## 🛠️ Tech Stack
-
-| Layer | Technology | Notes |
-|-------|-----------|-------|
-| Backend API | FastAPI + Uvicorn | Async REST, SSE streaming |
-| Vector DB | ChromaDB 1.5.9 | Persistent HNSW, local |
-| Embeddings | SentenceTransformers `all-MiniLM-L6-v2` | 384-dim, fully local — no API |
-| Sparse Search | Okapi BM25 (pure Python) | No external dependency |
-| Rank Fusion | Reciprocal Rank Fusion (k=60) | Fuses dense + sparse rankings |
-| LLM | Google Gemini (multi-model cascade) | `gemini-3.1-flash-lite` primary |
-| Frontend | React 19 + Vite 8 | SPA in `frontend/` |
-| CSV Ingestion | pandas | Row-to-text conversion |
-| Auth | API Key middleware | `X-API-Key` header |
-| Deployment | Render (backend) + Vercel (frontend) | |
-
----
-
-## ⚙️ Local Setup
-
-### Prerequisites
-- Python 3.12+
-- Node.js 18+
-- A Google Gemini API key ([get one free](https://aistudio.google.com/))
-
-### 1. Clone & Configure
+### 2. Environment Variables
+Clone the repository and set up your `.env` file in the root backend directory:
 
 ```bash
-git clone https://github.com/prsdx/platewise-rag.git
-cd platewise-rag
-
-# Copy the env template
-cp .env.example scripts/.env
-# Edit scripts/.env and fill in your GEMINI_API_KEY and PLATEWISE_API_KEY
+cp .env.example .env
 ```
+Open `.env` and fill in your Supabase, Gemini, and Groq keys.
 
-### 2. Backend
+### 3. Backend Setup
+
+Create a virtual environment and install the dependencies:
 
 ```bash
+# Windows
 python -m venv venv
-source venv/bin/activate        # Linux/macOS
-# .\venv\Scripts\Activate.ps1  # Windows PowerShell
+.\venv\Scripts\activate
+pip install -r requirements.txt
 
+# Mac/Linux
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Run Backend
-
+Start the FastAPI server:
 ```bash
-python -m uvicorn scripts.api:app --reload --port 8000
-# API docs: http://localhost:8000/docs
+uvicorn scripts.api:app --reload
 ```
+The API will run on `http://localhost:8000`.
 
-### 4. Run Frontend
+### 4. Frontend Setup
+
+Open a new terminal window, navigate to the `frontend` directory, and install npm packages:
 
 ```bash
 cd frontend
 npm install
+```
+
+Start the Vite development server:
+```bash
 npm run dev
-# React UI: http://localhost:5173
 ```
-
-### 5. Ingest Sample Data
-
-Upload the files from `data/sample_docs/` via the UI, or curl:
-
-```bash
-curl -X POST http://localhost:8000/upload \
-  -H "X-API-Key: your_secret_key" \
-  -F "files=@data/sample_docs/spice_garden_menu.txt"
-```
-
-### 6. Run Tests
-
-```bash
-pytest --tb=short
-```
+The web app will run on `http://localhost:5173`.
 
 ---
 
-## 📊 Retrieval Benchmark Results
+## ☁️ Deployment
 
-See [`eval/results.md`](eval/results.md) for the full benchmark.
-
-| Config | Hit-Rate @k=5 | p50 Latency | p95 Latency |
-|--------|--------------|-------------|-------------|
-| Dense-only | TBD | TBD | TBD |
-| Hybrid (BM25 + RRF) | TBD | TBD | TBD |
-
-> Run `python eval/retrieval_benchmark.py` to regenerate results.
+- **Frontend:** Deploys seamlessly to [Vercel](https://vercel.com) using the included `vercel.json` configuration.
+- **Backend:** Designed to be containerized and deployed to services like Render, Railway, or AWS App Runner.
+- **Database:** Supabase handles cloud persistence automatically.
 
 ---
 
-## 🐳 Docker
-
-```bash
-# Build
-docker build -t platewise-api .
-
-# Run (supply .env file)
-docker run --env-file scripts/.env -p 8000:8000 platewise-api
-```
+## 📜 License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
-
-## 📂 Project Structure
-
-```
-platewise-rag/
-├── frontend/                  # React + Vite SPA
-│   ├── src/
-│   │   ├── components/        # UI components (chat, upload, sources)
-│   │   ├── context/           # AuthContext, ToastContext, ChatHistoryContext
-│   │   └── services/api.js    # API client with streaming support
-│   └── index.html
-├── scripts/                   # Backend application code
-│   ├── api.py                 # FastAPI REST server + auth middleware
-│   ├── llm.py                 # LLM fallback cascade + streaming generator
-│   ├── search.py              # Hybrid search: BM25 + dense + RRF
-│   ├── vector_store.py        # ChromaDB ingestion & retrieval
-│   ├── chunker.py             # Sentence-aware recursive chunker
-│   ├── document_processor.py  # Pluggable document extractor dispatcher
-│   ├── readers/               # Per-format extractors
-│   │   ├── pdf_reader.py
-│   │   ├── docx_reader.py
-│   │   ├── csv_reader.py      # NEW: CSV row-to-text converter
-│   │   ├── txt_reader.py
-│   │   └── md_reader.py
-│   └── app.py                 # Streamlit UI (alternative to React)
-├── eval/                      # Retrieval benchmarking
-│   ├── retrieval_benchmark.py # Benchmark script (dense vs hybrid)
-│   ├── test_questions.json    # 18 Q&A pairs with known source docs
-│   └── results.md             # Auto-generated benchmark results
-├── tests/                     # Pytest test suite
-│   ├── test_chunker.py
-│   ├── test_csv_reader.py
-│   ├── test_auth.py
-│   ├── test_health.py
-│   ├── test_search.py
-│   ├── test_vector_store.py
-│   └── test_rag_pipeline.py
-├── data/
-│   └── sample_docs/           # 15 synthetic food-domain demo documents
-├── docs/
-│   ├── adr/                   # Architecture Decision Records
-│   ├── design_doc.md
-│   └── tech_stack.md
-├── Dockerfile                 # Multi-stage backend container
-├── docker-compose.yml         # Local convenience compose
-├── render.yaml                # Render deployment config
-├── requirements.txt
-└── .env.example               # Environment variable template
-```
-
----
-
-## 🔐 Authentication
-
-All API endpoints (except `/` and `/docs`) require an `X-API-Key` header:
-
-```bash
-curl -H "X-API-Key: your_secret_key" http://localhost:8000/documents
-```
-
-Set `PLATEWISE_API_KEY` in `scripts/.env`. The React frontend reads this key from the
-login modal and passes it automatically on every request.
-
----
-
-## ⚠️ Known Limitations
-
-1. **Citation granularity is chunk-level**, not exact-sentence — answers cite the chunk
-   where the evidence was found, not the specific line.
-2. **Scanned image PDFs** without an embedded text layer cannot be indexed (no OCR).
-3. **BM25 index is rebuilt in-memory** on first query after server restart — adds ~1s
-   latency on cold start with large document sets.
-4. **No persistent user sessions** — the session ID is client-generated; clearing browser
-   storage loses the session's document index.
-5. **Streaming citations** arrive as a final SSE event after the text stream — there is
-   a brief gap between the last token and citation rendering.
-
----
-
-## 🚀 Live Demo
-
-- **Frontend:** TBD (deploy to Vercel)
-- **Backend API:** TBD (deploy to Render)
-
-> API key for the live demo available on request.
-
----
-
-## 📄 License
-
-MIT — see [LICENSE](LICENSE).
+*Built with ❤️ for modern operations.*
