@@ -8,8 +8,10 @@ fastapi>=0.115,<1.0
 uvicorn[standard]>=0.30,<1.0
 python-multipart>=0.0.9
 
-# Vector DB + embeddings
-chromadb>=1.0,<2.0
+# Vector DB (Supabase pgvector) + embeddings
+supabase>=2.0,<3.0
+vecs>=0.4,<1.0
+psycopg2-binary>=2.9,<3.0
 sentence-transformers>=3.0,<4.0
 
 # Document readers
@@ -19,6 +21,7 @@ python-pptx>=1.0,<2.0
 
 # LLM
 google-genai>=1.0,<3.0
+groq>=1.0,<2.0
 
 # Config
 python-dotenv>=1.0,<2.0
