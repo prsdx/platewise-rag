@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
@@ -49,72 +48,85 @@
 }
 
 :root {
-    --background: #fdfbf7; /* Creamy off-white */
-    --foreground: #292524; /* Soft dark stone */
-    --card: #ffffff;
-    --card-foreground: #292524;
-    --popover: #ffffff;
-    --popover-foreground: #292524;
-    --primary: #10b981; /* Fresh Emerald Green */
+    --accent-primary: #10B981;
+    --accent-premium: #F59E0B;
+    --radius: 0.75rem;
+
+    /* ── Eye-Friendly Light Theme (Soft Paper / Linear Style) ── */
+    --bg-base: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --border-hairline: #E2E8F0;
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+
+    --background: var(--bg-base);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent-primary);
     --primary-foreground: #ffffff;
-    --secondary: #f5f5f4; /* Warm light gray */
-    --secondary-foreground: #292524;
-    --muted: #f5f5f4;
-    --muted-foreground: #78716c; /* Warm muted gray */
-    --accent: #d1fae5;
-    --accent-foreground: #064e3b;
-    --destructive: #ef4444; /* Alert Red */
-    --border: #e7e5e4;
-    --input: #e7e5e4;
-    --ring: #10b981;
-    --chart-1: #10b981;
-    --chart-2: #f59e0b;
-    --chart-3: #ef4444;
-    --chart-4: #3b82f6;
-    --chart-5: #8b5cf6;
-    --radius: 0.85rem;
-    --sidebar: #fdfbf7;
-    --sidebar-foreground: #292524;
-    --sidebar-primary: #10b981;
+    --secondary: #F1F5F9;
+    --secondary-foreground: var(--text-primary);
+    --muted: #F1F5F9;
+    --muted-foreground: var(--text-secondary);
+    --accent: rgba(16, 185, 129, 0.08);
+    --accent-foreground: var(--accent-primary);
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: var(--border-hairline);
+    --input: var(--border-hairline);
+    --ring: var(--accent-primary);
+
+    --sidebar: var(--bg-surface);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--accent-primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #f5f5f4;
-    --sidebar-accent-foreground: #292524;
-    --sidebar-border: #e7e5e4;
-    --sidebar-ring: #10b981;
+    --sidebar-accent: #F1F5F9;
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-hairline);
+    --sidebar-ring: var(--accent-primary);
 }
 
 .dark {
-    --background: #1c1917; /* Soft Charcoal */
-    --foreground: #f5f5f4; /* Soft warm white */
-    --card: #292524; /* Slightly lighter charcoal */
-    --card-foreground: #f5f5f4;
-    --popover: #292524;
-    --popover-foreground: #f5f5f4;
-    --primary: #10b981; /* Vibrant Emerald Green */
+    /* ── Premium Dark Theme (Part 0 Exact Specs) ── */
+    --bg-base: #0A0A0C;        /* page background */
+    --bg-surface: #131316;     /* cards, panels, elevated surfaces */
+    --border-hairline: #232328;
+    --accent-primary: #10B981; /* emerald — buttons, links, active states */
+    --accent-premium: #C9A227; /* muted gold — badges, hero glow */
+    --text-primary: #F5F5F4;
+    --text-secondary: #A1A1AA;
+
+    --background: var(--bg-base);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent-primary);
     --primary-foreground: #ffffff;
-    --secondary: #44403c;
-    --secondary-foreground: #f5f5f4;
-    --muted: #44403c;
-    --muted-foreground: #a8a29e;
-    --accent: #064e3b;
-    --accent-foreground: #d1fae5;
-    --destructive: #f87171;
-    --border: #44403c;
-    --input: #44403c;
-    --ring: #10b981;
-    --chart-1: #34d399;
-    --chart-2: #fbbf24;
-    --chart-3: #f87171;
-    --chart-4: #60a5fa;
-    --chart-5: #a78bfa;
-    --sidebar: #1c1917;
-    --sidebar-foreground: #f5f5f4;
-    --sidebar-primary: #10b981;
+    --secondary: #1C1C21;
+    --secondary-foreground: var(--text-primary);
+    --muted: #1C1C21;
+    --muted-foreground: var(--text-secondary);
+    --accent: rgba(16, 185, 129, 0.12);
+    --accent-foreground: var(--accent-primary);
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: var(--border-hairline);
+    --input: var(--border-hairline);
+    --ring: var(--accent-primary);
+
+    --sidebar: var(--bg-base);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--accent-primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #44403c;
-    --sidebar-accent-foreground: #f5f5f4;
-    --sidebar-border: #44403c;
-    --sidebar-ring: #10b981;
+    --sidebar-accent: var(--bg-surface);
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-hairline);
+    --sidebar-ring: var(--accent-primary);
 }
 
 @layer base {
@@ -165,6 +177,47 @@
   /* Soft pulse glow indicator */
   .pulse-glow-green {
     animation: pulseGreen 2s infinite;
+  }
+
+  /* Glassmorphic SaaS Cards & Borders */
+  .glass-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-hairline);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-hover:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .glass-header {
+    background: color-mix(in srgb, var(--bg-base) 85%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .glass-sidebar {
+    background: var(--bg-base);
+    border-right: 1px solid var(--border-hairline);
+  }
+
+  .gradient-text-emerald {
+    background: linear-gradient(135deg, #34d399 0%, #2dd4bf 50%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-amber {
+    background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   /* Hover scale & glow effect */

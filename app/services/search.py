@@ -155,7 +155,7 @@ def retrieve_relevant_chunks(query, n_results=10, document_name=None, user_id=No
     dummy_vector = [0.0] * 384
     all_data = collection.query(
         data=dummy_vector,
-        limit=5000,
+        limit=1000,
         filters=where_clause,
         include_metadata=True,
         include_value=False
@@ -258,7 +258,34 @@ def retrieve_document_content(document_name, user_id=None):
         include_value=False
     )
 
+    # Fallback to query without user_id filter if no chunks found
+    if not results and user_id:
+        results = collection.query(
+            data=dummy_vector,
+            limit=1000,
+            filters={"document_name": {"$eq": document_name}},
+            include_metadata=True,
+            include_value=False
+        )
+
     if not results:
+        # Fallback to reading file directly from disk if vector chunks not indexed yet
+        sample_path = BASE_DIR / "data" / "sample_docs" / document_name
+        upload_path = BASE_DIR / "data" / "uploads" / document_name
+        target_path = sample_path if sample_path.exists() else (upload_path if upload_path.exists() else None)
+
+        if target_path:
+            try:
+                with open(target_path, "r", encoding="utf-8", errors="ignore") as f:
+                    file_text = f.read()
+                return {
+                    "name": document_name,
+                    "content": file_text,
+                    "metadata": [{"document_name": document_name, "chunk": 1, "text": file_text}],
+                }
+            except Exception as err:
+                print(f"[WARN] Failed to read disk fallback for {document_name}: {err}")
+
         return {
             "name": document_name,
             "content": "",

@@ -12,13 +12,11 @@ import {
   Download,
   FileText,
   FileJson,
-  FileText as FileTxt,
-  Zap,
   Cpu,
-  Layers,
   Search,
   ChevronDown,
   ChevronUp,
+  Zap,
 } from "lucide-react";
 import { ToastContext } from "../../context/ToastContext";
 import MarkdownRenderer from "../ui/MarkdownRenderer";
@@ -62,8 +60,8 @@ export default function AnswerCard({
       filename += ".txt";
       mimeType = "text/plain";
     } else if (format === "markdown") {
-      content = `# AI Generated Answer\n\n${answer}\n\n## Sources\n${
-        sources?.map((s) => `- ${typeof s === 'string' ? s : s.document_name}`).join("\n") || "No sources"
+      content = `# PlateWise AI Answer\n\n${answer}\n\n## Sources\n${
+        sources?.map((s) => `- ${typeof s === "string" ? s : s.document_name}`).join("\n") || "No sources"
       }`;
       filename += ".md";
       mimeType = "text/markdown";
@@ -112,160 +110,129 @@ export default function AnswerCard({
     return null;
   }
 
-  // Latency metrics calculations
   const embedTime = metrics?.embedding_time_ms ? `${metrics.embedding_time_ms} ms` : "< 15 ms";
   const totalTime = metrics?.total_time_ms ? `${(metrics.total_time_ms / 1000).toFixed(2)}s` : null;
   const llmModel = metrics?.llm_model;
-  const fallbackChain = metrics?.fallback_chain;
 
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-300 flex flex-col">
-
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-card shrink-0 gap-4">
-
+    <div className="glass-card rounded-3xl border border-border overflow-hidden shadow-xl transition-all duration-300 flex flex-col my-4">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-secondary/40 shrink-0 gap-4">
         {/* Left: Title & Badges */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 border border-indigo-400/30 shrink-0">
-              <Sparkles size={18} strokeWidth={2.2} />
-            </div>
-            <div>
-              <h2 className="font-bold text-lg text-foreground whitespace-nowrap">
-                PlateWise AI Answer
-              </h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
+            <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-emerald-400">
+              <Sparkles size={16} />
             </div>
           </div>
+          <div>
+            <h3 className="font-bold text-sm text-foreground">PlateWise AI Intelligence</h3>
+          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-200 dark:border-emerald-800 whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
               <ShieldCheck size={12} />
-              Grounded Response
+              Grounded
             </span>
 
-            {/* Model Badge */}
             {llmModel && (
-              <span 
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 text-xs font-bold border border-slate-700 whitespace-nowrap"
-                title={`Fallback chain: ${fallbackChain || "N/A"}`}
-              >
-                <Cpu size={12} className="text-slate-400" />
-                {llmModel === "mock" ? "Mock Offline AI" : llmModel.startsWith("gemini") ? `Gemini: ${llmModel.replace("gemini-", "")}` : llmModel}
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground text-[11px] font-bold border border-border">
+                <Cpu size={12} className="text-emerald-400" />
+                {llmModel.startsWith("gemini") ? `Gemini: ${llmModel.replace("gemini-", "")}` : llmModel}
               </span>
             )}
           </div>
         </div>
 
-        {/* Right: Actions Toolbar */}
-        <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+        {/* Right: Actions */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={copyAnswer}
             disabled={!answer}
-            className={`p-2 rounded-lg border border-border bg-card hover:bg-secondary transition text-sm flex items-center gap-1 disabled:opacity-40 ${
-              copied ? "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5" : "text-muted-foreground hover:text-foreground"
+            className={`p-2 rounded-xl border border-border bg-secondary hover:bg-muted transition text-xs flex items-center gap-1.5 disabled:opacity-30 ${
+              copied ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" : "text-muted-foreground"
             }`}
             title="Copy Answer"
           >
             {copied ? <Check size={14} /> : <Copy size={14} />}
           </button>
 
-          {/* Download Dropdown */}
+          {/* Download */}
           <div className="relative group">
             <button
               disabled={!answer}
-              className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition text-sm flex items-center gap-1 disabled:opacity-40"
+              className="p-2 rounded-xl border border-border bg-secondary hover:bg-muted text-muted-foreground transition text-xs flex items-center gap-1.5 disabled:opacity-30"
               title="Download Answer"
             >
               <Download size={14} />
             </button>
-            <div className="absolute right-0 mt-1 w-36 bg-card border border-border rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-20 p-1">
+            <div className="absolute right-0 mt-1 w-36 glass-card border border-border rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-20 p-1">
               <button
                 onClick={() => downloadAnswer("txt")}
-                className="w-full text-left px-3 py-1.5 hover:bg-secondary rounded-lg flex items-center gap-2 text-sm font-medium text-foreground"
+                className="w-full text-left px-3 py-1.5 hover:bg-accent rounded-lg flex items-center gap-2 text-xs font-semibold text-foreground"
               >
-                <FileTxt size={14} />
-                Text (.txt)
+                <FileText size={13} /> Text (.txt)
               </button>
               <button
                 onClick={() => downloadAnswer("markdown")}
-                className="w-full text-left px-3 py-1.5 hover:bg-secondary rounded-lg flex items-center gap-2 text-sm font-medium text-foreground"
+                className="w-full text-left px-3 py-1.5 hover:bg-accent rounded-lg flex items-center gap-2 text-xs font-semibold text-foreground"
               >
-                <FileText size={14} />
-                Markdown (.md)
+                <FileText size={13} /> Markdown (.md)
               </button>
               <button
                 onClick={() => downloadAnswer("json")}
-                className="w-full text-left px-3 py-1.5 hover:bg-secondary rounded-lg flex items-center gap-2 text-sm font-medium text-foreground"
+                className="w-full text-left px-3 py-1.5 hover:bg-accent rounded-lg flex items-center gap-2 text-xs font-semibold text-foreground"
               >
-                <FileJson size={14} />
-                JSON (.json)
+                <FileJson size={13} /> JSON (.json)
               </button>
             </div>
           </div>
-
-          <button
-            className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-emerald-600 transition"
-            title="Helpful"
-          >
-            <ThumbsUp size={14} />
-          </button>
-
-          <button
-            className="p-2 rounded-lg border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-rose-600 transition"
-            title="Not Helpful"
-          >
-            <ThumbsDown size={14} />
-          </button>
         </div>
-
       </div>
 
       {/* Body */}
       <div className="p-6 space-y-4 flex flex-col">
-
-        {/* User Question Quote */}
+        {/* User Question */}
         {question && (
-          <div className="rounded-xl border border-border bg-secondary/40 p-4 flex items-start gap-3 border-l-4 border-l-indigo-500 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center border border-border shrink-0 mt-0.5">
-              <User size={16} className="text-foreground" />
+          <div className="rounded-2xl border border-border bg-secondary/40 p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+              <User size={15} />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-1">
-                Your Question
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+                Executive Prompt
               </span>
-              <p className="text-base font-semibold text-foreground leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm font-semibold text-foreground leading-relaxed whitespace-pre-wrap">
                 {question}
               </p>
             </div>
           </div>
         )}
 
-        {/* Collapsible Search and Thought Process (like ChatGPT / Gemini Thinking accordion) */}
+        {/* Collapsible Search and Thought Process */}
         {!loading && retrievedChunks && retrievedChunks.length > 0 && (
-          <div className="rounded-xl border border-border/80 bg-secondary/20 overflow-hidden transition-all duration-200 shrink-0">
+          <div className="rounded-2xl border border-border bg-secondary/40 overflow-hidden transition-all">
             <button
               onClick={() => setShowThinking(!showThinking)}
-              className="w-full flex items-center justify-between px-4 py-3 bg-secondary/40 hover:bg-secondary/60 transition text-left text-xs font-bold text-muted-foreground gap-4"
+              className="w-full flex items-center justify-between px-4 py-3 bg-secondary/60 hover:bg-secondary transition text-left text-xs font-semibold text-muted-foreground gap-4"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Search size={14} className="text-indigo-500 shrink-0" />
-                <span className="truncate">
-                  RAG Pipeline Search: retrieved {retrievedChunks.length} passages
+                <Search size={14} className="text-emerald-400 shrink-0" />
+                <span className="truncate text-foreground">
+                  RAG Telemetry: Retrieved {retrievedChunks.length} document passages
                 </span>
-                <span className="hidden sm:inline-flex items-center font-mono text-[10px] bg-card px-1.5 py-0.5 rounded border border-border/50 whitespace-nowrap">
+                <span className="hidden sm:inline-flex items-center font-mono text-[10px] bg-muted px-2 py-0.5 rounded text-emerald-400 border border-border">
                   RRF Hybrid Search ({embedTime})
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-[11px] font-medium">
-                  {showThinking ? "Hide Details" : "Show Details"}
-                </span>
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <span className="text-[11px] font-medium">{showThinking ? "Hide Chunks" : "Inspect Chunks"}</span>
                 {showThinking ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
               </div>
             </button>
-            
+
             {showThinking && (
-              <div className="border-t border-border/60 bg-card p-2 animate-fade-in">
+              <div className="border-t border-border bg-secondary/80 p-3">
                 <RetrievedChunksPanel
                   retrievedChunks={retrievedChunks}
                   highlightedChunkId={highlightedChunkId}
@@ -276,70 +243,50 @@ export default function AnswerCard({
         )}
 
         {/* Answer Content */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 min-h-[160px] shrink-0">
+        <div className="rounded-2xl border border-border bg-card/60 p-6 min-h-[140px]">
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 text-muted-foreground py-10">
-              <Loader2 size={24} className="animate-spin text-indigo-500" />
-              <span className="text-base font-semibold text-foreground">
-                Retrieving vector embeddings &amp; generating grounded response...
+              <Loader2 size={26} className="animate-spin text-emerald-400" />
+              <span className="text-sm font-semibold text-foreground">
+                Generating grounded culinary answer...
               </span>
               <span className="text-xs text-muted-foreground">
-                Generating local 384-dimensional embeddings via sentence-transformers
+                Scanning pgvector database embeddings
               </span>
             </div>
           ) : answer ? (
             <MarkdownRenderer content={answer} />
           ) : (
-            <p className="text-muted-foreground text-base leading-relaxed py-2 text-center">
-              No answer generated yet. Enter a prompt above to receive grounded document insights.
+            <p className="text-muted-foreground text-sm leading-relaxed text-center py-4">
+              Enter a question above to inspect menus, recipes, or food safety guidelines.
             </p>
           )}
         </div>
 
-        {/* Page Citations */}
+        {/* Citations */}
         {!loading && sources && sources.length > 0 && (
-          <div className="shrink-0">
-            <SourceCitations
-              sources={sources}
-              onSelectCitation={handleSelectCitation}
-            />
-          </div>
+          <SourceCitations sources={sources} onSelectCitation={handleSelectCitation} />
         )}
-
       </div>
 
       {/* Footer Meta */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-3 border-t border-border bg-secondary/20 text-muted-foreground text-xs shrink-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-3 border-t border-border bg-secondary/40 text-muted-foreground text-xs">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5 font-mono">
-            <Cpu size={14} className="text-indigo-500" />
-            <span>
-              Embed Model: <strong className="text-foreground">all-MiniLM-L6-v2</strong> (384d)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 font-mono">
-            <Zap size={14} className="text-amber-500" />
-            <span>
-              Search Speed: <strong className="text-foreground">{embedTime}</strong>
-            </span>
+          <div className="flex items-center gap-1.5 font-mono text-[11px]">
+            <Cpu size={13} className="text-emerald-400" />
+            <span>Embedder: <strong className="text-foreground">all-MiniLM-L6-v2</strong></span>
           </div>
 
           {totalTime && (
-            <div className="flex items-center gap-1.5 font-mono">
-              <Clock size={14} className="text-emerald-500" />
-              <span>
-                Total Latency: <strong className="text-foreground">{totalTime}</strong>
-              </span>
+            <div className="flex items-center gap-1.5 font-mono text-[11px]">
+              <Clock size={13} className="text-teal-400" />
+              <span>Latency: <strong className="text-foreground">{totalTime}</strong></span>
             </div>
           )}
         </div>
 
-        <span className="font-mono text-[11px] text-muted-foreground">
-          PlateWise RAG • Local Embeddings Enabled
-        </span>
+        <span className="font-mono text-[10px] text-muted-foreground">PlateWise RAG Engine</span>
       </div>
-
     </div>
   );
 }

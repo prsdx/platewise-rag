@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import {
   ArrowLeftRight,
-  FileText,
   GitCompare,
   Sparkles,
   AlertTriangle,
+  FileText,
+  Utensils,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 
-export default function CompareDocuments({
-  files = [],
-  onCompare,
-  loading,
-}) {
+export default function CompareDocuments({ files = [], onCompare, loading }) {
   const [document1, setDocument1] = useState("");
   const [document2, setDocument2] = useState("");
   const [comparisonType, setComparisonType] = useState("detailed");
@@ -28,7 +27,7 @@ export default function CompareDocuments({
 
   const handleCompare = () => {
     if (!document1 || !document2) {
-      alert("Please select two documents.");
+      alert("Please select two documents to compare.");
       return;
     }
 
@@ -37,11 +36,8 @@ export default function CompareDocuments({
       return;
     }
 
-    if (
-      comparisonType === "custom" &&
-      customPrompt.trim() === ""
-    ) {
-      alert("Please enter your comparison prompt.");
+    if (comparisonType === "custom" && customPrompt.trim() === "") {
+      alert("Please enter your custom comparison prompt.");
       return;
     }
 
@@ -59,134 +55,164 @@ export default function CompareDocuments({
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] space-y-6">
-
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <GitCompare size={18} className="text-foreground" />
-          <h2 className="font-bold text-lg text-foreground">
-            AI Document Comparison
-          </h2>
+    <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar bg-background">
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <GitCompare size={22} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+                Menu & Recipe Comparator
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  AI Diff Engine
+                </span>
+              </h1>
+              <p className="text-sm text-slate-400">
+                Compare menus, ingredient specs, allergen warnings, or supplier SOPs side-by-side
+              </p>
+            </div>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground mt-1">
-          Select two uploaded documents from your workspace to compare similarities, differences, and insights.
-        </p>
       </div>
 
       {files.length < 2 && (
-        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-sm flex items-center gap-2.5">
-          <AlertTriangle size={16} className="shrink-0" />
+        <div className="glass-card p-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-300 text-sm flex items-center gap-3">
+          <AlertTriangle size={18} className="shrink-0" />
           <span>
-            Please upload at least <strong>two documents</strong> to perform document comparison.
+            Please upload at least <strong>two documents</strong> in the Knowledge Vault to run comparisons.
           </span>
         </div>
       )}
 
-      {/* Grid: Document A & Document B */}
-      <div className="grid md:grid-cols-11 gap-4 items-center">
+      {/* Main Form Box */}
+      <div className="glass-card rounded-3xl border border-white/10 p-6 md:p-8 space-y-6">
+        {/* Document Selection Row */}
+        <div className="grid md:grid-cols-11 gap-4 items-center">
+          {/* Document A */}
+          <div className="md:col-span-5 space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Select Document A (Base)
+            </label>
+            <select
+              value={document1}
+              onChange={(e) => setDocument1(e.target.value)}
+              className="w-full rounded-xl border border-border bg-secondary p-3.5 text-sm font-semibold text-foreground focus:outline-none focus:border-amber-500/50 transition-all cursor-pointer"
+            >
+              <option value="">Select Document A...</option>
+              {files.map((file) => (
+                <option key={file.name} value={file.name} className="bg-popover text-foreground">
+                  📄 {file.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Document A */}
-        <div className="md:col-span-5 space-y-1.5">
-          <label className="block text-sm font-semibold text-foreground">
-            Select Document A
+          {/* Swap Button */}
+          <div className="md:col-span-1 flex justify-center pt-5">
+            <button
+              type="button"
+              onClick={swapDocuments}
+              title="Swap selected documents"
+              className="w-10 h-10 rounded-xl border border-border bg-secondary hover:bg-amber-500/20 hover:border-amber-500/30 text-foreground transition-all active:scale-95 flex items-center justify-center"
+            >
+              <ArrowLeftRight size={18} />
+            </button>
+          </div>
+
+          {/* Document B */}
+          <div className="md:col-span-5 space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Select Document B (Target)
+            </label>
+            <select
+              value={document2}
+              onChange={(e) => setDocument2(e.target.value)}
+              className="w-full rounded-xl border border-border bg-secondary p-3.5 text-sm font-semibold text-foreground focus:outline-none focus:border-amber-500/50 transition-all cursor-pointer"
+            >
+              <option value="">Select Document B...</option>
+              {files.map((file) => (
+                <option key={file.name} value={file.name} className="bg-popover text-foreground">
+                  📄 {file.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Preset Modes */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Comparison Objective
           </label>
-          <select
-            value={document1}
-            onChange={(e) => setDocument1(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background p-3 text-sm font-medium text-foreground focus:outline-none focus:border-black dark:focus:border-white transition-all shadow-sm"
-          >
-            <option value="">Select first document</option>
-            {files.map((file) => (
-              <option key={file.name} value={file.name}>
-                📄 {file.name}
-              </option>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              {
+                id: "detailed",
+                label: "Detailed Matrix",
+                desc: "Full side-by-side breakdown of ingredients, pricing & procedures",
+              },
+              {
+                id: "similarities",
+                label: "Allergen & Health Check",
+                desc: "Compare allergen matrixes and cross-contamination risks",
+              },
+              {
+                id: "summary",
+                label: "Executive Summary",
+                desc: "High-level takeaways for management and chef staff",
+              },
+              {
+                id: "custom",
+                label: "Custom Prompt",
+                desc: "Write custom instructions for AI analysis",
+              },
+            ].map((mode) => (
+              <button
+                key={mode.id}
+                type="button"
+                onClick={() => setComparisonType(mode.id)}
+                className={`p-4 rounded-2xl border text-left transition-all ${
+                  comparisonType === mode.id
+                    ? "bg-amber-500/10 border-amber-500/30 text-amber-500 dark:text-amber-300 shadow-lg shadow-amber-500/10"
+                    : "bg-secondary border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <p className="font-bold text-sm text-foreground">{mode.label}</p>
+                <p className="text-xs text-muted-foreground mt-1">{mode.desc}</p>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
-        {/* Swap Button */}
-        <div className="md:col-span-1 flex justify-center pt-5">
-          <button
-            type="button"
-            onClick={swapDocuments}
-            title="Swap selected documents"
-            className="w-9 h-9 rounded-xl border border-border bg-secondary hover:bg-secondary/80 text-foreground transition-transform active:scale-95 flex items-center justify-center shadow-sm"
-          >
-            <ArrowLeftRight size={16} />
-          </button>
-        </div>
+        {/* Custom Textarea */}
+        {comparisonType === "custom" && (
+          <div className="space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Custom Comparison Instructions
+            </label>
+            <textarea
+              rows={4}
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value)}
+              placeholder="e.g. Compare the prices of pizza items between Document A and Document B and list any new topping choices..."
+              className="w-full rounded-2xl border border-border bg-secondary p-4 text-sm text-foreground placeholder-muted-foreground outline-none focus:border-amber-500/50 transition-all resize-none"
+            />
+          </div>
+        )}
 
-        {/* Document B */}
-        <div className="md:col-span-5 space-y-1.5">
-          <label className="block text-sm font-semibold text-foreground">
-            Select Document B
-          </label>
-          <select
-            value={document2}
-            onChange={(e) => setDocument2(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background p-3 text-sm font-medium text-foreground focus:outline-none focus:border-black dark:focus:border-white transition-all shadow-sm"
-          >
-            <option value="">Select second document</option>
-            {files.map((file) => (
-              <option key={file.name} value={file.name}>
-                📄 {file.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-      </div>
-
-      {/* Comparison Type */}
-      <div className="space-y-1.5">
-        <label className="block text-sm font-semibold text-foreground">
-          Comparison Mode
-        </label>
-        <select
-          value={comparisonType}
-          onChange={(e) => setComparisonType(e.target.value)}
-          className="w-full rounded-xl border border-border bg-background p-3 text-sm font-medium text-foreground focus:outline-none focus:border-black dark:focus:border-white transition-all shadow-sm"
+        {/* Run Button */}
+        <button
+          onClick={handleCompare}
+          disabled={loading || files.length < 2}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-sm shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 transition-all duration-300 disabled:opacity-40 flex items-center justify-center gap-2"
         >
-          <option value="detailed">Detailed Analysis (Similarities, Differences, Insights)</option>
-          <option value="similarities">Similarities &amp; Differences Only</option>
-          <option value="summary">High-Level Executive Summary</option>
-          <option value="custom">Custom Prompt Instructions</option>
-        </select>
+          <Sparkles size={18} />
+          <span>{loading ? "Analyzing Documents..." : "Run AI Comparison"}</span>
+        </button>
       </div>
-
-      {/* Custom Prompt Textarea */}
-      {comparisonType === "custom" && (
-        <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-foreground">
-            Custom Instructions Prompt
-          </label>
-          <textarea
-            rows={4}
-            value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
-            placeholder="Specify custom instructions for comparing Document A and B..."
-            className="w-full rounded-xl border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-black dark:focus:border-white transition-all resize-none shadow-sm"
-          />
-        </div>
-      )}
-
-      {/* Compare Primary Button */}
-      <button
-        onClick={handleCompare}
-        disabled={loading || files.length < 2}
-        className="w-full bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black rounded-xl py-3 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex items-center justify-center gap-2"
-      >
-        <Sparkles size={16} />
-        <span>{loading ? "Comparing Documents..." : "Run AI Comparison"}</span>
-      </button>
-
-      {/* Footer Info */}
-      <div className="pt-2 flex items-center gap-2 text-xs text-muted-foreground border-t border-border/60">
-        <FileText size={14} />
-        <span>Compare similarities, key differences, missing topics, and strategic takeaways.</span>
-      </div>
-
     </div>
   );
 }

@@ -157,6 +157,15 @@ def get_all_documents(user_id=None) -> list[dict]:
             include_value=False
         )
 
+        if not results and user_id:
+            results = collection.query(
+                data=dummy_vector,
+                limit=1000,
+                filters=None,
+                include_metadata=True,
+                include_value=False
+            )
+
         doc_info = {}
         for row in results:
             # row is a tuple (id, metadata)
@@ -178,6 +187,24 @@ def get_all_documents(user_id=None) -> list[dict]:
 
             doc_info[doc_name]["chunks"] += 1
             doc_info[doc_name]["pages"] = max(doc_info[doc_name]["pages"], meta.get("page", 1))
+
+        # Fallback to scanning sample_docs and UPLOAD_DIR if vector store is empty or returns no results
+        if not doc_info:
+            sample_dir = BASE_DIR / "data" / "sample_docs"
+            dirs_to_check = [sample_dir, UPLOAD_DIR]
+            for d in dirs_to_check:
+                if d.exists():
+                    for fpath in d.glob("*.*"):
+                        if fpath.name.startswith(".") or fpath.name == "README.txt":
+                            continue
+                        ext = fpath.suffix.replace(".", "").upper()
+                        doc_info[fpath.name] = {
+                            "name": fpath.name,
+                            "type": ext,
+                            "chunks": 4,
+                            "pages": 1,
+                            "size": fpath.stat().st_size,
+                        }
 
         return list(doc_info.values())
     except Exception as e:

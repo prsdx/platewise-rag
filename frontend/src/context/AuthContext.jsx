@@ -21,19 +21,32 @@ export function AuthProvider({ children }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
+    // Fallback timeout safeguard to prevent hanging on initial load
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
     // Check active sessions and sets the user
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(normalizeUser(session?.user));
       setLoading(false);
+      clearTimeout(timer);
+    }).catch(() => {
+      setLoading(false);
+      clearTimeout(timer);
     });
 
     // Listen for changes on auth state (sign in, sign out, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(normalizeUser(session?.user));
       setLoading(false);
+      clearTimeout(timer);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timer);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loginWithGoogle = useCallback(async () => {
@@ -108,7 +121,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 }

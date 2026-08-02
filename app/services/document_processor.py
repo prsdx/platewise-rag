@@ -30,22 +30,24 @@ def extract_document(file_path):
     if extension not in SUPPORTED_EXTENSIONS:
         raise ValueError(f"Unsupported file type: {extension}")
 
+    file_path_str = str(file_path)
+
     if extension == ".pdf":
-        return extract_pdf_text(file_path)
+        return extract_pdf_text(file_path_str)
 
     if extension == ".docx":
-        return extract_docx_text(file_path)
+        return extract_docx_text(file_path_str)
 
     if extension == ".txt":
-        return extract_txt_text(file_path)
+        return extract_txt_text(file_path_str)
 
     if extension == ".pptx":
-        return extract_pptx_text(file_path)
+        return extract_pptx_text(file_path_str)
 
     if extension == ".md":
-        return extract_md_text(file_path)
+        return extract_md_text(file_path_str)
 
     if extension == ".csv":
-        return extract_csv_text(file_path)
+        return extract_csv_text(file_path_str)
 
     raise ValueError(f"No reader available for {extension}")
