@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { openRazorpayCheckout } from '../services/razorpay';
+import HeroInteractiveBackground from '../components/landing/HeroInteractiveBackground';
 import {
   ArrowRight, Search, ShieldCheck, Zap, Database, PlayCircle, LogIn, CheckCircle2, ChevronDown, ChevronUp, FileText, Cpu, LayoutGrid, ExternalLink, Sun, Moon, Twitter, Mail, Github
 } from 'lucide-react';
@@ -97,6 +98,9 @@ export default function Landing() {
         onMouseLeave={() => setIsHovered(false)}
         className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto overflow-hidden group cursor-default"
       >
+        {/* Dynamic Interactive Background Canvas */}
+        <HeroInteractiveBackground />
+
         {/* Mouse Tracking Interactive Spotlight Glow */}
         <div 
           className="pointer-events-none absolute w-[550px] h-[550px] rounded-full bg-emerald-500/15 blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
