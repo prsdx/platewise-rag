@@ -51,8 +51,11 @@ export default function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/30">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/30 relative">
       
+      {/* ── Global Interactive Canvas Particle Background ────────────────── */}
+      <HeroInteractiveBackground />
+
       {/* ── 1. Navbar ───────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between glass-header">
         <div className="flex items-center gap-3">
@@ -98,9 +101,6 @@ export default function Landing() {
         onMouseLeave={() => setIsHovered(false)}
         className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto overflow-hidden group cursor-default"
       >
-        {/* Dynamic Interactive Background Canvas */}
-        <HeroInteractiveBackground />
-
         {/* Mouse Tracking Interactive Spotlight Glow */}
         <div 
           className="pointer-events-none absolute w-[550px] h-[550px] rounded-full bg-emerald-500/15 blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"

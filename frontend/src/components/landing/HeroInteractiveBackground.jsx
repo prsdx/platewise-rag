@@ -9,13 +9,13 @@ export default function HeroInteractiveBackground() {
     const ctx = canvas.getContext("2d");
 
     let animationFrameId;
-    let width = (canvas.width = canvas.parentElement.offsetWidth);
-    let height = (canvas.height = canvas.parentElement.offsetHeight);
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
     const handleResize = () => {
-      if (!canvas || !canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.offsetWidth;
-      height = canvas.height = canvas.parentElement.offsetHeight;
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     };
     window.addEventListener("resize", handleResize);
 
@@ -25,89 +25,90 @@ export default function HeroInteractiveBackground() {
       y: height / 2,
       targetX: width / 2,
       targetY: height / 2,
-      radius: 180,
+      radius: 240,
     };
 
     const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.targetX = e.clientX - rect.left;
-      mouse.targetY = e.clientY - rect.top;
+      mouse.targetX = e.clientX;
+      mouse.targetY = e.clientY;
     };
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Node items representing RAG Document Chunks & Culinary Data
+    // RAG Document & Culinary Nodes
     const labels = [
       "📄 Pizza_Menu.pdf",
-      "🍕 Spice_Garden_Menu.txt",
+      "🍕 Spice_Garden.txt",
       "📋 Safety_SOP.pdf",
-      "📊 Restaurant_Directory.csv",
-      "⚡ Semantic Cache <15ms",
-      "🛡️ 94.2% RRF Grounded",
+      "📊 Directory.csv",
+      "⚡ Cache <15ms",
+      "🛡️ 94.2% RRF",
       "🔍 Dense Vector 384d",
-      "📜 FSSAI Compliance",
+      "📜 FSSAI Guide",
+      "🌿 Vegan Tagged",
+      "💰 Price Metric",
     ];
 
     const nodes = [];
-    const nodeCount = 18;
+    const nodeCount = 45;
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        radius: Math.random() * 3 + 2,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        radius: Math.random() * 3.5 + 2,
         label: labels[i % labels.length],
-        isLabeled: i < 7,
-        alpha: Math.random() * 0.5 + 0.3,
+        isLabeled: i < 12,
+        color: i % 3 === 0 ? "#10B981" : i % 3 === 1 ? "#F59E0B" : "#A1A1AA",
       });
     }
 
     const render = () => {
       // Smooth mouse spring interpolation
-      mouse.x += (mouse.targetX - mouse.x) * 0.1;
-      mouse.y += (mouse.targetY - mouse.y) * 0.1;
+      mouse.x += (mouse.targetX - mouse.x) * 0.12;
+      mouse.y += (mouse.targetY - mouse.y) * 0.12;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw mouse spotlight glow
-      const gradient = ctx.createRadialGradient(
+      // 1. Draw Mouse Spotlight Radial Glow
+      const spotlight = ctx.createRadialGradient(
         mouse.x,
         mouse.y,
         0,
         mouse.x,
         mouse.y,
-        mouse.radius * 1.8
+        mouse.radius * 1.6
       );
-      gradient.addColorStop(0, "rgba(16, 185, 129, 0.18)");
-      gradient.addColorStop(0.5, "rgba(16, 185, 129, 0.05)");
-      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = gradient;
+      spotlight.addColorStop(0, "rgba(16, 185, 129, 0.22)");
+      spotlight.addColorStop(0.4, "rgba(245, 158, 11, 0.08)");
+      spotlight.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = spotlight;
       ctx.fillRect(0, 0, width, height);
 
-      // Update and draw nodes
+      // 2. Render Nodes and Connections
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
         node.x += node.vx;
         node.y += node.vy;
 
-        // Bounce off canvas boundaries
+        // Bounce off canvas edges
         if (node.x < 0 || node.x > width) node.vx *= -1;
         if (node.y < 0 || node.y > height) node.vy *= -1;
 
-        // Calculate distance to mouse cursor
+        // Calculate distance to cursor
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // Draw node connection beam to mouse if within radius
+        // Draw dynamic laser beam from cursor to nearby nodes
         if (dist < mouse.radius) {
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(mouse.x, mouse.y);
-          const lineAlpha = (1 - dist / mouse.radius) * 0.5;
+          const lineAlpha = (1 - dist / mouse.radius) * 0.6;
           ctx.strokeStyle = `rgba(16, 185, 129, ${lineAlpha})`;
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 1.2;
           ctx.stroke();
         }
 
@@ -118,11 +119,11 @@ export default function HeroInteractiveBackground() {
           const ndy = other.y - node.y;
           const ndist = Math.sqrt(ndx * ndx + ndy * ndy);
 
-          if (ndist < 130) {
+          if (ndist < 140) {
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(161, 161, 170, ${0.15 * (1 - ndist / 130)})`;
+            ctx.strokeStyle = `rgba(161, 161, 170, ${0.2 * (1 - ndist / 140)})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -131,13 +132,21 @@ export default function HeroInteractiveBackground() {
         // Draw node dot
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = dist < mouse.radius ? "#10B981" : "rgba(161, 161, 170, 0.4)";
+        ctx.fillStyle = dist < mouse.radius ? "#10B981" : node.color;
         ctx.fill();
 
-        // Draw node label pill if labeled
-        if (node.isLabeled && dist < mouse.radius * 1.4) {
-          const labelAlpha = Math.max(0.2, 1 - dist / (mouse.radius * 1.4));
-          ctx.font = "11px system-ui, sans-serif";
+        // Draw glowing halo on hovered nodes
+        if (dist < mouse.radius) {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, node.radius * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(16, 185, 129, 0.25)";
+          ctx.fill();
+        }
+
+        // Draw text label on nodes near cursor
+        if (node.isLabeled && dist < mouse.radius * 1.5) {
+          const labelAlpha = Math.max(0.3, 1 - dist / (mouse.radius * 1.5));
+          ctx.font = "bold 11px system-ui, sans-serif";
           ctx.fillStyle = `rgba(245, 245, 244, ${labelAlpha})`;
           ctx.fillText(node.label, node.x + 8, node.y + 4);
         }
@@ -158,7 +167,7 @@ export default function HeroInteractiveBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none -z-10"
+      className="fixed inset-0 w-vw h-vh pointer-events-none z-0"
     />
   );
 }
