@@ -1,3 +1,4 @@
+
 SAMPLE DOCUMENTS — PlateWise Demo Data
 All documents in this folder are synthetic, generated for demonstration purposes only.
 They do not represent any real restaurant, policy, or regulatory body.
@@ -18,3 +19,4 @@ Files:
 - vegan_vegetarian_guide.txt    : Vegan/vegetarian certification standards
 - peak_hour_policy.txt          : Surge pricing & peak hour operations
 - restaurant_directory.csv      : Restaurant directory (structured data)
+
