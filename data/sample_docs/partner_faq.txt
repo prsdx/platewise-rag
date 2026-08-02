@@ -1,0 +1,32 @@
+================================================================================
+PLATEWISE — PARTNER RESTAURANT FAQs
+Last Updated: 10 February 2025
+================================================================================
+
+Q1. How do I temporarily stop receiving orders?
+A1. If your kitchen is overwhelmed, use the "Busy Mode" toggle on your Partner 
+    Dashboard. You can pause orders for 30 minutes, 1 hour, or until the next day. 
+    Do NOT accept orders and then cancel them, as this incurs a penalty.
+
+Q2. When are payouts processed?
+A2. Payouts are processed on a weekly cycle. Earnings from Monday to Sunday are 
+    transferred to your registered bank account by the following Wednesday.
+
+Q3. How do I update my menu prices?
+A3. You can edit item prices directly from the "Menu Management" tab on the 
+    Dashboard. Price updates take up to 2 hours to reflect on the customer app.
+
+Q4. What do I do if the assigned delivery partner doesn't show up?
+A4. If the partner hasn't arrived 15 minutes after the food is marked "Ready", 
+    click "Report Partner Delay" on the active order screen. The system will 
+    automatically reassign a new partner.
+
+Q5. A customer called asking to customize their order. What should I do?
+A5. Advise the customer that customizations can only be guaranteed if they were 
+    added in the "Order Notes" during checkout. You may accommodate minor requests 
+    at your discretion, but PlateWise will not cover any additional costs incurred.
+
+Q6. How can I run a discount campaign?
+A6. Navigate to the "Promotions" tab on your Dashboard. You can set up percentage 
+    discounts (e.g., 20% off) or flat discounts (e.g., ₹50 off on ₹300) and choose 
+    the campaign duration.

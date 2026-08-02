@@ -33,7 +33,7 @@ export default function CompareResult({
     if (!result) return;
 
     let content = result;
-    let filename = `intellidocs-comparison-${new Date().getTime()}`;
+    let filename = `platewise-comparison-${new Date().getTime()}`;
     let mimeType = "text/plain";
 
     if (format === "txt") {

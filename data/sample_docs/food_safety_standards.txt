@@ -1,0 +1,37 @@
+================================================================================
+PLATEWISE — FOOD SAFETY STANDARDS REFERENCE
+Document Version: 2.1 | Last Updated: January 2025
+================================================================================
+
+This document serves as a quick reference for PlateWise staff regarding basic 
+food safety standards. 
+
+1. THE DANGER ZONE
+--------------------------------------------------------------------------------
+Bacteria multiply most rapidly between 5°C and 60°C (41°F and 140°F). 
+This range is known as the "Danger Zone."
+- Cold food must be kept below 5°C.
+- Hot food must be kept above 60°C.
+- Food should not be left in the Danger Zone for more than 2 hours.
+
+2. COOKING TEMPERATURES (MINIMUM SAFE INTERNAL TEMPERATURES)
+--------------------------------------------------------------------------------
+- Poultry (Chicken, Duck, Turkey): 74°C (165°F)
+- Minced/Ground Meats (Beef, Pork, Lamb): 71°C (160°F)
+- Whole Cuts of Meat (Beef, Pork, Lamb): 63°C (145°F) + 3 min rest
+- Fish and Seafood: 63°C (145°F)
+- Leftovers/Reheating: 74°C (165°F)
+
+3. CROSS-CONTAMINATION PREVENTION
+--------------------------------------------------------------------------------
+- Use separate cutting boards and utensils for raw meat and ready-to-eat foods.
+- Store raw meat below cooked and ready-to-eat foods in the refrigerator to 
+  prevent juices from dripping.
+- Wash hands thoroughly after handling raw meat.
+
+4. THAWING SAFE PRACTICES
+--------------------------------------------------------------------------------
+Never thaw food at room temperature. Safe methods include:
+- In the refrigerator (safest method).
+- Under cold running water.
+- In the microwave (must be cooked immediately after).

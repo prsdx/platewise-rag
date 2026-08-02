@@ -1,0 +1,60 @@
+================================================================================
+PLATEWISE — FSSAI COMPLIANCE & HYGIENE GUIDE FOR PARTNERS
+Reference Guide for Food Safety and Standards Authority of India Regulations
+================================================================================
+
+1. FSSAI REGISTRATION & LICENSING
+--------------------------------------------------------------------------------
+Every food business operator (FBO) partnering with PlateWise MUST possess a 
+valid FSSAI License or Registration Certificate.
+
+- Turnover < ₹12 Lakhs: FSSAI Registration Certificate (Form A).
+- Turnover ₹12 Lakhs - ₹20 Crores: State FSSAI License (Form B).
+- Turnover > ₹20 Crores / Operating in multiple states: Central FSSAI License.
+
+The 14-digit FSSAI number must be displayed prominently on the restaurant 
+premises and printed on all customer invoices. PlateWise requires the FSSAI 
+certificate to be uploaded to the Partner Dashboard. Expired certificates will 
+result in automatic delisting until renewed.
+
+2. PREMISES & FACILITY HYGIENE
+--------------------------------------------------------------------------------
+- Floors, walls, and ceilings must be clean, intact, and easy to sanitize.
+- Adequate ventilation must be provided to prevent condensation and grease buildup.
+- Pest control measures must be documented and conducted monthly by a licensed agency.
+- Pets and stray animals are strictly prohibited inside the kitchen/prep areas.
+- Potable water (drinking quality) must be used for all cooking and ice-making.
+  Water testing reports must be available upon request.
+
+3. PERSONAL HYGIENE OF FOOD HANDLERS
+--------------------------------------------------------------------------------
+- Food handlers must wear clean protective clothing, hairnets, and gloves.
+- Regular handwashing with soap and warm water is mandatory.
+- Personnel suffering from infectious diseases (fever, cold, cuts, skin infections)
+  must not handle food or enter the food prep area.
+- Annual medical fitness certificates (including tests for typhoid and tuberculosis) 
+  are mandatory for all kitchen staff.
+- No smoking, spitting, or chewing tobacco/gum in food handling areas.
+
+4. FOOD STORAGE & TEMPERATURE CONTROL
+--------------------------------------------------------------------------------
+- Raw and cooked food must be stored separately to prevent cross-contamination.
+- Vegetarian and Non-Vegetarian items must have separate storage and prep areas.
+- Cold storage requirements:
+    - Refrigerators: Below 5°C.
+    - Freezers: Below -18°C.
+- Hot holding: Cooked food meant for hot serving must be kept at > 60°C.
+- First-In-First-Out (FIFO) methodology must be strictly followed for raw materials.
+
+5. PACKAGING
+--------------------------------------------------------------------------------
+- Food-grade packaging material MUST be used.
+- Single-use plastics banned by local municipalities are strictly prohibited.
+- Hot liquids (soups, gravies) must be packed in heat-resistant, leak-proof containers.
+- All delivery parcels must be sealed with a tamper-evident PlateWise tape or sticker.
+
+6. AUDITS
+--------------------------------------------------------------------------------
+PlateWise conducts surprise hygiene audits via third-party agencies (e.g., Equinox Labs).
+Restaurants failing an audit (scoring below 60%) will be suspended from the 
+platform until a corrective action plan is implemented and a re-audit is passed.

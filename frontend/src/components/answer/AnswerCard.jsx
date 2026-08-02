@@ -54,7 +54,7 @@ export default function AnswerCard({
     if (!answer) return;
 
     let content = answer;
-    let filename = `intellidocs-answer-${new Date().getTime()}`;
+    let filename = `platewise-answer-${new Date().getTime()}`;
     let mimeType = "text/plain";
 
     if (format === "txt") {
@@ -132,7 +132,7 @@ export default function AnswerCard({
             </div>
             <div>
               <h2 className="font-bold text-lg text-foreground whitespace-nowrap">
-                IntelliDocs AI Answer
+                PlateWise AI Answer
               </h2>
             </div>
           </div>
@@ -336,7 +336,7 @@ export default function AnswerCard({
         </div>
 
         <span className="font-mono text-[11px] text-muted-foreground">
-          IntelliDocs RAG • Local Embeddings Enabled
+          PlateWise RAG • Local Embeddings Enabled
         </span>
       </div>
 

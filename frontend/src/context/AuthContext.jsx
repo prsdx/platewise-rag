@@ -50,12 +50,15 @@ export function AuthProvider({ children }) {
       return unsubscribe;
     } else {
       // Mock auth — restore from localStorage
-      const stored = localStorage.getItem('intellidocs_mock_user');
+      const stored = localStorage.getItem('platewise_mock_user');
       if (stored) {
         try {
-          setUser(JSON.parse(stored));
-        } catch {
-          localStorage.removeItem('intellidocs_mock_user');
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.apiKey) {
+            setUser(parsed);
+          }
+        } catch (e) {
+          localStorage.removeItem('platewise_mock_user');
         }
       }
       setLoading(false);
@@ -76,7 +79,7 @@ export function AuthProvider({ children }) {
         provider: 'google',
         _normalized: true,
       };
-      localStorage.setItem('intellidocs_mock_user', JSON.stringify(mockUser));
+      localStorage.setItem('platewise_mock_user', JSON.stringify(mockUser));
       setUser(mockUser);
       return { user: mockUser };
     }
@@ -96,7 +99,7 @@ export function AuthProvider({ children }) {
         provider: 'email',
         _normalized: true,
       };
-      localStorage.setItem('intellidocs_mock_user', JSON.stringify(mockUser));
+      localStorage.setItem('platewise_mock_user', JSON.stringify(mockUser));
       setUser(mockUser);
       return { user: mockUser };
     }
@@ -120,7 +123,7 @@ export function AuthProvider({ children }) {
         provider: 'email',
         _normalized: true,
       };
-      localStorage.setItem('intellidocs_mock_user', JSON.stringify(mockUser));
+      localStorage.setItem('platewise_mock_user', JSON.stringify(mockUser));
       setUser(mockUser);
       return { user: mockUser };
     }
@@ -142,7 +145,7 @@ export function AuthProvider({ children }) {
       setUser(normalizeUser(auth.currentUser));
     } else if (user) {
       const updated = { ...user, name: displayName };
-      localStorage.setItem('intellidocs_mock_user', JSON.stringify(updated));
+      localStorage.setItem('platewise_mock_user', JSON.stringify(updated));
       setUser(updated);
     }
   }, [user]);
@@ -152,7 +155,7 @@ export function AuthProvider({ children }) {
     if (isFirebaseConfigured) {
       await firebaseSignOut(auth);
     } else {
-      localStorage.removeItem('intellidocs_mock_user');
+      localStorage.removeItem('platewise_mock_user');
       setUser(null);
     }
   }, []);

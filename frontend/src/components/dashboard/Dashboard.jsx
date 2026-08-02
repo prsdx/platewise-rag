@@ -208,7 +208,7 @@ export default function Dashboard({ files = [], onSwitchMode, onSuggestionClick 
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-secondary-foreground border border-border text-xs font-semibold">
               <Sparkles size={14} className="text-foreground" />
-              IntelliDocs AI — Analytics &amp; Control Center
+              PlateWise — Restaurant Intelligence & Analytics
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
               Document Intelligence Dashboard

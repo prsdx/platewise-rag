@@ -1,0 +1,69 @@
+================================================================================
+PLATEWISE — PARTNER RESTAURANT CANCELLATION & PENALTY POLICY
+Document Version: 1.4 | Effective Date: 1 March 2025
+================================================================================
+
+This document outlines the policies regarding order cancellations initiated or 
+caused by Restaurant Partners on the PlateWise platform.
+
+================================================================================
+1. MERCHANT-INITIATED CANCELLATIONS (MIC)
+================================================================================
+
+A Merchant-Initiated Cancellation occurs when a restaurant cancels an order after
+initially accepting it, or fails to accept an order within the 15-minute SLA.
+
+1.1 Acceptable Cancellation Reasons (No Penalty):
+    - Item out of stock (Must update inventory on the dashboard within 5 mins).
+    - Emergency kitchen closure (fire, power outage, equipment breakdown).
+    - Delivery partner unassigned for >30 minutes.
+
+1.2 Unacceptable Cancellation Reasons (Penalty Applies):
+    - "Kitchen too busy" (Restaurants must use the 'Busy Mode' toggle instead).
+    - Price discrepancy (Restaurant failed to update prices on the portal).
+    - Closing time approached (If order was placed before closing time).
+
+================================================================================
+2. PENALTY STRUCTURE
+================================================================================
+
+If an order is cancelled due to an unacceptable reason, the following penalties apply:
+
+2.1 Cancellation Penalty Fee
+    - Tier 1 (1st to 3rd cancellation in a week): ₹50 per order.
+    - Tier 2 (4th to 10th cancellation in a week): ₹100 per order.
+    - Tier 3 (11+ cancellations in a week): ₹200 per order + temporary suspension.
+
+2.2 Visibility Downgrade
+    - Restaurants exceeding a 3% cancellation rate over a 7-day rolling period
+      will be deprioritized in the PlateWise search algorithm and removed from
+      the "Recommended" carousel for 48 hours.
+
+2.3 Customer Compensation Charge
+    - If a cancellation occurs more than 20 minutes after order acceptance, the 
+      restaurant will be charged an additional ₹50 customer inconvenience fee, 
+      which is passed directly to the customer as PlateWise Credit.
+
+================================================================================
+3. AUTO-CANCELLATION BY SYSTEM
+================================================================================
+
+3.1 No Acceptance
+    If an order is not accepted on the merchant terminal within 15 minutes, 
+    the system auto-cancels the order. This counts as a Merchant Cancellation 
+    and incurs a ₹50 penalty.
+
+3.2 Prep Time Violation
+    If an order is not marked "Food Ready" within 45 minutes of the expected 
+    prep time, and the customer requests cancellation, the order will be 
+    cancelled at the merchant's expense (Full order value deduction).
+
+================================================================================
+4. DISPUTES & WAIVERS
+================================================================================
+
+Restaurants may dispute a cancellation penalty within 72 hours via the 
+Partner Dashboard -> Help Center -> "Dispute Penalty". 
+
+Valid proof must be provided (e.g., CCTV footage showing power outage, POS logs).
+Our Partner Support team resolves disputes within 3-5 business days.

@@ -1,0 +1,11 @@
+restaurant_id,restaurant_name,cuisine,rating,delivery_time_mins,price_range,fssai_certified,is_pure_veg
+101,Spice Garden,Indian,4.5,35,₹₹,Yes,No
+102,Downtown Pizza Co.,Italian,4.2,40,₹₹₹,Yes,No
+103,QuickBite Cloud Kitchen,Multi-Cuisine,3.8,25,₹,Yes,No
+104,Govinda's Pure Veg,Indian,4.6,30,₹₹,Yes,Yes
+105,Burger Bros,American,4.0,20,₹₹,Yes,No
+106,Healthy Greens,Salads,4.8,35,₹₹₹,Yes,No
+107,The Wok Shop,Chinese,4.1,45,₹₹,Yes,No
+108,Delhi Darbar,North Indian,4.4,50,₹₹₹,No,No
+109,Sushi Express,Japanese,4.7,40,₹₹₹₹,Yes,No
+110,Mumbai Chaat Corner,Street Food,3.9,15,₹,Yes,Yes

@@ -76,7 +76,7 @@ export default function Navbar({ onClearAllDocuments, filesCount, setSidebarOpen
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-lg font-extrabold text-foreground tracking-tight">
-              IntelliDocs <span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 bg-clip-text text-transparent font-black">AI</span>
+              PlateWise <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent font-black">AI</span>
             </h1>
 
             <span className="text-[10px] font-bold bg-indigo-600 text-indigo-100 px-2 py-0.5 rounded-md border border-indigo-500/50">

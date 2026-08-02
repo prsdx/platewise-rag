@@ -1,0 +1,40 @@
+================================================================================
+PLATEWISE — RESTAURANT HYGIENE AUDIT CHECKLIST
+Internal Use Only
+================================================================================
+
+Date of Audit: ______________
+Restaurant ID: ______________
+Auditor Name:  ______________
+
+Score: ____ / 100
+Pass Mark: 60 (Below 60 requires immediate suspension)
+
+A. PREMISES & ENVIRONMENT (20 points)
+[ ] Floor, walls, and ceiling are clean, dry, and free of cracks. (5 pts)
+[ ] Proper ventilation and exhaust hoods installed and grease-free. (5 pts)
+[ ] No signs of pests (rodents, cockroaches, flies). Pest control logs updated. (10 pts)
+
+B. PERSONNEL HYGIENE (25 points)
+[ ] Staff wearing clean uniforms, hairnets, and aprons. (5 pts)
+[ ] Nails are short, clean, and unpolished. No jewelry on hands. (5 pts)
+[ ] Proper handwashing stations available with soap and disposable towels. (5 pts)
+[ ] Staff medical fitness certificates are available and up to date. (10 pts)
+
+C. FOOD STORAGE (25 points)
+[ ] Veg and Non-Veg items are stored separately and clearly labeled. (10 pts)
+[ ] Refrigerators operating at < 5°C and Freezers at < -18°C. Logs maintained. (10 pts)
+[ ] Raw materials stored off the floor (at least 6 inches). (5 pts)
+
+D. FOOD PREPARATION (20 points)
+[ ] Separate color-coded chopping boards used for Veg (Green) and Non-Veg (Red). (10 pts)
+[ ] Drinking water (RO/UV treated) used for cooking. (5 pts)
+[ ] Oil is not reused multiple times (TPM value < 25%). (5 pts)
+
+E. PACKAGING & DISPATCH (10 points)
+[ ] Food-grade packaging material is used. No banned plastics. (5 pts)
+[ ] Tamper-evident seals are applied to all outgoing delivery bags. (5 pts)
+
+Overall Comments / Corrective Actions:
+________________________________________________________________________________
+________________________________________________________________________________

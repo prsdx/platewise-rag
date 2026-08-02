@@ -1,0 +1,33 @@
+================================================================================
+PLATEWISE — TOP CUSTOMER FAQs
+Last Updated: 10 February 2025
+================================================================================
+
+Q1. How can I track my order?
+A1. Once the restaurant accepts your order, you can track it in real-time under 
+    the "My Orders" section. The map will activate as soon as the delivery partner 
+    picks up the food.
+
+Q2. What if my food arrives cold or damaged?
+A2. We apologize if this happens. Please go to My Orders > Select the Order > 
+    Report an Issue > "Food Quality/Damage" within 2 hours of delivery. Upload 
+    clear photos of the damaged items, and we will initiate a refund or 
+    replacement based on our Refund Policy.
+
+Q3. Can I change my delivery address after placing an order?
+A3. You can change your address only if the restaurant has not yet handed the 
+    food to the delivery partner AND the new address is within 1 km of the 
+    original address. If it's further, the order will have to be cancelled.
+
+Q4. Why did my order get cancelled automatically?
+A4. Orders are auto-cancelled if the restaurant fails to accept it within 15 
+    minutes, or if no delivery partners are available in your area due to extreme 
+    weather or high demand. A full refund is processed instantly.
+
+Q5. How do I apply a promo code?
+A5. On the checkout page, click on "Apply Coupon" below the bill summary. 
+    Enter your code or select an available offer.
+
+Q6. What is PlateWise Pro?
+A6. PlateWise Pro is our premium membership that offers free delivery on orders 
+    above ₹199, priority customer support, and an "On-Time or Free" guarantee.

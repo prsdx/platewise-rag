@@ -1,0 +1,53 @@
+================================================================================
+PLATEWISE — DELIVERY SLA & COMPENSATION POLICY
+Document Version: 3.0 | Effective Date: 1 January 2025
+================================================================================
+
+1. ESTIMATED TIME OF ARRIVAL (ETA)
+--------------------------------------------------------------------------------
+The ETA displayed at checkout is an algorithmic estimation based on restaurant 
+prep time, traffic conditions, and delivery partner availability. It is not a 
+guaranteed delivery time, except for orders placed under the "PlateWise Pro" 
+subscription.
+
+2. LATE DELIVERY COMPENSATION (STANDARD ORDERS)
+--------------------------------------------------------------------------------
+If an order arrives more than 20 minutes past the original ETA:
+- The customer is eligible for a standard ₹50 "Late Apology Credit".
+- To claim, the customer must tap "Order was late" in the Help section within 
+  12 hours of delivery.
+- Note: This does not apply during extreme weather conditions, natural disasters,
+  or city-wide bandhs/strikes.
+
+3. PLATEWISE PRO: "ON-TIME OR FREE" GUARANTEE
+--------------------------------------------------------------------------------
+For PlateWise Pro subscribers, eligible orders carry an "On-Time or Free" badge.
+- If the order arrives even 1 minute past the promised ETA, the customer receives
+  a 100% refund of the food value (up to ₹500) as PlateWise Credits.
+- The refund is processed automatically within 24 hours.
+- Taxes and packaging charges are not refunded.
+
+4. EXTREME DELAYS & FOOD SAFETY
+--------------------------------------------------------------------------------
+If an order is delayed by more than 60 minutes past the ETA:
+- The customer has the right to refuse delivery at the doorstep.
+- A full refund (including all fees and taxes) will be issued to the original 
+  payment method.
+- PlateWise strictly instructs delivery partners not to deliver food that has 
+  been in transit for more than 90 minutes due to food safety and temperature 
+  control regulations.
+
+5. DELIVERY PARTNER WAIT TIME
+--------------------------------------------------------------------------------
+Upon reaching the customer's location, the delivery partner will wait for a 
+maximum of 10 minutes. 
+- The partner will attempt to call the customer at least 3 times.
+- PlateWise Support will send an app notification and SMS.
+- If the customer remains unreachable after 10 minutes, the order will be 
+  marked "Customer Unavailable" and cancelled. No refund will be provided.
+
+6. ADDRESS CHANGES POST-DISPATCH
+--------------------------------------------------------------------------------
+Once the delivery partner has picked up the order, the delivery address cannot 
+be changed if the new location is more than 1 kilometer away from the original. 
+If the new address is within 1 km, a ₹30 redirection fee applies.
