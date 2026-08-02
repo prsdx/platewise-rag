@@ -39,10 +39,12 @@ ALLOWED_EXTENSIONS = {
 # ──────────────────────────────────────────────
 _upload_jobs: Dict[str, Dict[str, Any]] = {}
 
+PLATEWISE_VERSION = "1.0.0"
+
 app = FastAPI(
-    title="IntelliDocs AI API",
-    description="Multi-Document RAG using Gemini",
-    version="2.3.0",
+    title="PlateWise API",
+    description="Restaurant & Food Knowledge Assistant — RAG-powered Q&A over menus, policies, and FAQs.",
+    version=PLATEWISE_VERSION,
 )
 
 @app.middleware("http")
@@ -137,7 +139,7 @@ class CompareRequest(BaseModel):
 def home():
     return {
         "status": "running",
-        "message": "IntelliDocs AI Backend Running",
+        "message": f"PlateWise API v{PLATEWISE_VERSION} — Restaurant & Food Knowledge Assistant",
     }
 
 

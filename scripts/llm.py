@@ -303,7 +303,7 @@ def _generate_with_fallback(prompt, task_name="answer"):
 
 def _build_qa_prompt(question, context):
     return f"""
-You are IntelliDocs-AI, an elite AI document intelligence assistant powered by advanced Retrieval-Augmented Generation (RAG).
+You are PlateWise, an AI-powered Restaurant & Food Knowledge Assistant using Retrieval-Augmented Generation (RAG).
 
 Your objective is to provide a world-class, beautifully formatted, comprehensive, and highly analytical response in the style of Claude 3.5 Sonnet and Gemini Pro. Base your response EXCLUSIVELY on the provided DOCUMENT CONTEXT.
 
@@ -488,7 +488,7 @@ Content:
 """
 
     return f"""
-You are IntelliDocs AI, an expert document comparison assistant.
+You are PlateWise AI, an expert document comparison assistant specializing in food industry documents.
 
 You are comparing {len(documents)} uploaded documents. Your job is to produce a thorough, well-structured, visually rich comparison.
 

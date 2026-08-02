@@ -1,0 +1,134 @@
+================================================================================
+PLATEWISE — CUSTOMER REFUND & CANCELLATION POLICY
+Document Version: 2.1 | Effective Date: 1 January 2025
+================================================================================
+
+This policy governs all refund and cancellation requests made by customers on the
+PlateWise platform. By placing an order, you agree to the terms below.
+
+================================================================================
+1. ORDER CANCELLATION
+================================================================================
+
+1.1  FREE CANCELLATION WINDOW
+     You may cancel your order without any charge within 3 minutes of placing it,
+     provided the restaurant has not yet confirmed the order.
+
+1.2  CANCELLATION AFTER RESTAURANT CONFIRMATION
+     Once the restaurant confirms the order, cancellation is subject to the
+     restaurant's individual policy. A cancellation fee of up to 50% of the
+     order value may be charged.
+
+1.3  CANCELLATION AFTER DISPATCH
+     Orders cannot be cancelled after the delivery partner has picked up the food.
+     If you no longer want the order, you may reject it at the door, but no refund
+     will be issued for a rejection at the door unless the food is damaged or
+     incorrect.
+
+1.4  HOW TO CANCEL
+     To cancel, go to: My Orders → Select Order → Cancel Order.
+     Cancellations via customer support may take longer to process.
+
+================================================================================
+2. REFUND ELIGIBILITY
+================================================================================
+
+You are eligible for a full refund in the following situations:
+
+2.1  LATE DELIVERY REFUND
+     If your order arrives more than 30 minutes after the estimated delivery time
+     (ETA) displayed at checkout, you are eligible for a ₹50 platform credit or
+     a 10% refund of the order value, whichever is higher. To claim: raise a
+     "Late Delivery" ticket within 24 hours of delivery.
+
+2.2  WRONG ITEMS DELIVERED
+     If you receive an item different from what you ordered (wrong dish, wrong
+     size, wrong variant), you are eligible for a full refund or re-delivery of
+     the correct item. Photo evidence required.
+
+2.3  MISSING ITEMS
+     If items are missing from your order, you are eligible for a refund of the
+     exact value of the missing items. Raise a "Missing Item" request within 2
+     hours of delivery. Photo of the delivered items required.
+
+2.4  FOOD QUALITY ISSUES
+     If the food is spoiled, undercooked, or contains a foreign object, you are
+     eligible for a full refund. You must raise a complaint within 2 hours of
+     delivery with photo or video evidence. PlateWise reserves the right to
+     investigate and may offer a partial refund or platform credit based on the
+     findings.
+
+2.5  RESTAURANT CLOSED / ORDER NOT ACCEPTED
+     If the restaurant does not accept your order within 15 minutes, the order is
+     automatically cancelled and a full refund is processed.
+
+2.6  DUPLICATE CHARGE
+     If your account has been charged more than once for the same order, a full
+     refund of the duplicate charge is processed within 2 business days.
+
+================================================================================
+3. NON-REFUNDABLE SITUATIONS
+================================================================================
+
+The following are NOT eligible for refunds:
+
+- Change of mind after the cancellation window has elapsed.
+- Incorrect delivery address provided by the customer.
+- Customer not available to receive the order (after 2 delivery attempts).
+- Subjective quality complaints ("food was too spicy" / "portion felt small")
+  without objective evidence of a defect.
+- Orders paid using expired or invalid promo codes.
+- Platform credits/coupons are non-refundable and cannot be converted to cash.
+
+================================================================================
+4. REFUND TIMELINES
+================================================================================
+
+  Original Payment Method    | Refund Timeline
+  ---------------------------|-----------------
+  UPI / IMPS                 | 1–3 business days
+  Debit Card                 | 3–5 business days
+  Credit Card                | 5–7 business days
+  Net Banking                | 3–5 business days
+  PlateWise Wallet           | Instant (within 30 minutes)
+  Platform Credit            | Instant (within 30 minutes)
+
+Delays beyond the above timelines: contact your bank. PlateWise support can
+provide a refund reference number for your bank to trace the transaction.
+
+================================================================================
+5. HOW TO RAISE A REFUND REQUEST
+================================================================================
+
+Step 1: Open the PlateWise app or website.
+Step 2: Go to My Orders → Select the affected order.
+Step 3: Tap "Report a Problem" and select the relevant issue category.
+Step 4: Upload photos/videos if prompted.
+Step 5: Submit the request.
+
+Our support team will respond within 24 hours. Complex cases (quality disputes,
+partial refunds) may take up to 5 business days to resolve.
+
+For urgent issues: Live chat is available 8:00 AM – 11:00 PM IST, 7 days a week.
+Phone support: 1800-XXX-XXXX (toll-free), 9:00 AM – 9:00 PM IST.
+
+================================================================================
+6. APPEALS
+================================================================================
+
+If you disagree with a refund decision, you may appeal within 7 days by emailing
+support@platewise.com with the order ID and reason for appeal. Appeals are
+reviewed by the escalation team within 5 business days. The decision of the
+escalation team is final.
+
+================================================================================
+7. POLICY CHANGES
+================================================================================
+
+PlateWise reserves the right to update this policy at any time. The latest version
+will always be available at platewise.com/policies/refund. Continued use of the
+platform constitutes acceptance of the updated policy.
+
+================================================================================
+[SYNTHETIC DOCUMENT — FOR DEMO PURPOSES ONLY]
+================================================================================

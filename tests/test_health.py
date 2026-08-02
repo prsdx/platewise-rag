@@ -14,11 +14,10 @@ client = TestClient(app)
 
 def test_api_health():
     """
-    Test that the root endpoint is running and returns status.
+    Test that the root endpoint returns PlateWise status and message.
     """
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {
-        "status": "running",
-        "message": "IntelliDocs AI Backend Running",
-    }
+    data = response.json()
+    assert data["status"] == "running"
+    assert "PlateWise" in data["message"]

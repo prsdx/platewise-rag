@@ -1,0 +1,131 @@
+================================================================================
+QUICKBITE CLOUD KITCHEN — MULTI-CUISINE MENU
+Operated by QuickBite Foods Pvt. Ltd. | FSSAI Lic. No. 33445566778899
+================================================================================
+
+DELIVERY ONLY — No dine-in | Orders via PlateWise App only
+HOURS: 9:00 AM – 12:00 AM (Monday–Sunday)
+Average Delivery Time: 25–35 minutes
+Minimum Order: ₹200
+
+================================================================================
+BREAKFAST (Available 9:00 AM – 12:00 PM)
+================================================================================
+
+Masala Omelette [GF]
+  Three-egg omelette with onion, tomato, green chilli, and coriander.
+  Price: ₹120 | Allergens: Egg
+
+Veg Upma [V, VG, GF]
+  Semolina-free upma made with millet, tempered with mustard seeds and curry leaves.
+  Price: ₹110 | No major allergens.
+
+Poha [V, VG, GF]
+  Flattened rice with peanuts, turmeric, and lemon. Light and wholesome.
+  Price: ₹100 | Allergens: Nuts (peanuts)
+
+Avocado Toast [V, VG]
+  Multigrain sourdough, smashed avocado, chilli flakes, lemon.
+  Price: ₹200 | Allergens: Gluten (bread)
+
+Idli Sambar (4 pcs) [V, VG, GF]
+  Steamed rice cakes with lentil sambar and coconut chutney.
+  Price: ₹130 | Allergens: Coconut
+
+================================================================================
+LUNCH / DINNER — INDIAN
+================================================================================
+
+Dal Tadka + Steamed Rice [V, VG, GF]
+  Yellow lentils tempered with ghee, cumin, and garlic. Served with steamed rice.
+  Price: ₹180 | Allergens: Dairy (ghee)
+
+Rajma Chawal [V, VG, GF]
+  Kidney bean curry with basmati rice. A North Indian comfort classic.
+  Price: ₹190 | No major allergens (no dairy by default).
+
+Chicken Curry + Rice [GF]
+  Home-style chicken curry in a tomato-onion base. Served with steamed basmati.
+  Price: ₹260 | Allergens: Dairy (optional)
+
+Egg Curry + Rice [GF]
+  Boiled eggs simmered in a spiced onion-tomato gravy.
+  Price: ₹200 | Allergens: Egg
+
+Mutton Keema + Pav
+  Spiced minced mutton with peas, served with buttered pav buns.
+  Price: ₹300 | Allergens: Gluten (pav), Dairy (butter)
+
+================================================================================
+LUNCH / DINNER — CONTINENTAL & FUSION
+================================================================================
+
+Grilled Chicken Sandwich
+  Whole-wheat bread, grilled chicken breast, lettuce, tomato, chipotle mayo.
+  Price: ₹240 | Allergens: Gluten, Egg (mayo)
+
+Veggie Wrap [V]
+  Whole-wheat tortilla with hummus, roasted vegetables, and feta cheese.
+  Price: ₹210 | Allergens: Gluten, Dairy, Sesame (hummus)
+
+Pasta Arrabbiata [V, VG]
+  Penne in a spicy tomato-garlic sauce. Vegan by default.
+  Price: ₹240 | Allergens: Gluten
+
+Pasta Alfredo [V]
+  Fettuccine in a rich cream and parmesan sauce.
+  Price: ₹270 | Allergens: Gluten, Dairy
+
+Burrito Bowl [V, VG, GF]
+  Brown rice, black beans, corn salsa, guacamole, jalapeños. No wheat.
+  Price: ₹280 | No major allergens (soy-free, gluten-free, dairy-free)
+
+Chicken Quesadilla
+  Flour tortilla with grilled chicken, cheese, and jalapeños.
+  Price: ₹300 | Allergens: Gluten, Dairy
+
+================================================================================
+HEALTHY BOWLS
+================================================================================
+
+Quinoa Power Bowl [V, VG, GF]
+  Quinoa, roasted chickpeas, cucumber, cherry tomatoes, tahini dressing.
+  Price: ₹320 | Allergens: Sesame (tahini)
+
+Grilled Chicken Power Bowl [GF]
+  Brown rice, grilled chicken, steamed broccoli, edamame, teriyaki glaze.
+  Price: ₹360 | Allergens: Soy (teriyaki, edamame)
+
+================================================================================
+DESSERTS
+================================================================================
+
+Brownie [V]                    ₹140  | Allergens: Gluten, Dairy, Egg
+Mango Cheesecake [V]           ₹180  | Allergens: Dairy, Gluten, Egg
+Vegan Chia Pudding [VG, GF]    ₹150  | Allergens: Coconut (coconut milk)
+
+================================================================================
+COMBOS (Best Value)
+================================================================================
+
+Combo 1 — Office Lunch [V]
+  Dal Tadka + Rice + 1 Roti + Raita + Pickle
+  Price: ₹240 (Save ₹40)
+
+Combo 2 — Non-Veg Meal
+  Chicken Curry + Rice + 2 Rotis + Dessert of the Day
+  Price: ₹340 (Save ₹60)
+
+Combo 3 — Healthy Start
+  Quinoa Power Bowl + Cold Coffee
+  Price: ₹430 (Save ₹50)
+
+================================================================================
+ORDERING POLICIES
+================================================================================
+- Minimum order ₹200. Orders below minimum not accepted.
+- Delivery is free for orders above ₹500. ₹40 delivery fee below ₹500.
+- Customisations (no onion, extra spice, etc.) via order notes — best effort basis.
+- ETA is an estimate. Actual delivery may vary by up to ±10 minutes during peak hours.
+- For order modifications, contact support within 5 minutes of placing the order.
+================================================================================

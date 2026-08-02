@@ -1,309 +1,277 @@
-# 🚀 IntelliDocs-AI
+# 🍽️ PlateWise — Restaurant & Food Knowledge Assistant
 
-> **An AI-powered Retrieval-Augmented Generation (RAG) platform enabling semantic search, multi-provider LLM answer synthesis, inline citations, and multi-document comparative analysis over multi-format document corpora (PDF, DOCX, PPTX, Markdown, and TXT).**
+> **An AI-powered Retrieval-Augmented Generation (RAG) system for the food-delivery industry.
+> Ask natural-language questions about restaurant menus, food safety, delivery SLAs, refund
+> policies, and FSSAI compliance — and get cited, grounded answers.**
 
 <p align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
-![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?logo=streamlit)
 ![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?logo=react)
-![PyMuPDF](https://img.shields.io/badge/PDF-PyMuPDF-orange)
-![python-docx](https://img.shields.io/badge/DOCX-python--docx-blue)
-![python-pptx](https://img.shields.io/badge/PPTX-python--pptx-red)
-![Gemini Embeddings](https://img.shields.io/badge/Embeddings-Gemini--Embedding-blue?logo=google)
 ![ChromaDB](https://img.shields.io/badge/Vector%20DB-ChromaDB-green)
+![SentenceTransformers](https://img.shields.io/badge/Embeddings-SentenceTransformers-orange)
 ![Gemini](https://img.shields.io/badge/LLM-Google%20Gemini-4285F4?logo=google)
-![Pytest](https://img.shields.io/badge/Testing-Pytest%20(13%20Passed)-yellow?logo=pytest)
-![Status](https://img.shields.io/badge/Status-Milestone%20Complete-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 </p>
 
 ---
 
-## 🎥 Demo
+## 🎯 What is PlateWise?
 
-- **Live Deployed App (React Frontend):** [https://intellidocs-ai-tau.vercel.app](https://intellidocs-ai-tau.vercel.app)
-- **Live Deployed API (FastAPI Backend):** [https://intellidocs-api-yedx.onrender.com](https://intellidocs-api-yedx.onrender.com)
-- **Demo Walkthrough Video (Loom):** [▶️ Watch 3-Min Loom Walkthrough](https://www.loom.com/share/a103a99f1ece4e61bd1b851023f6724f)
-- **Demo Prototype Video (Google Drive):** [Watch Product Demo Video](https://drive.google.com/file/d/1M6AxdbiT9fYv4QrJI_NGNFW7MyIIgBlA/view?usp=sharing)
-- **Live Local REST API:** `http://localhost:8000` (FastAPI Server)
-- **Live Local Streamlit UI:** `http://localhost:8501` (Streamlit App)
-- **Live Local React UI:** `http://localhost:5173` (Vite + React SPA)
+PlateWise is a **Food Knowledge Hub** — a RAG system built for a food-delivery company's
+internal support and operations team. It ingests:
+
+- 🍛 **Restaurant menus** (PDF) — with dietary tags (V/VG/GF) and allergen info
+- 📋 **Policy documents** (DOCX/TXT) — refund, cancellation, delivery SLA, FSSAI compliance
+- ❓ **FAQ documents** (TXT/MD) — customer and restaurant partner FAQs
+- 📊 **Structured data** (CSV) — restaurant directory with cuisine, rating, delivery time
+
+**Example queries it handles well:**
+- *"Which dishes on the Spice Garden menu are vegan?"*
+- *"What's the refund policy if an order arrives more than 30 minutes late?"*
+- *"Does this restaurant have a valid FSSAI hygiene certificate on file?"*
+- *"Summarize the cancellation policy for restaurant partners."*
+- *"Which restaurants in Bengaluru have a rating above 4.5?"*
 
 ---
 
-## 📌 Problem Statement
+## 🏗️ Architecture
 
-Reading and locating specific information inside long documents (e.g., PDFs, DOCX files, PowerPoint slide decks, Markdown pages, and Text files) is time-consuming and inefficient. Traditional keyword searches fail when user queries use different phrasing or conceptual terminology than the source document.
-
-**IntelliDocs-AI** solves this by implementing an end-to-end Retrieval-Augmented Generation (RAG) pipeline. It extracts text and structural elements (markdown tables and image placeholders) from multiple document formats (PDF, DOCX, PPTX, MD, and TXT) using specialized extractors (PyMuPDF, python-docx, python-pptx, and native markdown/text parsers), splits the text into 500-character semantic chunks with 50-character overlap, generates 768-dimensional dense vectors using Google Gemini Embeddings (`gemini-embedding-001`) to support memory-safe cloud deployment, indexes them in ChromaDB alongside an in-memory BM25 sparse index, and combines search results via Reciprocal Rank Fusion (RRF $k=60$). Retrieved chunks are passed as context to Google Gemini to synthesize grounded answers backed by chunk-level source citations.
-
----
-
-## 🏗️ Architecture Diagram
-
-*The system uses a 5-tier architecture connecting the React frontend, FastAPI gateway, chunking ingestion pipeline, hybrid HNSW vector + BM25 keyword index, and resilient multi-model Gemini LLM fallback cascade.*
-
-![IntelliDocs-AI System Architecture](docs/architecture_diagram.png)
-
-```mermaid
-flowchart TD
-    subgraph Client ["Client Layer"]
-        StreamlitUI["Streamlit UI (scripts/app.py)"]
-        ReactUI["React Frontend (frontend/)"]
-    end
-
-    subgraph API ["REST API Layer"]
-        FastAPIApp["FastAPI Server (scripts/api.py)"]
-    end
-
-    subgraph Ingestion ["Multi-Format Ingestion & Processing"]
-        DocExtractors["Document Extractors (PDF, DOCX, PPTX, MD, TXT)"]
-        TableImageProc["Markdown Table Finder & Image Marker (PDFs)"]
-        Chunker["Recursive Text Chunker (500 chars / 50 overlap)"]
-        DocExtractors --> TableImageProc --> Chunker
-    end
-
-    subgraph Storage ["Hybrid Indexing Layer"]
-        DenseEmbed["Google Gemini API (gemini-embedding-001)"]
-        ChromaDBStore[("ChromaDB Vector Store (Persistent HNSW)")]
-        BM25Index["Rank-BM25 Sparse Index"]
-        Chunker --> DenseEmbed --> ChromaDBStore
-        Chunker --> BM25Index
-    end
-
-    subgraph Search ["Hybrid Search Engine (scripts/search.py)"]
-        UserQuery["User Query"]
-        DenseSearch["Dense Vector Cosine Similarity"]
-        SparseSearch["BM25 Keyword Search"]
-        RRFEngine["Reciprocal Rank Fusion (RRF k=60)"]
-        
-        UserQuery --> DenseSearch
-        UserQuery --> SparseSearch
-        ChromaDBStore --> DenseSearch
-        BM25Index --> SparseSearch
-        DenseSearch --> RRFEngine
-        SparseSearch --> RRFEngine
-    end
-
-    subgraph LLM ["Generation & Fallback Engine (scripts/llm.py)"]
-        RRFEngine --> GroundedContext["Top-k Grounded Context Chunks"]
-        GroundedContext --> FallbackCascade{"Multi-Provider Fallback Cascade"}
-        FallbackCascade -->|Primary| Gem31Lite["Gemini 3.1 Flash Lite"]
-        FallbackCascade -->|429 Fallback| Gem2Flash["Gemini 2.0 Flash"]
-        FallbackCascade -->|429 Fallback| Gem15Flash["Gemini 1.5 Flash"]
-        FallbackCascade -->|Offline / Key Miss| OfflineMock["Local Mock Context Extractor"]
-    end
-
-    subgraph Output ["Answer Output"]
-        Gem31Lite --> FinalAns["Grounded Answer + Page & Chunk Citations"]
-        Gem2Flash --> FinalAns
-        Gem15Flash --> FinalAns
-        OfflineMock --> FinalAns
-    end
-
-    StreamlitUI --> FastAPIApp
-    ReactUI --> FastAPIApp
-    FastAPIApp --> Ingestion
-    FastAPIApp --> Search
-    Search --> LLM
-    Output --> FastAPIApp
+```
+User Query
+    │
+    ▼
+React Frontend (Vite SPA)
+    │  POST /query/stream  (SSE streaming)
+    │  X-API-Key header
+    ▼
+FastAPI Backend  ──  Auth Middleware (X-API-Key)
+    │
+    ├── POST /upload    → Ingestion Pipeline
+    │       │
+    │       ├── PDF Reader    (PyMuPDF)
+    │       ├── DOCX Reader   (python-docx)
+    │       ├── TXT/MD Reader (native)
+    │       └── CSV Reader    (pandas → row-to-text)
+    │               │
+    │               └── Recursive Sentence Chunker (800 chars / 2-sentence overlap)
+    │                       │
+    │                       └── SentenceTransformer Embeddings (all-MiniLM-L6-v2, 384d)
+    │                               │
+    │                               └── ChromaDB (persistent HNSW vector store)
+    │
+    └── POST /query/stream → Hybrid Retrieval → LLM Generation
+            │
+            ├── Dense Vector Search  (ChromaDB cosine similarity)
+            ├── BM25 Keyword Search  (pure-Python Okapi BM25)
+            └── Reciprocal Rank Fusion (RRF k=60)
+                    │
+                    └── Top-k Context Chunks
+                            │
+                            └── Gemini LLM Fallback Cascade
+                                    ├── gemini-3.1-flash-lite  (primary)
+                                    ├── gemini-3.5-flash       (429 fallback)
+                                    ├── gemini-2.5-flash       (429 fallback)
+                                    └── mock extractor         (offline fallback)
+                                            │
+                                            └── Streamed Answer + Citations (SSE)
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Component Layer | Tool / Technology | Version / Specification | Rationale & Usage |
-|-----------------|-------------------|-------------------------|-------------------|
-| **Core Runtime** | Python | 3.12 | Primary backend language for NLP and API server |
-| **Document Extraction** | PyMuPDF (`fitz`), python-docx, python-pptx | 1.23+ / 1.2.0 / 1.0.2 | Extracts text and structural components from PDFs, DOCX, PPTX, Markdown, and TXT files |
-| **Text Segmentation** | Custom Recursive Chunker | 500 chars / 50 overlap | Retains cohesive paragraph context while preventing semantic dilution |
-| **Dense Embeddings** | Google Gemini API | `gemini-embedding-001` | 768-dimensional dense vectors (migrated from local Sentence Transformers to resolve Render RAM OOM) |
-| **Vector DB** | ChromaDB | 1.5.9 | Local persistent HNSW vector store with metadata filtering |
-| **Sparse Index** | Rank-BM25 | 0.2.2 | Okapi BM25 algorithm for exact keyword matching |
-| **Rank Fusion** | Reciprocal Rank Fusion | RRF ($k=60$) | Fuses dense and sparse rankings into a unified score |
-| **Primary LLM** | Google Gemini API | `gemini-3.1-flash-lite` | Context-aware answer synthesis via `google-genai` SDK |
-| **Fallback LLM Tier** | Google Gemini Cascade | `gemini-2.0-flash`, `gemini-1.5-flash` | Cascades automatically on HTTP 429 rate limits |
-| **Offline Fallback** | Local Mock Extractor | Built-in | Graceful offline context extraction when APIs are down |
-| **Backend API** | FastAPI + Uvicorn | 0.109+ | Async REST API (`/upload`, `/query`, `/compare`, `/collections`, `/status`) |
-| **Web Interface 1** | Streamlit | 1.30+ | Python interactive web app (`scripts/app.py`) |
-| **Web Interface 2** | React + Vite | React 19 / Vite 8 | Single Page Application (SPA) in `frontend/` |
-| **Testing** | Pytest | 9.1+ | Automated test suite across 8 modules (10/10 passed) |
+| Layer | Technology | Notes |
+|-------|-----------|-------|
+| Backend API | FastAPI + Uvicorn | Async REST, SSE streaming |
+| Vector DB | ChromaDB 1.5.9 | Persistent HNSW, local |
+| Embeddings | SentenceTransformers `all-MiniLM-L6-v2` | 384-dim, fully local — no API |
+| Sparse Search | Okapi BM25 (pure Python) | No external dependency |
+| Rank Fusion | Reciprocal Rank Fusion (k=60) | Fuses dense + sparse rankings |
+| LLM | Google Gemini (multi-model cascade) | `gemini-3.1-flash-lite` primary |
+| Frontend | React 19 + Vite 8 | SPA in `frontend/` |
+| CSV Ingestion | pandas | Row-to-text conversion |
+| Auth | API Key middleware | `X-API-Key` header |
+| Deployment | Render (backend) + Vercel (frontend) | |
 
 ---
 
-## ⚙️ Quickstart
+## ⚙️ Local Setup
 
 ### Prerequisites
-- Python 3.10+ (Python 3.12 recommended)
-- Node.js 18+ (optional, for React frontend)
+- Python 3.12+
+- Node.js 18+
+- A Google Gemini API key ([get one free](https://aistudio.google.com/))
 
-### Step 1: Clone the Repository
+### 1. Clone & Configure
+
 ```bash
-git clone https://github.com/rajeevkrsingh17/IntelliDocs-AI.git
-cd IntelliDocs-AI
+git clone https://github.com/prsdx/platewise-rag.git
+cd platewise-rag
+
+# Copy the env template
+cp .env.example scripts/.env
+# Edit scripts/.env and fill in your GEMINI_API_KEY and PLATEWISE_API_KEY
 ```
 
-### Step 2: Set Up Virtual Environment & Dependencies
+### 2. Backend
+
 ```bash
-# Create virtual environment
 python -m venv venv
+source venv/bin/activate        # Linux/macOS
+# .\venv\Scripts\Activate.ps1  # Windows PowerShell
 
-# Activate virtual environment
-# Windows (PowerShell):
-.\venv\Scripts\Activate.ps1
-# Linux / macOS:
-source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Step 3: Configure Environment Variables
-Create a `.env` file in the `scripts/` directory:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-3.1-flash-lite
-```
+### 3. Run Backend
 
-### Step 4: Run the Application
-
-#### Option A: Launch Streamlit Web UI (Direct Python Application)
 ```bash
-python -m streamlit run scripts/app.py
-```
-*Open browser at `http://localhost:8501`*
-
-#### Option B: Launch FastAPI REST Server & React Frontend
-```bash
-# Terminal 1: Run FastAPI backend
 python -m uvicorn scripts.api:app --reload --port 8000
+# API docs: http://localhost:8000/docs
+```
 
-# Terminal 2: Run React frontend
+### 4. Run Frontend
+
+```bash
 cd frontend
 npm install
 npm run dev
+# React UI: http://localhost:5173
 ```
-*Access React UI at `http://localhost:5173` and Swagger docs at `http://localhost:8000/docs`*
 
-### Step 5: Run Automated Tests
+### 5. Ingest Sample Data
+
+Upload the files from `data/sample_docs/` via the UI, or curl:
+
 ```bash
-pytest
+curl -X POST http://localhost:8000/upload \
+  -H "X-API-Key: your_secret_key" \
+  -F "files=@data/sample_docs/spice_garden_menu.txt"
 ```
-*Output: 10 passed test cases across 8 test suites.*
+
+### 6. Run Tests
+
+```bash
+pytest --tb=short
+```
 
 ---
 
-## 📊 Data Sources
+## 📊 Retrieval Benchmark Results
 
-IntelliDocs-AI operates over multi-format document corpora uploaded dynamically by users or placed in `data/raw/` and `data/uploads/`.
-- Supported input formats: `.pdf`, `.docx`, `.pptx`, `.md`, `.txt` (with readable text, tables, and structural elements).
-- Metadata attached to every indexed chunk: `document_name`, `document_type`, `chunk` (sequential index), `page` (calculated page number), `upload_time`.
+See [`eval/results.md`](eval/results.md) for the full benchmark.
+
+| Config | Hit-Rate @k=5 | p50 Latency | p95 Latency |
+|--------|--------------|-------------|-------------|
+| Dense-only | TBD | TBD | TBD |
+| Hybrid (BM25 + RRF) | TBD | TBD | TBD |
+
+> Run `python eval/retrieval_benchmark.py` to regenerate results.
 
 ---
 
-## 📂 Repository Structure
+## 🐳 Docker
+
+```bash
+# Build
+docker build -t platewise-api .
+
+# Run (supply .env file)
+docker run --env-file scripts/.env -p 8000:8000 platewise-api
+```
+
+---
+
+## 📂 Project Structure
 
 ```
-IntelliDocs-AI/
-├── frontend/                  # React + Vite SPA (deployed on Vercel)
-│   ├── src/                   # React components & pages
-│   ├── public/                # Static assets
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── package.json
-│   └── vercel.json            # Vercel rewrite rules
+platewise-rag/
+├── frontend/                  # React + Vite SPA
+│   ├── src/
+│   │   ├── components/        # UI components (chat, upload, sources)
+│   │   ├── context/           # AuthContext, ToastContext, ChatHistoryContext
+│   │   └── services/api.js    # API client with streaming support
+│   └── index.html
 ├── scripts/                   # Backend application code
-│   ├── api.py                 # FastAPI REST server
-│   ├── app.py                 # Streamlit UI
+│   ├── api.py                 # FastAPI REST server + auth middleware
+│   ├── llm.py                 # LLM fallback cascade + streaming generator
+│   ├── search.py              # Hybrid search: BM25 + dense + RRF
 │   ├── vector_store.py        # ChromaDB ingestion & retrieval
-│   ├── search.py              # Hybrid search (Dense + BM25 + RRF)
-│   ├── llm.py                 # LLM fallback cascade engine
-│   ├── chunker.py             # Recursive text chunker
-│   ├── document_processor.py  # PDF extraction orchestrator
-│   ├── embeddings.py          # Gemini embedding wrapper
-│   └── .env                   # API keys (not committed)
-├── docs/                      # Project documentation
-│   ├── adr/                   # Architecture Decision Records
-│   │   ├── ADR-001-vector-store.md
-│   │   ├── ADR-002-gemini-integration.md
-│   │   ├── ADR-003-source-citation.md
-│   │   └── ADR-004-model-fallback.md
-│   ├── architecture_diagram.png
-│   ├── reflection.md
-│   ├── roadmap_3rd_year.md
-│   ├── resume_bullets.md
-│   ├── resume_final.md
-│   ├── mock_interview.md
-│   ├── postmortem.md
-│   ├── status-one-pager.md
-│   └── showcase_slide_content.md
-├── tests/                     # Pytest test suites (10 tests)
-│   ├── conftest.py
+│   ├── chunker.py             # Sentence-aware recursive chunker
+│   ├── document_processor.py  # Pluggable document extractor dispatcher
+│   ├── readers/               # Per-format extractors
+│   │   ├── pdf_reader.py
+│   │   ├── docx_reader.py
+│   │   ├── csv_reader.py      # NEW: CSV row-to-text converter
+│   │   ├── txt_reader.py
+│   │   └── md_reader.py
+│   └── app.py                 # Streamlit UI (alternative to React)
+├── eval/                      # Retrieval benchmarking
+│   ├── retrieval_benchmark.py # Benchmark script (dense vs hybrid)
+│   ├── test_questions.json    # 18 Q&A pairs with known source docs
+│   └── results.md             # Auto-generated benchmark results
+├── tests/                     # Pytest test suite
 │   ├── test_chunker.py
-│   ├── test_search.py
+│   ├── test_csv_reader.py
+│   ├── test_auth.py
 │   ├── test_health.py
-│   ├── test_pdf_parser.py
+│   ├── test_search.py
 │   ├── test_vector_store.py
-│   ├── test_embedding_service.py
-│   ├── test_eval.py
 │   └── test_rag_pipeline.py
-├── data/                      # PDF uploads & processed ChromaDB
-├── requirements.txt           # Python dependencies
+├── data/
+│   └── sample_docs/           # 15 synthetic food-domain demo documents
+├── docs/
+│   ├── adr/                   # Architecture Decision Records
+│   ├── design_doc.md
+│   └── tech_stack.md
+├── Dockerfile                 # Multi-stage backend container
+├── docker-compose.yml         # Local convenience compose
 ├── render.yaml                # Render deployment config
-├── .gitignore
-└── README.md
+├── requirements.txt
+└── .env.example               # Environment variable template
 ```
 
 ---
 
-## 📑 ADRs
+## 🔐 Authentication
 
-All core architecture decisions are documented in [`docs/adr/`](docs/adr/):
+All API endpoints (except `/` and `/docs`) require an `X-API-Key` header:
 
-- [ADR-001: Selection of ChromaDB as Vector Database](docs/adr/ADR-001-vector-store.md)
-- [ADR-002: Google Gemini as Primary LLM & Embedding Provider](docs/adr/ADR-002-gemini-integration.md)
-- [ADR-003: Chunk-Level Source Citation for Answer Transparency](docs/adr/ADR-003-source-citation.md)
-- [ADR-004: Resilient LLM Fallback Cascade Engine](docs/adr/ADR-004-model-fallback.md)
+```bash
+curl -H "X-API-Key: your_secret_key" http://localhost:8000/documents
+```
 
----
-
-## ✨ Mini-Extension
-
-IntelliDocs-AI includes two major mini-extensions that go beyond standard single-file RAG tutorials:
-
-1. **Multi-Document Comparative Analysis Engine:**
-   - Allows users to select multiple uploaded documents (PDFs, DOCX, PPTX, MD, TXT) and generate comparative reports.
-   - Provides 4 comparison modes: `summary`, `similarities`, `detailed`, and `custom`.
-
-2. **Resilient LLM Fallback Cascade:**
-   - Detects HTTP 429 quota limits and instantly cascades across model tiers (`gemini-2.0-flash` → `gemini-1.5-flash` → `mock`).
-   - Differentiates 429 quota errors (cascade immediately) from 503 service errors (retry 3 times with 5s delay).
+Set `PLATEWISE_API_KEY` in `scripts/.env`. The React frontend reads this key from the
+login modal and passes it automatically on every request.
 
 ---
 
 ## ⚠️ Known Limitations
 
-- **Scanned Image-Only PDFs:** Pure scanned image PDFs without an embedded OCR text layer require pre-OCR processing (planned for 3rd-year extension).
-- **Large File Processing Latency:** Parsing and generating dense embeddings for 200+ page PDFs takes 15–30 seconds on local CPU hardware.
+1. **Citation granularity is chunk-level**, not exact-sentence — answers cite the chunk
+   where the evidence was found, not the specific line.
+2. **Scanned image PDFs** without an embedded text layer cannot be indexed (no OCR).
+3. **BM25 index is rebuilt in-memory** on first query after server restart — adds ~1s
+   latency on cold start with large document sets.
+4. **No persistent user sessions** — the session ID is client-generated; clearing browser
+   storage loses the session's document index.
+5. **Streaming citations** arrive as a final SSE event after the text stream — there is
+   a brief gap between the last token and citation rendering.
 
 ---
 
-## 🗺️ What I'd Do in 3rd Year
+## 🚀 Live Demo
 
-See the complete 12-month roadmap in [`docs/roadmap_3rd_year.md`](docs/roadmap_3rd_year.md):
-- Hybrid search optimization with Qdrant and pgvector.
-- Multimodal document analysis (extracting and indexing images and charts using Vision-Language Models).
-- Agentic RAG workflows (query decomposition and self-verification using LangGraph).
-- Containerized cloud deployment with Docker Compose, GitHub Actions CI/CD, and Prometheus metrics.
+- **Frontend:** TBD (deploy to Vercel)
+- **Backend API:** TBD (deploy to Render)
+
+> API key for the live demo available on request.
 
 ---
 
-## 📄 License + Acknowledgements
+## 📄 License
 
-- **License:** MIT License
-- **Developer:** Rajeev Kumar (B.Tech CSE - AI & Data Engineering, Lovely Professional University)
-- **Segment:** Foundations of Applied Machine Learning (Summer Internship 2026)
-- **Problem Statement Code:** `I2 – Document Q&A (RAG over a Focused Corpus)`
+MIT — see [LICENSE](LICENSE).

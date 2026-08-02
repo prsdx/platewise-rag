@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 _IS_CLOUD = bool(os.getenv("RENDER"))
 DB_PATH = Path("/tmp/chroma_db") if _IS_CLOUD else BASE_DIR / "data" / "processed" / "chroma_db"
 UPLOAD_DIR = Path("/tmp/uploads") if _IS_CLOUD else BASE_DIR / "data" / "uploads"
-print(f"[DB] ChromaDB path: {DB_PATH} | Cloud mode: {_IS_CLOUD}")
+print(f"[PlateWise] ChromaDB path: {DB_PATH} | Cloud mode: {_IS_CLOUD}")
 
 # ------------------------------------------------
 # Embedding Function (Local Sentence-Transformers)
@@ -71,7 +71,7 @@ def get_collection():
     client = chromadb.PersistentClient(path=str(DB_PATH))
     if _EF_ST is None:
         raise RuntimeError("Embedding function not initialized. Check sentence-transformers installation.")
-    return client.get_or_create_collection("intellidocs_st", embedding_function=_EF_ST)
+    return client.get_or_create_collection("platewise", embedding_function=_EF_ST)
 
 
 
@@ -242,7 +242,7 @@ def process_document(file_path, session_id=None):
     # --------------------------------------------
 
     print("\n" + "=" * 60)
-    print("IntelliDocs AI")
+    print("PlateWise — Food Knowledge Assistant")
     print("=" * 60)
 
     print(f"Document : {file_path.name}")
@@ -345,8 +345,8 @@ def clear_database(session_id=None):
     # First try to delete via the client API (nuke whole DB if no session)
     try:
         client = chromadb.PersistentClient(path=str(DB_PATH))
-        client.delete_collection("intellidocs")
-        print("Database collection 'intellidocs' deleted via API.")
+        client.delete_collection("platewise")
+        print("Database collection 'platewise' deleted via API.")
     except Exception:
         pass
 
