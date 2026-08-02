@@ -60,7 +60,7 @@ from app.services.semantic_cache import semantic_cache
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os as _os
-_IS_CLOUD = bool(_os.getenv("RENDER"))
+_IS_CLOUD = bool(_os.getenv("RENDER") or _os.getenv("RAILWAY_STATIC_URL") or _os.getenv("PORT"))
 UPLOAD_DIR = Path("/tmp/uploads") if _IS_CLOUD else BASE_DIR / "data" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -86,6 +86,10 @@ app = FastAPI(
     description="Restaurant & Food Knowledge Assistant — RAG-powered Q&A over menus, policies, and FAQs.",
     version=PLATEWISE_VERSION,
 )
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "service": "platewise-api", "version": PLATEWISE_VERSION}
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
