@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useCallback } from "react";
 
 export const ChatHistoryContext = createContext();
 
-const STORAGE_KEY = "intellidocs_chat_sessions";
+const STORAGE_KEY = "platewise_chat_sessions";
 
 export function ChatHistoryProvider({ children }) {
   const [history, setHistory] = useState(() => {

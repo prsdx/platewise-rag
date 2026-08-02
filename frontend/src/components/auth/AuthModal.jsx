@@ -565,7 +565,7 @@ export default function AuthModal() {
         {/* ── Footer Brand ──────────────────────────────────────── */}
         <div className="px-8 py-4 border-t border-border bg-secondary/30">
           <p className="text-[10px] text-muted-foreground text-center font-medium">
-            Secured by <span className="font-bold">IntelliDocs AI</span> • Your data stays private
+            Secured by <span className="font-bold">PlateWise</span> • Your data stays private
           </p>
         </div>
       </div>

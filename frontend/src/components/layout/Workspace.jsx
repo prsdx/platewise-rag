@@ -165,7 +165,7 @@ export default function Workspace({ files = [], setFiles, activeHistoryItem, onN
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-extrabold text-foreground tracking-tight">
-                IntelliDocs <span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 bg-clip-text text-transparent font-black">AI</span>
+                PlateWise <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent font-black">AI</span>
               </h1>
               <p className="text-xs md:text-sm font-medium text-muted-foreground">
                 Intelligent Multi-Document Analysis Platform

@@ -8,10 +8,10 @@ const API_URL = "/api";
 
 // Persistent Session ID generator per browser/device
 function getSessionId() {
-  let sid = localStorage.getItem("intellidocs_session_id");
+  let sid = localStorage.getItem("platewise_session_id");
   if (!sid) {
     sid = "sess_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem("intellidocs_session_id", sid);
+    localStorage.setItem("platewise_session_id", sid);
   }
   return sid;
 }
@@ -31,7 +31,7 @@ api.interceptors.request.use(async (config) => {
       config.headers["Authorization"] = `Bearer ${token}`;
     } else {
       // Mock auth — attach mock token from localStorage
-      const mockUser = localStorage.getItem("intellidocs_mock_user");
+      const mockUser = localStorage.getItem("platewise_mock_user");
       if (mockUser) {
         const parsed = JSON.parse(mockUser);
         config.headers["Authorization"] = `Bearer mock_${parsed.uid}`;

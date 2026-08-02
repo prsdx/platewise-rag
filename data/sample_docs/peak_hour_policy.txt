@@ -1,0 +1,38 @@
+================================================================================
+PLATEWISE — SURGE PRICING & PEAK HOUR OPERATIONS POLICY
+Internal & Partner Operations Guide
+================================================================================
+
+1. WHAT CONSTITUTES "PEAK HOURS"?
+--------------------------------------------------------------------------------
+Peak hours are dynamically triggered by the PlateWise algorithm when:
+- Order volume in a specific 3km radius exceeds active delivery partner capacity 
+  by a ratio of 3:1.
+- Severe weather conditions (heavy rain, waterlogging) are reported.
+- Major public holidays or local festivals (e.g., Diwali, New Year's Eve, match days).
+
+Standard historical peak hours:
+- Lunch: 12:30 PM - 2:30 PM
+- Dinner: 7:30 PM - 10:00 PM
+- Weekends (Fri-Sun) experience 40% higher volume.
+
+2. DYNAMIC SURGE PRICING (DELIVERY FEE)
+--------------------------------------------------------------------------------
+During peak hours, a "Surge Fee" is applied to the customer's delivery charge.
+- Tier 1 Surge: +₹20 (High Demand)
+- Tier 2 Surge: +₹40 (Very High Demand / Light Rain)
+- Tier 3 Surge: +₹60 (Severe Conditions / Extreme Shortage)
+
+This extra fee goes directly to the delivery partner as a "Peak Bonus" to 
+incentivize them to log in and accept orders during difficult conditions.
+PlateWise Pro members are exempt from Tier 1 & 2 surge fees, but pay a reduced 
+fee during Tier 3.
+
+3. RESTAURANT OPERATIONS DURING PEAK
+--------------------------------------------------------------------------------
+- Preparation SLAs: Automatically extended by +10 minutes in the system.
+- Promotions: Discounts and "Buy 1 Get 1" offers can be dynamically paused 
+  by restaurants if they opt into "Peak Auto-Pause".
+- Order Limiting: If a restaurant fails to accept 3 consecutive orders within 
+  the SLA during a surge, the system will automatically place the restaurant 
+  on "Busy Mode" for 30 minutes to clear the backlog.
