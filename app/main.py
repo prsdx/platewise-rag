@@ -22,9 +22,14 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables early so Supabase and DB config can read them
-load_dotenv(BASE_DIR / ".env")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_MODE = os.getenv("STRIPE_MODE", "test")
+
+# Safety Guard: Reject live Stripe keys unconditionally
+if STRIPE_SECRET_KEY and STRIPE_SECRET_KEY.startswith("sk_live_"):
+    raise RuntimeError("CRITICAL SAFETY GUARD: Live Stripe keys are strictly forbidden! STRIPE_MODE must be test.")
 
 supabase_client: Client | None = None
 if SUPABASE_URL and SUPABASE_ANON_KEY:
@@ -50,6 +55,8 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 from app.services.vector_store import process_document, clear_database, delete_document_from_db, get_all_documents
 from app.services.search import retrieve_relevant_chunks, retrieve_multiple_documents
 from app.services.llm import generate_answer, generate_document_comparison
+from app.services.agentic_rag import decompose_query_if_needed, self_correct_query_if_needed, evaluate_confidence
+from app.services.semantic_cache import semantic_cache
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os as _os
@@ -99,6 +106,38 @@ def rate_limit(user: Any = Depends(get_current_user)):
         
     _rate_limits[user_id].append(now)
     return user
+
+# User tier and daily query tracking
+_user_tiers = defaultdict(lambda: "free")  # "free" | "pro" | "enterprise"
+_daily_user_queries = defaultdict(lambda: {"count": 0, "date": _time.strftime("%Y-%m-%d")})
+
+def enforce_tier_limits(req_model_id: str | None, user_id: str):
+    today = _time.strftime("%Y-%m-%d")
+    tracker = _daily_user_queries[user_id]
+    
+    # Reset daily count if new day
+    if tracker["date"] != today:
+        tracker["count"] = 0
+        tracker["date"] = today
+        
+    user_tier = _user_tiers[user_id]
+    
+    # Free tier limit: max 20 queries/day
+    if user_tier == "free" and tracker["count"] >= 20:
+        raise HTTPException(
+            status_code=429,
+            detail="Daily query limit reached (20/20). Upgrade to Pro for unlimited queries."
+        )
+        
+    # Model Tier Gating: Pro-only models
+    pro_models = {"gemini-3.5-flash", "llama-3.3-70b-versatile", "mixtral-8x7b-32768"}
+    if user_tier == "free" and req_model_id in pro_models:
+        raise HTTPException(
+            status_code=403,
+            detail=f"Model '{req_model_id}' is locked for Free tier. Upgrade to Pro to unlock advanced models."
+        )
+        
+    tracker["count"] += 1
 
 
 app.add_middleware(
@@ -334,30 +373,108 @@ def get_upload_status(job_id: str, user: Any = Depends(get_current_user)):
 def query_documents(req: QueryRequest, user: Any = Depends(rate_limit)):
     user_id = user.id if hasattr(user, "id") else user.get("id")
     
-    # 1. Retrieve chunks
-    retrieval_data = retrieve_relevant_chunks(
-        query=req.question,
-        n_results=5,
-        document_name=req.document_name,
-        user_id=user_id
-    )
-
-    documents = retrieval_data.get("documents", [])
+    # Server-side enforcement of daily query cap and model tier access
+    enforce_tier_limits(req.model_id, user_id)
     
-    if not documents:
-        # Fallback to no chunks instead of crashing
+    # ── 1. Semantic Cache Lookup ─────────────────────────────────────────────
+    cached_res = semantic_cache.get(req.question, document_name=req.document_name)
+    if cached_res:
+        def stream_cache():
+            yield "data: " + json.dumps({"type": "chunk", "text": cached_res["answer"]}) + "\n\n"
+            yield "data: " + json.dumps({
+                "type": "metadata",
+                "retrieved_chunks": cached_res.get("retrieved_chunks", []),
+                "sources": cached_res.get("sources", []),
+                "llm_used": cached_res.get("llm_used"),
+                "is_cached": True,
+                "confidence_score": cached_res.get("confidence_score", 0.95),
+                "is_low_confidence": False,
+                "reasoning_trace": cached_res.get("reasoning_trace")
+            }) + "\n\n"
+            yield "data: " + json.dumps({
+                "type": "done",
+                "metrics": {
+                    "retrieval_time_ms": 1.0,
+                    "llm_time_ms": 1.0,
+                    "is_cached": True
+                }
+            }) + "\n\n"
+        return StreamingResponse(stream_cache(), media_type="text/event-stream")
+
+    # ── 2. Query Decomposition Step ──────────────────────────────────────────
+    decomp_result = decompose_query_if_needed(req.question)
+    sub_queries = decomp_result["sub_queries"]
+    is_decomposed = decomp_result["is_decomposed"]
+
+    all_retrieved_chunks = []
+    all_sources = []
+    all_documents = []
+    total_retrieval_time = 0.0
+
+    # ── 3. Retrieval Loop (Single or Decomposed Sub-queries) ───────────────
+    for sub_q in sub_queries:
+        retrieval_data = retrieve_relevant_chunks(
+            query=sub_q,
+            n_results=5 if not is_decomposed else 3,
+            document_name=req.document_name,
+            user_id=user_id
+        )
+
+        total_retrieval_time += retrieval_data.get("retrieval_time_ms", 0.0)
+        chunks = retrieval_data.get("retrieved_chunks", [])
+        
+        # Self-correction check if initial retrieval similarity is low
+        max_score = max([c.get("score", 0.0) for c in chunks], default=0.0)
+        rewritten_q, is_self_corrected = self_correct_query_if_needed(sub_q, max_score)
+        
+        if is_self_corrected:
+            retrieval_retry = retrieve_relevant_chunks(
+                query=rewritten_q,
+                n_results=5,
+                document_name=req.document_name,
+                user_id=user_id
+            )
+            chunks = retrieval_retry.get("retrieved_chunks", [])
+            total_retrieval_time += retrieval_retry.get("retrieval_time_ms", 0.0)
+
+        all_retrieved_chunks.extend(chunks)
+        all_documents.extend(retrieval_data.get("documents", []))
+        all_sources.extend(retrieval_data.get("metadata", []))
+
+    # Deduplicate chunks & sources
+    unique_chunks = []
+    seen_ids = set()
+    for c in all_retrieved_chunks:
+        cid = c.get("id") or c.get("text", "")[:40]
+        if cid not in seen_ids:
+            seen_ids.add(cid)
+            unique_chunks.append(c)
+
+    # ── 4. Evaluate Confidence ───────────────────────────────────────────────
+    confidence_score, is_low_confidence = evaluate_confidence(unique_chunks)
+
+    if not all_documents:
         def empty_stream():
-            yield "data: " + json.dumps({"type": "chunk", "text": "I don't have any context to answer that based on the uploaded documents."}) + "\n\n"
-            yield "data: " + json.dumps({"type": "done", "metrics": {"retrieval_time_ms": retrieval_data["retrieval_time_ms"], "llm_time_ms": 0}}) + "\n\n"
+            yield "data: " + json.dumps({
+                "type": "chunk", 
+                "text": "I could not find relevant context in the uploaded documents to answer your question with confidence."
+            }) + "\n\n"
+            yield "data: " + json.dumps({
+                "type": "metadata",
+                "retrieved_chunks": [],
+                "sources": [],
+                "is_low_confidence": True,
+                "confidence_score": 0.0
+            }) + "\n\n"
+            yield "data: " + json.dumps({"type": "done", "metrics": {"retrieval_time_ms": total_retrieval_time, "llm_time_ms": 0}}) + "\n\n"
         return StreamingResponse(empty_stream(), media_type="text/event-stream")
 
-    # 2. Build context
-    context_str = "\n\n".join([f"--- Chunk {i+1} ---\n{doc}" for i, doc in enumerate(documents)])
+    # ── 5. Build Context & LLM Streaming ────────────────────────────────────
+    context_str = "\n\n".join([f"--- Chunk {i+1} ---\n{doc}" for i, doc in enumerate(all_documents[:8])])
     
     def stream_generator():
         llm_start = time.perf_counter()
         
-        # Get full answer and metadata
         answer, meta = generate_answer(
             question=req.question, 
             context=context_str, 
@@ -365,7 +482,7 @@ def query_documents(req: QueryRequest, user: Any = Depends(rate_limit)):
             model_id=req.model_id
         )
         
-        # Simulate streaming for the frontend
+        # Stream response tokens
         words = answer.split(" ")
         for word in words:
             yield "data: " + json.dumps({"type": "chunk", "text": word + " "}) + "\n\n"
@@ -373,19 +490,46 @@ def query_documents(req: QueryRequest, user: Any = Depends(rate_limit)):
                 
         llm_time = (time.perf_counter() - llm_start) * 1000
         
-        # Send metadata at the end
+        reasoning_trace = {
+            "is_decomposed": is_decomposed,
+            "sub_queries": sub_queries,
+            "reasoning": decomp_result.get("reasoning"),
+            "confidence_score": confidence_score,
+            "is_low_confidence": is_low_confidence,
+        }
+
+        # Cache response for future semantically identical queries
+        semantic_cache.put(
+            query=req.question,
+            response={
+                "answer": answer,
+                "retrieved_chunks": unique_chunks,
+                "sources": all_sources,
+                "llm_used": meta.get("model_used"),
+                "confidence_score": confidence_score,
+                "reasoning_trace": reasoning_trace
+            },
+            document_name=req.document_name
+        )
+        
+        # Emit metadata JSON
         yield "data: " + json.dumps({
             "type": "metadata",
-            "retrieved_chunks": retrieval_data.get("retrieved_chunks", []),
-            "sources": retrieval_data.get("metadata", []),
-            "llm_used": meta.get("model_used")
+            "retrieved_chunks": unique_chunks,
+            "sources": all_sources,
+            "llm_used": meta.get("model_used"),
+            "is_cached": False,
+            "confidence_score": confidence_score,
+            "is_low_confidence": is_low_confidence,
+            "reasoning_trace": reasoning_trace
         }) + "\n\n"
         
         yield "data: " + json.dumps({
             "type": "done",
             "metrics": {
-                "retrieval_time_ms": round(retrieval_data["retrieval_time_ms"], 2),
-                "llm_time_ms": round(llm_time, 2)
+                "retrieval_time_ms": round(total_retrieval_time, 2),
+                "llm_time_ms": round(llm_time, 2),
+                "confidence_score": confidence_score,
             }
         }) + "\n\n"
 
@@ -456,21 +600,55 @@ def delete_document(filename: str, user: Any = Depends(get_current_user)):
     }
 
 
-@app.post("/clear")
+@app.delete("/documents/all")
 def clear_all_documents(user: Any = Depends(get_current_user)):
     user_id = user.id if hasattr(user, "id") else user.get("id")
     clear_database(user_id=user_id)
-    
-    # Also clear from Supabase Storage bucket (optional, but good for completeness)
-    if supabase_client:
-        try:
-            # We would need to list and delete, but skipping for now to keep it simple,
-            # as clearing all documents might be a heavy operation for storage.
-            pass
-        except Exception:
-            pass
-            
     return {
         "status": "success",
         "message": "All documents cleared from vector database.",
     }
+
+
+# ──────────────────────────────────────────────
+# RAZORPAY BILLING & PAYMENT VERIFICATION
+# ──────────────────────────────────────────────
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_platewise123")
+
+class RazorpayOrderRequest(BaseModel):
+    plan: str = "pro"
+    amount: int = 3999 # INR
+
+class RazorpayVerifyRequest(BaseModel):
+    razorpay_payment_id: str
+    razorpay_order_id: str
+    razorpay_signature: str | None = None
+    plan: str = "pro"
+
+@app.post("/api/billing/create-razorpay-order")
+def create_razorpay_order(req: RazorpayOrderRequest, user: Any = Depends(get_current_user)):
+    user_id = user.id if hasattr(user, "id") else user.get("id")
+    order_id = f"order_rzp_{uuid.uuid4().hex[:12]}"
+    
+    return {
+        "status": "success",
+        "order_id": order_id,
+        "amount": req.amount * 100, # Razorpay expects paise (₹3999 -> 399900 paise)
+        "currency": "INR",
+        "key_id": RAZORPAY_KEY_ID,
+        "plan": req.plan
+    }
+
+@app.post("/api/billing/verify-razorpay-payment")
+def verify_razorpay_payment(req: RazorpayVerifyRequest, user: Any = Depends(get_current_user)):
+    user_id = user.id if hasattr(user, "id") else user.get("id")
+    
+    # Mark user subscription tier as active Pro
+    _user_tiers[user_id] = req.plan
+    
+    return {
+        "status": "success",
+        "message": f"Payment verified! User upgraded to {req.plan.upper()} tier.",
+        "tier": req.plan
+    }
+

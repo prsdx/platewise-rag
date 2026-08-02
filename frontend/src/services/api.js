@@ -153,6 +153,11 @@ export async function askQuestion(question, documentName = null, modelId = null,
   let finalMetrics = null;
   let buffer = "";
 
+  let finalIsCached = false;
+  let finalConfidenceScore = 0.95;
+  let finalIsLowConfidence = false;
+  let finalReasoningTrace = null;
+
   while (!done) {
     const { value, done: readerDone } = await reader.read();
     done = readerDone;
@@ -168,6 +173,10 @@ export async function askQuestion(question, documentName = null, modelId = null,
             if (data.type === "metadata") {
               finalSources = data.sources || [];
               finalChunks = data.retrieved_chunks || [];
+              finalIsCached = data.is_cached || false;
+              finalConfidenceScore = data.confidence_score || 0.95;
+              finalIsLowConfidence = data.is_low_confidence || false;
+              finalReasoningTrace = data.reasoning_trace || null;
             } else if (data.type === "chunk") {
               fullAnswer += data.text;
               onChunk(fullAnswer);
@@ -175,7 +184,6 @@ export async function askQuestion(question, documentName = null, modelId = null,
               finalMetrics = data.metrics || null;
             }
           } catch (e) {
-            // ignore JSON parse error for genuinely malformed lines, but incomplete ones are now handled by buffer!
             console.error("SSE JSON Parse Error on line:", line, e);
           }
         }
@@ -188,6 +196,10 @@ export async function askQuestion(question, documentName = null, modelId = null,
     sources: finalSources,
     retrieved_chunks: finalChunks,
     metrics: finalMetrics,
+    is_cached: finalIsCached,
+    confidence_score: finalConfidenceScore,
+    is_low_confidence: finalIsLowConfidence,
+    reasoning_trace: finalReasoningTrace,
   };
 }
 

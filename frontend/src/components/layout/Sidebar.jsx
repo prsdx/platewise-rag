@@ -1,319 +1,231 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
-  FileText,
-  Plus,
-  Trash2,
-  FolderOpen,
   MessageSquare,
   Database,
+  GitCompare,
+  BarChart3,
+  Plus,
+  Trash2,
+  Utensils,
+  Sparkles,
+  Layers,
   Search,
+  LogOut,
+  User,
+  ShieldCheck,
   X,
+  Settings,
 } from "lucide-react";
 import ChatHistory from "../chat/ChatHistory";
-import WorkspaceStats from "../chat/WorkspaceStats";
+import { AuthContext } from "../../context/AuthContext";
 import { ToastContext } from "../../context/ToastContext";
-import { deleteDocument, clearAllDocuments } from "../../services/api";
+import { clearAllDocuments } from "../../services/api";
 
-export default function Sidebar({ files = [], setFiles, onNewChat, onSelectHistory, sidebarOpen, setSidebarOpen }) {
-  const [sidebarTab, setSidebarTab] = useState("conversations");
-  const [searchQuery, setSearchQuery] = useState("");
+export default function Sidebar({
+  files = [],
+  setFiles,
+  activeMode = "chat",
+  setActiveMode,
+  onNewChat,
+  onSelectHistory,
+  sidebarOpen,
+  setSidebarOpen,
+  userProfile = { name: "Gordon Ramsay", role: "Executive Chef" },
+  onOpenSettings,
+}) {
+  const [historySearch, setHistorySearch] = useState("");
+  const { user, logout } = useContext(AuthContext);
   const { showToast } = useContext(ToastContext);
 
-  const removeFile = async (name) => {
-    setFiles((prev) => prev.filter((file) => file.name !== name));
-    try {
-      await deleteDocument(name);
-      if (showToast) showToast(`Deleted "${name}" from vector database`, "info");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const totalChunks = files.reduce((acc, f) => acc + (f.chunks || 0), 0);
 
-  const handleClearAll = async () => {
-    if (!files.length) return;
-    if (window.confirm("Are you sure you want to clear all indexed documents?")) {
-      setFiles([]);
-      try {
-        await clearAllDocuments();
-        if (showToast) showToast("Cleared all documents from vector store", "success");
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
-  const formatSize = (bytes) => {
-    const size = Number(bytes) || 0;
-    if (size === 0) return "0 KB";
-    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-    return `${(size / (1024 * 1024)).toFixed(2)} MB`;
-  };
-
-  const getFormatBadgeStyle = (filename) => {
-    const ext = filename ? filename.split(".").pop().toLowerCase() : "";
-    switch (ext) {
-      case "pdf":
-        return "bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800";
-      case "docx":
-      case "doc":
-        return "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800";
-      case "pptx":
-      case "ppt":
-        return "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800";
-      case "md":
-      case "txt":
-        return "bg-purple-50 text-purple-600 border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-800";
-      default:
-        return "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
-    }
-  };
-
-
-
-  const filesToDisplay = files.filter(file => 
-    file?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const navItems = [
+    { id: "chat", label: "AI Intelligence Hub", icon: MessageSquare, badge: "RAG" },
+    { id: "vault", label: "Knowledge Vault", icon: Database, badge: files.length },
+    { id: "compare", label: "Menu & SOP Comparator", icon: GitCompare },
+    { id: "analytics", label: "System Telemetry", icon: BarChart3 },
+  ];
 
   return (
     <>
-      {/* Backdrop overlay for mobile drawer */}
+      {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 dark:bg-black/60 z-40 xl:hidden transition-opacity duration-200"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 xl:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 xl:relative xl:translate-x-0 w-[280px] sm:w-[320px] bg-sidebar border-r border-border flex flex-col transition-transform duration-300 ease-in-out overflow-hidden shrink-0 shadow-xl xl:shadow-none h-full ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      }`}>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 xl:relative xl:translate-x-0 w-[290px] glass-sidebar flex flex-col transition-transform duration-300 ease-in-out h-full ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Brand Header */}
+        <div className="p-4 border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
+              <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-emerald-400">
+                <Utensils size={18} />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base font-extrabold text-foreground tracking-tight">PlateWise</h1>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  PRO
+                </span>
+              </div>
+              <p className="text-[11px] text-muted-foreground">Culinary AI Assistant</p>
+            </div>
+          </div>
 
-        {/* Primary Action: New Conversation */}
-        <div className="p-3 border-b border-border/60 flex items-center gap-2">
-          <button
-            onClick={() => {
-              onNewChat();
-              if (setSidebarOpen) setSidebarOpen(false);
-            }}
-            className="flex-1 flex items-center justify-between py-2.5 px-3 rounded-lg bg-card hover:bg-secondary text-foreground font-semibold text-sm border border-border transition-all duration-150 group"
-          >
-            <span className="flex items-center gap-2">
-              <Plus size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
-              New Chat
-            </span>
-            <span className="text-[10px] text-muted-foreground font-mono bg-background border border-border px-1.5 rounded-md hidden sm:block">
-              ⌘ N
-            </span>
-          </button>
-
-          {/* Close Sidebar Button (Mobile/Tablet only) */}
           <button
             onClick={() => setSidebarOpen(false)}
-            className="xl:hidden p-2.5 rounded-xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition"
-            title="Close Sidebar"
+            className="xl:hidden p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
           >
             <X size={18} />
           </button>
         </div>
 
-      {/* Search Bar */}
-      <div className="border-b border-border/60 p-4">
-        <div className="relative">
-          <Search
-            size={16}
-            className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none"
-          />
-          <input
-            type="text"
-            placeholder={sidebarTab === "conversations" ? "Search conversations..." : "Search documents..."}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-border bg-card text-xs md:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-black dark:focus:border-white transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Sidebar Tab Switcher */}
-      <div className="px-4 pt-3 pb-2 border-b border-border/60">
-        <div className="flex p-1 rounded-xl bg-secondary/80 border border-border/80">
+        {/* New Chat Action */}
+        <div className="p-3">
           <button
-            onClick={() => setSidebarTab("conversations")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-bold transition-all duration-150 ${sidebarTab === "conversations"
-                ? "bg-gradient-to-r from-slate-800 to-zinc-900 text-white shadow-sm border border-slate-700/60"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-              }`}
-          >
-            <MessageSquare size={15} />
-            <span>Chats</span>
-          </button>
-          <button
-            onClick={() => setSidebarTab("documents")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-bold transition-all duration-150 ${sidebarTab === "documents"
-                ? "bg-gradient-to-r from-slate-800 to-zinc-900 text-white shadow-sm border border-slate-700/60"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-              }`}
-          >
-            <Database size={15} />
-            <span>Documents</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ========================
-          CONVERSATIONS TAB
-      ======================== */}
-      {sidebarTab === "conversations" && (
-        <div className="flex-1 overflow-y-auto flex flex-col animate-fade-in">
-          {/* Recent Conversations */}
-          <ChatHistory
-            onSelectHistory={(item) => {
-              setSearchQuery("");
-              onSelectHistory(item);
+            onClick={() => {
+              onNewChat();
+              setActiveMode("chat");
               if (setSidebarOpen) setSidebarOpen(false);
             }}
-            searchQuery={searchQuery}
-          />
-
-          {/* Workspace Stats (2x2 Grid) */}
-          <div className="border-t border-border/60 mt-auto">
-            <WorkspaceStats files={files} />
-          </div>
+            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold text-xs flex items-center justify-between shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 transform hover:-translate-y-0.5 group"
+          >
+            <span className="flex items-center gap-2">
+              <Plus size={16} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span>New Conversation</span>
+            </span>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono text-emerald-200">
+              ⌘K
+            </kbd>
+          </button>
         </div>
-      )}
 
-      {/* ========================
-          DOCUMENTS TAB
-      ======================== */}
-      {sidebarTab === "documents" && (
-        <div className="flex-1 overflow-y-auto flex flex-col animate-fade-in">
-          {/* Knowledge Base Header */}
-          <div className="px-4 pt-4 pb-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <h3 className="text-sm font-bold text-foreground">
-                Knowledge Base
-              </h3>
-              <span className="bg-secondary text-secondary-foreground text-xs px-2.5 py-0.5 rounded-lg font-bold border border-border">
-                {files.length} files
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {files.length > 0 && (
-                <button
-                  onClick={handleClearAll}
-                  className="text-xs font-semibold text-muted-foreground hover:text-destructive transition px-2 py-1 rounded-lg hover:bg-destructive/10"
-                  title="Clear all documents"
-                >
-                  Clear all
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Documents List */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2.5">
-            {filesToDisplay.length === 0 && files.length === 0 ? (
-              <div className="border border-dashed border-border rounded-xl bg-card p-6 text-center mt-2">
-                <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center border border-border mx-auto mb-3">
-                  <FolderOpen size={24} className="text-muted-foreground" />
+        {/* View Switcher Nav */}
+        <div className="px-3 py-2 space-y-1">
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
+            Platform Views
+          </p>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeMode === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveMode(item.id);
+                  if (setSidebarOpen) setSidebarOpen(false);
+                }}
+                className={`w-full flex items-center justify-between py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
+                  isActive
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground border border-transparent"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Icon size={16} className={isActive ? "text-emerald-400" : "text-muted-foreground"} />
+                  <span>{item.label}</span>
                 </div>
-                <p className="font-bold text-foreground text-sm">No Documents Yet</p>
-                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                  Upload files in the main workspace to build your knowledge base
-                </p>
-              </div>
-            ) : filesToDisplay.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">
-                No matching documents found
-              </p>
-            ) : (
-              filesToDisplay.map((file) => {
-                const ext = file.name ? file.name.split(".").pop().toUpperCase() : "DOC";
-                return (
-                  <div
-                    key={file.name}
-                    className="bg-card border border-border rounded-xl p-3.5 hover:border-foreground/20 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all group"
+                {item.badge !== undefined && (
+                  <span
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                      isActive
+                        ? "bg-emerald-500/20 text-emerald-300"
+                        : "bg-secondary text-muted-foreground"
+                    }`}
                   >
-                    <div className="flex items-start justify-between gap-2.5">
-                      <div className="flex items-start gap-3 min-w-0 flex-1">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-black border shrink-0 uppercase tracking-wide mt-0.5 ${getFormatBadgeStyle(
-                            file.name
-                          )}`}
-                        >
-                          {ext}
-                        </span>
-
-                        <div className="min-w-0 flex-1">
-                          <h4
-                            className="font-semibold text-foreground truncate text-sm leading-snug"
-                            title={file.name}
-                          >
-                            {file.name}
-                          </h4>
-
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1.5">
-                            <span>{formatSize(file.size)}</span>
-                            {file.pages > 0 && <span>• {file.pages} pages</span>}
-                            {file.chunks > 0 && <span>• {file.chunks} chunks</span>}
-                          </div>
-
-                          <div className="flex items-center gap-1.5 mt-2">
-                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-200 dark:border-emerald-800">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                              Indexed
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => removeFile(file.name)}
-                        className="p-1.5 rounded-lg text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all shrink-0"
-                        title="Delete document"
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      )}
 
-      {/* Bottom Panel: Storage Telemetry */}
-      <div className="p-4 border-t border-border bg-secondary/15 shrink-0">
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase">
-            <span>Storage Used</span>
-            <span className="font-mono text-foreground font-semibold">
-              {formatSize(files.reduce((sum, f) => sum + (f.size || 0), 0))} / 100 MB
+        {/* History */}
+        <div className="flex-1 min-h-0 flex flex-col border-t border-border mt-2 pt-2 px-3">
+          <div className="flex items-center justify-between px-3 py-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              Recent Queries
             </span>
           </div>
-          <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden border border-border/40">
-            <div
-              className="bg-primary h-full transition-all duration-500 rounded-full"
-              style={{
-                width: `${Math.min(
-                  100,
-                  (files.reduce((sum, f) => sum + (f.size || 0), 0) / (100 * 1024 * 1024)) * 100
-                )}%`,
-              }}
-            />
+
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <ChatHistory onSelectHistory={onSelectHistory} searchQuery={historySearch} />
           </div>
         </div>
-      </div>
 
+        {/* Storage Meter */}
+        <div className="p-3 border-t border-border">
+          <div className="glass-card p-3 rounded-xl border border-border space-y-2">
+            <div className="flex justify-between items-center text-[11px]">
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <Layers size={13} className="text-emerald-400" />
+                Knowledge Base
+              </span>
+              <span className="font-mono text-emerald-400 font-bold">{files.length} Files</span>
+            </div>
+
+            <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
+                style={{ width: `${Math.min(100, files.length * 10)}%` }}
+              />
+            </div>
+
+            <div className="flex justify-between items-center text-[10px] text-muted-foreground">
+              <span>{totalChunks} Chunks indexed</span>
+              <span className="text-emerald-400 flex items-center gap-1">
+                <ShieldCheck size={10} /> pgvector
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* User Profile Card & Settings Trigger */}
+        <div className="p-3 border-t border-border bg-card/40 flex items-center justify-between gap-2">
+          <div
+            onClick={onOpenSettings}
+            className="flex items-center gap-2.5 min-w-0 cursor-pointer group flex-1 p-1 rounded-lg hover:bg-accent transition-colors"
+            title="Edit Profile & Settings"
+          >
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+              <User size={15} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-foreground truncate max-w-[120px]">
+                {userProfile?.name || user?.email || "Gordon Ramsay"}
+              </p>
+              <p className="text-[10px] text-emerald-400 font-mono truncate max-w-[120px]">
+                {userProfile?.role || "Executive Chef"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={onOpenSettings}
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              title="Settings"
+            >
+              <Settings size={15} />
+            </button>
+            <button
+              onClick={logout}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              title="Logout"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
+        </div>
       </aside>
     </>
   );
