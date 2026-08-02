@@ -8,6 +8,9 @@ fastapi>=0.115,<1.0
 uvicorn[standard]>=0.30,<1.0
 python-multipart>=0.0.9
 
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2+cpu; sys_platform != 'darwin'
+
 # Vector DB (Supabase pgvector) + embeddings
 supabase>=2.0,<3.0
 vecs>=0.4,<1.0
