@@ -68,8 +68,8 @@ export default function AuthModal() {
     if (error) setError('');
   }, [email, password, confirmPassword, fullName]);
 
-  // If user is logged in, don't show modal
-  if (user) return null;
+  // If user is logged in or modal is closed, don't show modal
+  if (user || !isAuthModalOpen) return null;
 
   const passwordStrength = getPasswordStrength(password);
 

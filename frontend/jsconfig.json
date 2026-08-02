@@ -3,7 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": []
   },
-  "include": ["src"]
+  "typeAcquisition": {
+    "enable": false
+  },
+  "exclude": ["node_modules", "dist"]
 }
