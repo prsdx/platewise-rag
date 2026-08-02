@@ -8,10 +8,10 @@ import statistics
 # Add scripts directory to path to import backend modules
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
-sys.path.append(str(BASE_DIR / "scripts"))
+sys.path.append(str(BASE_DIR / "app"))
 
-from scripts.vector_store import get_collection
-from scripts.search import retrieve_relevant_chunks
+from app.services.vector_store import get_collection, _model
+from app.services.search import retrieve_relevant_chunks
 
 def load_test_cases():
     test_file = BASE_DIR / "eval" / "test_questions.json"
@@ -24,13 +24,15 @@ def run_dense_only(query, collection, k=5):
     """
     start_time = time.perf_counter()
     try:
+        query_embedding = _model.encode(query, show_progress_bar=False).tolist()
         results = collection.query(
-            query_texts=[query],
-            n_results=k,
-            include=["metadatas"]
+            data=query_embedding,
+            limit=k,
+            include_metadata=True,
+            include_value=False
         )
-        metadatas = results.get("metadatas", [[]])[0]
-        retrieved_docs = [m.get("document_name") for m in metadatas if m]
+        # vecs query returns [(id, metadata)] when include_value=False
+        retrieved_docs = [row[1].get("document_name") for row in results if row[1]]
     except Exception as e:
         print(f"Dense search failed: {e}")
         retrieved_docs = []

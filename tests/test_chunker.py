@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Add the scripts folder to Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SCRIPTS_PATH = PROJECT_ROOT / "scripts"
+SCRIPTS_PATH = PROJECT_ROOT / "app"
 
 sys.path.append(str(SCRIPTS_PATH))
 

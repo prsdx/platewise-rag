@@ -4,10 +4,10 @@ from fastapi.testclient import TestClient
 
 # Add scripts directory to Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.append(str(PROJECT_ROOT / "scripts"))
+sys.path.append(str(PROJECT_ROOT / "app"))
 sys.path.append(str(PROJECT_ROOT))
 
-from scripts.api import app
+from app.main import app
 
 client = TestClient(app)
 

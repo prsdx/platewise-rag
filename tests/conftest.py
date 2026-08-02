@@ -1,9 +1,8 @@
-import chromadb
-import scripts.vector_store
+import sys
+from pathlib import Path
 
-class MockSentenceTransformerEmbeddingFunction(chromadb.EmbeddingFunction):
-    def __call__(self, input: chromadb.Documents) -> chromadb.Embeddings:
-        return [[0.0] * 384 for _ in input]
+# Add scripts directory to Python path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.append(str(PROJECT_ROOT / "app"))
 
-if not scripts.vector_store._EF_ST:
-    scripts.vector_store._EF_ST = MockSentenceTransformerEmbeddingFunction()
+# We no longer need to mock chromadb.EmbeddingFunction since we use pgvector and sentence-transformers directly.

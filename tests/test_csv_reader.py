@@ -4,7 +4,7 @@ from pathlib import Path
 
 # Add scripts directory to Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.append(str(PROJECT_ROOT / "scripts"))
+sys.path.append(str(PROJECT_ROOT / "app"))
 
 from readers.csv_reader import extract_csv_text
 

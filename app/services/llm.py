@@ -14,7 +14,7 @@ except ImportError:
 # Load Environment Variables
 # ------------------------------------------------
 
-ENV_PATH = Path(__file__).resolve().parent / ".env"
+ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=ENV_PATH)
 
 def _clean_env_var(val: str | None) -> str | None:
