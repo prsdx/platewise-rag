@@ -99,37 +99,51 @@ export default function Landing() {
       >
         {/* Mouse Tracking Interactive Spotlight Glow */}
         <div 
-          className="pointer-events-none absolute w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-[100px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
+          className="pointer-events-none absolute w-[550px] h-[550px] rounded-full bg-emerald-500/15 blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
           style={{ 
             left: `${mousePos.x}px`, 
             top: `${mousePos.y}px`,
-            opacity: isHovered ? 1 : 0.4
+            opacity: isHovered ? 1 : 0.5
           }} 
         />
 
+        {/* Dynamic Vector Laser Connection Beams Following Mouse */}
+        <svg className="pointer-events-none absolute inset-0 w-full h-full -z-10 opacity-30">
+          <line 
+            x1="120" y1="120" 
+            x2={mousePos.x} y2={mousePos.y} 
+            stroke="#10B981" strokeWidth="1.5" strokeDasharray="6 4"
+          />
+          <line 
+            x1="880" y1="140" 
+            x2={mousePos.x} y2={mousePos.y} 
+            stroke="#C9A227" strokeWidth="1.5" strokeDasharray="6 4"
+          />
+        </svg>
+
         {/* Floating RAG Intelligence Nodes Reacting to Cursor */}
         <div 
-          className="hidden lg:flex absolute top-24 left-10 items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/80 border border-emerald-500/30 text-emerald-400 text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          className="animate-float-slow absolute top-20 left-4 sm:left-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-emerald-500/40 text-emerald-400 text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
           style={{
-            transform: `translate(${mousePos.x * 0.02}px, ${mousePos.y * 0.02}px)`
+            transform: `translate(${mousePos.x * 0.025}px, ${mousePos.y * 0.025}px)`
           }}
         >
-          <Zap size={14} className="text-emerald-400 fill-emerald-400" /> Instant Cache &lt;15ms
+          <Zap size={14} className="text-emerald-400 fill-emerald-400 animate-pulse" /> Instant Cache &lt;15ms
         </div>
 
         <div 
-          className="hidden lg:flex absolute top-32 right-10 items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/80 border border-amber-500/30 text-amber-400 text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          className="animate-float-reverse absolute top-28 right-4 sm:right-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-amber-500/40 text-amber-400 text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
           style={{
-            transform: `translate(${-mousePos.x * 0.02}px, ${mousePos.y * 0.025}px)`
+            transform: `translate(${-mousePos.x * 0.025}px, ${mousePos.y * 0.03}px)`
           }}
         >
           <ShieldCheck size={14} /> 94.2% RRF Accuracy
         </div>
 
         <div 
-          className="hidden lg:flex absolute bottom-44 left-16 items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 border border-border text-foreground text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          className="animate-float-slow absolute bottom-36 left-8 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-border text-foreground text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
           style={{
-            transform: `translate(${mousePos.x * 0.015}px, ${-mousePos.y * 0.015}px)`
+            transform: `translate(${mousePos.x * 0.02}px, ${-mousePos.y * 0.02}px)`
           }}
         >
           <FileText size={14} className="text-emerald-400" /> Multi-SOP Ingestion
