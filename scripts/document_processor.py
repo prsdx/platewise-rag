@@ -5,6 +5,7 @@ from scripts.readers.docx_reader import extract_docx_text
 from scripts.readers.txt_reader import extract_txt_text
 from scripts.readers.pptx_reader import extract_pptx_text
 from scripts.readers.md_reader import extract_md_text
+from scripts.readers.csv_reader import extract_csv_text
 
 
 SUPPORTED_EXTENSIONS = {
@@ -13,6 +14,7 @@ SUPPORTED_EXTENSIONS = {
     ".txt",
     ".pptx",
     ".md",
+    ".csv",
 }
 
 
@@ -42,5 +44,8 @@ def extract_document(file_path):
 
     if extension == ".md":
         return extract_md_text(file_path)
+
+    if extension == ".csv":
+        return extract_csv_text(file_path)
 
     raise ValueError(f"No reader available for {extension}")
