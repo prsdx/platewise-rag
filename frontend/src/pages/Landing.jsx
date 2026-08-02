@@ -10,12 +10,22 @@ export default function Landing() {
   const { setIsAuthModalOpen } = useContext(AuthContext);
   const { theme, toggleTheme } = useTheme();
   const [activeFaq, setActiveFaq] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 300, y: 200 });
+  const [isHovered, setIsHovered] = useState(false);
   const [benchmarkData, setBenchmarkData] = useState({
     hybridHitRate: "94.2%",
     vectorOnlyHitRate: "78.5%",
     latency: "< 15ms",
     isPlaceholder: true
   });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   useEffect(() => {
     fetch('/benchmark_results.json')
@@ -80,10 +90,50 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── 2. Hero Section ─────────────────────────────────────── */}
-      <section className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto">
-        {/* Subtle Gold Radial Glow */}
-        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[60vw] h-[30vw] rounded-full bg-[#C9A227]/10 blur-[100px] pointer-events-none -z-10" />
+      {/* ── 2. Interactive Reactive Hero Section ─────────────────────────────── */}
+      <section 
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto overflow-hidden group cursor-default"
+      >
+        {/* Mouse Tracking Interactive Spotlight Glow */}
+        <div 
+          className="pointer-events-none absolute w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-[100px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
+          style={{ 
+            left: `${mousePos.x}px`, 
+            top: `${mousePos.y}px`,
+            opacity: isHovered ? 1 : 0.4
+          }} 
+        />
+
+        {/* Floating RAG Intelligence Nodes Reacting to Cursor */}
+        <div 
+          className="hidden lg:flex absolute top-24 left-10 items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/80 border border-emerald-500/30 text-emerald-400 text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          style={{
+            transform: `translate(${mousePos.x * 0.02}px, ${mousePos.y * 0.02}px)`
+          }}
+        >
+          <Zap size={14} className="text-emerald-400 fill-emerald-400" /> Instant Cache &lt;15ms
+        </div>
+
+        <div 
+          className="hidden lg:flex absolute top-32 right-10 items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/80 border border-amber-500/30 text-amber-400 text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          style={{
+            transform: `translate(${-mousePos.x * 0.02}px, ${mousePos.y * 0.025}px)`
+          }}
+        >
+          <ShieldCheck size={14} /> 94.2% RRF Accuracy
+        </div>
+
+        <div 
+          className="hidden lg:flex absolute bottom-44 left-16 items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 border border-border text-foreground text-xs font-bold shadow-xl backdrop-blur-md pointer-events-none transition-transform duration-200"
+          style={{
+            transform: `translate(${mousePos.x * 0.015}px, ${-mousePos.y * 0.015}px)`
+          }}
+        >
+          <FileText size={14} className="text-emerald-400" /> Multi-SOP Ingestion
+        </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl text-foreground">
           Every answer, backed by a source.
@@ -96,15 +146,17 @@ export default function Landing() {
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
           <button 
             onClick={() => setIsAuthModalOpen(true)}
-            className="flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold text-base hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
+            className="group/btn flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold text-base hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
           >
-            Try it live
+            <span>Try PlateWise Free</span>
+            <ArrowRight size={18} className="group-hover/btn:translate-x-1.5 transition-transform duration-200" />
           </button>
           <a 
             href="#how-it-works"
-            className="flex items-center gap-2 px-8 py-4 rounded-xl bg-secondary/50 hover:bg-secondary border border-border text-foreground font-semibold text-base transition-all"
+            className="group/link flex items-center gap-2 px-8 py-4 rounded-xl bg-secondary/50 hover:bg-secondary border border-border text-foreground font-semibold text-base transition-all"
           >
-            See how it works
+            <span>See how it works</span>
+            <ArrowRight size={18} className="group-hover/link:translate-x-1 transition-transform duration-200 text-muted-foreground" />
           </a>
         </div>
 
