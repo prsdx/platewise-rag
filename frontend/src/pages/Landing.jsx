@@ -203,7 +203,7 @@ export default function Landing() {
             <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
           </div>
           <div className="p-6 md:p-10 flex flex-col gap-6 text-left relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-opacity-5">
-            <div className="self-end max-w-md w-full p-4 rounded-2xl rounded-tr-sm bg-primary/20 border border-primary/30 text-white font-medium text-sm">
+            <div className="self-end max-w-md w-full p-4 rounded-2xl rounded-tr-sm bg-primary/20 border border-primary/30 text-foreground font-medium text-sm">
               What is the holding temperature for poultry?
             </div>
             <div className="max-w-lg w-full p-4 rounded-2xl rounded-tl-sm bg-secondary border border-border text-foreground font-medium text-sm relative">

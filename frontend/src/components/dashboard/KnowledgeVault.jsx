@@ -186,13 +186,13 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
               <Database size={22} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-3">
                 Knowledge Vault
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   RAG Vector Store
                 </span>
               </h1>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Manage your restaurant SOPs, Menus, Allergen Guides, and Standard Recipes
               </p>
             </div>
@@ -213,14 +213,14 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
         <div className="glass-card p-5 rounded-2xl border border-white/10 relative overflow-hidden">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Indexed Files</p>
-              <h3 className="text-3xl font-extrabold text-white mt-1">{files.length}</h3>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Indexed Files</p>
+              <h3 className="text-3xl font-extrabold text-foreground mt-1">{files.length}</h3>
             </div>
             <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <FileText size={20} />
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
             <ShieldCheck size={14} className="text-emerald-400" />
             <span>Active in query scope</span>
           </div>
@@ -229,14 +229,14 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
         <div className="glass-card p-5 rounded-2xl border border-white/10 relative overflow-hidden">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Vector Chunks</p>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Vector Chunks</p>
               <h3 className="text-3xl font-extrabold text-emerald-400 mt-1">{totalChunks}</h3>
             </div>
             <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               <Layers size={20} />
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
             <Sparkles size={14} className="text-emerald-400" />
             <span>384-dim all-MiniLM embeddings</span>
           </div>
@@ -245,14 +245,14 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
         <div className="glass-card p-5 rounded-2xl border border-white/10 relative overflow-hidden">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Total Pages</p>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Pages</p>
               <h3 className="text-3xl font-extrabold text-teal-400 mt-1">{totalPages}</h3>
             </div>
             <div className="p-3 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20">
               <HardDrive size={20} />
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
             <CheckCircle2 size={14} className="text-teal-400" />
             <span>PyMuPDF & Docx Parsers</span>
           </div>
@@ -261,14 +261,14 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
         <div className="glass-card p-5 rounded-2xl border border-white/10 relative overflow-hidden">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Vault Health</p>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Vault Health</p>
               <h3 className="text-3xl font-extrabold text-amber-400 mt-1">100%</h3>
             </div>
             <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
               <ShieldCheck size={20} />
             </div>
           </div>
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>Supabase pgvector connected</span>
           </div>
@@ -311,12 +311,12 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
       {/* Document Grid */}
       {filteredFiles.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center border border-white/10 space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-slate-800/50 border border-white/10 mx-auto flex items-center justify-center text-slate-500">
+          <div className="w-16 h-16 rounded-2xl bg-secondary border border-border mx-auto flex items-center justify-center text-muted-foreground">
             <FileText size={32} />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">No documents found</h3>
-            <p className="text-sm text-slate-400 max-w-md mx-auto mt-1">
+            <h3 className="text-lg font-bold text-foreground">No documents found</h3>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto mt-1">
               {searchQuery
                 ? `No documents match "${searchQuery}"`
                 : "Your Knowledge Vault is empty. Upload menus, food safety SOPs, or ingredient lists to start querying."}
@@ -354,7 +354,7 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
                       </span>
                       <button
                         onClick={(e) => handleDelete(file.name, e)}
-                        className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                        className="p-1.5 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                         title="Delete Document"
                       >
                         <Trash2 size={15} />
@@ -378,8 +378,8 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
                       <p className="text-xs font-bold text-emerald-400 mt-0.5">{file.chunks || "N/A"}</p>
                     </div>
                     <div className="bg-secondary/60 p-2 rounded-lg border border-border">
-                      <p className="text-[10px] text-slate-400 font-medium">SIZE</p>
-                      <p className="text-xs font-bold text-slate-200 mt-0.5">{formatSize(file.size)}</p>
+                      <p className="text-[10px] text-muted-foreground font-medium">SIZE</p>
+                      <p className="text-xs font-bold text-foreground mt-0.5">{formatSize(file.size)}</p>
                     </div>
                   </div>
                 </div>
@@ -391,7 +391,7 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
                       if (onSelectDocumentFilter) onSelectDocumentFilter(file.name);
                       toast.info(`Chat scoped to "${file.name}"`);
                     }}
-                    className="flex-1 py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-xs font-semibold text-slate-200 border border-white/5 flex items-center justify-center gap-1.5 transition-all"
+                    className="flex-1 py-2 px-3 rounded-xl bg-secondary hover:bg-muted text-xs font-semibold text-foreground border border-border flex items-center justify-center gap-1.5 transition-all"
                   >
                     <Sparkles size={13} className="text-emerald-400" />
                     <span>Query File</span>
@@ -399,7 +399,7 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
 
                   <button
                     onClick={() => setInspectingFile(file)}
-                    className="p-2 rounded-xl bg-slate-800/40 hover:bg-slate-800 text-slate-400 hover:text-white border border-white/5 transition-all"
+                    className="p-2 rounded-xl bg-secondary hover:bg-muted text-muted-foreground hover:text-foreground border border-border transition-all"
                     title="Inspect Document Details"
                   >
                     <Eye size={15} />
@@ -413,22 +413,22 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="glass-card w-full max-w-xl rounded-3xl border border-white/10 p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in">
+          <div className="glass-card w-full max-w-xl rounded-3xl border border-border p-6 shadow-2xl relative">
             <button
               onClick={() => setShowUploadModal(false)}
-              className="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="absolute right-5 top-5 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
             >
               <X size={18} />
             </button>
 
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-primary border border-emerald-500/20 flex items-center justify-center">
                 <UploadCloud size={20} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Upload Knowledge Document</h3>
-                <p className="text-xs text-slate-400">Add menus, recipes, SOPs, or ingredient guides to RAG</p>
+                <h3 className="text-lg font-bold text-foreground">Upload Knowledge Document</h3>
+                <p className="text-xs text-muted-foreground">Add menus, recipes, SOPs, or ingredient guides to RAG</p>
               </div>
             </div>
 
@@ -442,7 +442,7 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
               }`}
             >
               <input {...getInputProps()} />
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mx-auto mb-3 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-primary border border-emerald-500/20 mx-auto mb-3 flex items-center justify-center">
                 {uploading ? (
                   <Loader2 size={26} className="animate-spin" />
                 ) : (
@@ -459,12 +459,12 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
 
             {/* Progress */}
             {uploading && (
-              <div className="mt-4 p-4 rounded-xl bg-slate-900/80 border border-white/10 space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-white">
+              <div className="mt-4 p-4 rounded-xl bg-secondary border border-border space-y-2">
+                <div className="flex justify-between text-xs font-semibold text-foreground">
                   <span>Embedding Vectors...</span>
                   <span className="font-mono">{overallProgress}%</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-200"
                     style={{ width: `${overallProgress}%` }}
@@ -478,11 +478,11 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
 
       {/* Detail Inspection Modal */}
       {inspectingFile && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="glass-card w-full max-w-lg rounded-3xl border border-white/10 p-6 shadow-2xl relative space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in">
+          <div className="glass-card w-full max-w-lg rounded-3xl border border-border p-6 shadow-2xl relative space-y-4">
             <button
               onClick={() => setInspectingFile(null)}
-              className="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="absolute right-5 top-5 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
             >
               <X size={18} />
             </button>
@@ -492,10 +492,10 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
                 <Info size={20} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white truncate max-w-[320px]">
+                <h3 className="text-lg font-bold text-foreground truncate max-w-[320px]">
                   {inspectingFile.name}
                 </h3>
-                <p className="text-xs text-slate-400">Vector Index & Metadata Inspector</p>
+                <p className="text-xs text-muted-foreground">Vector Index & Metadata Inspector</p>
               </div>
             </div>
 

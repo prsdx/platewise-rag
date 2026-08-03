@@ -54,7 +54,7 @@ export default function Navbar({
 
         {/* Document Scope Pill */}
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary border border-border text-xs">
-          <BookOpen size={14} className="text-emerald-400" />
+          <BookOpen size={14} className="text-primary" />
           <span className="text-muted-foreground">Context:</span>
           <select
             value={selectedDocument}
@@ -78,7 +78,7 @@ export default function Navbar({
           <span className="w-2 h-2 rounded-full bg-emerald-400" />
           <span className="text-secondary-foreground">Free Plan</span>
           <span className="text-hairline">|</span>
-          <span className="text-emerald-400 font-mono font-bold">14/20 queries</span>
+          <span className="text-primary font-mono font-bold">14/20 queries</span>
           <a href="#pricing" className="text-[10px] text-amber-400 underline ml-1 font-bold">Upgrade</a>
         </div>
         {/* Model Switcher Pill */}
@@ -88,7 +88,7 @@ export default function Navbar({
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary border border-border hover:border-emerald-500/30 text-xs font-semibold text-foreground transition-all shadow-sm"
           >
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <Cpu size={14} className="text-emerald-400" />
+            <Cpu size={14} className="text-primary" />
             <span>{currentModelObj.name}</span>
             <ChevronDown size={14} className="text-muted-foreground ml-1" />
           </button>
@@ -111,7 +111,7 @@ export default function Navbar({
                   }}
                   className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-left transition-all ${
                     selectedModel === m.id
-                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      ? "bg-emerald-500/10 text-primary border border-emerald-500/20"
                       : "text-foreground/80 hover:bg-accent hover:text-foreground"
                   }`}
                 >
@@ -140,7 +140,7 @@ export default function Navbar({
         {onOpenUpload && (
           <button
             onClick={onOpenUpload}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-semibold text-xs transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-primary border border-emerald-500/20 font-semibold text-xs transition-all shadow-sm"
           >
             <UploadCloud size={14} />
             <span className="hidden sm:inline">Upload</span>

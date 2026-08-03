@@ -222,16 +222,16 @@ export default function Workspace({
           {messages.length === 0 ? (
             <div className="text-center space-y-6 my-auto pt-12 animate-fade-in">
               <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 mx-auto shadow-2xl shadow-emerald-500/20">
-                <div className="w-full h-full bg-slate-950 rounded-[22px] flex items-center justify-center text-emerald-400">
+                <div className="w-full h-full bg-background rounded-[22px] flex items-center justify-center text-primary">
                   <Utensils size={30} />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-3xl font-extrabold text-white tracking-tight">
+                <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
                   PlateWise <span className="gradient-text-emerald">AI Workspace</span>
                 </h2>
-                <p className="text-slate-400 max-w-md mx-auto text-sm">
+                <p className="text-muted-foreground max-w-md mx-auto text-sm">
                   Ask questions about your uploaded menus, SOPs, ingredient specs, or food safety manuals.
                 </p>
               </div>
@@ -274,7 +274,7 @@ export default function Workspace({
         </div>
 
         {/* Fixed Chat Input Bar */}
-        <div className="pt-4 sticky bottom-0 bg-background/90 backdrop-blur-md pb-2 border-t border-hairline">
+        <div className="pt-4 sticky bottom-0 bg-background pb-2 border-t border-hairline">
           <ChatInput
             question={question}
             setQuestion={setQuestion}

@@ -61,24 +61,24 @@ export default function ProfileSettingsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-      <div className="glass-card w-full max-w-xl rounded-3xl border border-white/10 p-6 shadow-2xl relative space-y-6">
+    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in">
+      <div className="glass-card w-full max-w-xl rounded-3xl border border-border p-6 shadow-2xl relative space-y-6">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute right-5 top-5 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           <X size={18} />
         </button>
 
         {/* Modal Header */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-primary border border-emerald-500/20 flex items-center justify-center">
             <Settings size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Account & System Settings</h3>
-            <p className="text-xs text-slate-400">Customize your culinary profile and RAG retrieval parameters</p>
+            <h3 className="text-lg font-bold text-foreground">Account & System Settings</h3>
+            <p className="text-xs text-muted-foreground">Customize your culinary profile and RAG retrieval parameters</p>
           </div>
         </div>
 
@@ -178,7 +178,7 @@ export default function ProfileSettingsModal({
         <div className="flex items-center gap-3 pt-2">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+            className="flex-1 py-2.5 rounded-xl bg-secondary hover:bg-muted text-muted-foreground text-xs font-semibold transition-colors"
           >
             Cancel
           </button>

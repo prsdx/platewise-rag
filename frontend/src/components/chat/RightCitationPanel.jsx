@@ -8,7 +8,7 @@ export default function RightCitationPanel({ isOpen, onClose, citation }) {
       {/* Panel Header */}
       <div className="p-4 border-b border-hairline flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-primary flex items-center justify-center">
             <BookOpen size={15} />
           </div>
           <span className="font-bold text-xs text-foreground uppercase tracking-wider">Citation Inspector</span>
@@ -26,7 +26,7 @@ export default function RightCitationPanel({ isOpen, onClose, citation }) {
       <div className="p-5 flex-1 overflow-y-auto custom-scrollbar space-y-5">
         {/* Source File Badge */}
         <div className="p-4 rounded-xl bg-background border border-hairline space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
             <FileText size={13} /> Source Document
           </span>
           <h4 className="font-bold text-sm text-foreground truncate">{citation.document || citation.source || "Document"}</h4>
@@ -41,14 +41,14 @@ export default function RightCitationPanel({ isOpen, onClose, citation }) {
         <div className="grid grid-cols-2 gap-3">
           <div className="p-3 rounded-xl bg-background border border-hairline">
             <p className="text-[10px] text-secondary-foreground font-semibold">Similarity Score</p>
-            <p className="text-sm font-bold text-emerald-400 font-mono mt-0.5">
+            <p className="text-sm font-bold text-primary font-mono mt-0.5">
               {citation.score ? `${(citation.score * 100).toFixed(1)}%` : "High Match"}
             </p>
           </div>
           <div className="p-3 rounded-xl bg-background border border-hairline">
             <p className="text-[10px] text-secondary-foreground font-semibold">Retrieval Method</p>
             <p className="text-xs font-bold text-foreground mt-0.5 flex items-center gap-1">
-              <Layers size={12} className="text-emerald-400" /> RRF Hybrid
+              <Layers size={12} className="text-primary" /> RRF Hybrid
             </p>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function RightCitationPanel({ isOpen, onClose, citation }) {
         {/* Operational Grounding Check */}
         <div className="p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-xs text-emerald-300 space-y-1">
           <div className="flex items-center gap-1.5 font-bold">
-            <CheckCircle2 size={14} className="text-emerald-400" /> Grounding Verified
+            <CheckCircle2 size={14} className="text-primary" /> Grounding Verified
           </div>
           <p className="text-[11px] text-secondary-foreground">
             This paragraph was extracted verbatim from pgvector storage to verify the AI's response logic.

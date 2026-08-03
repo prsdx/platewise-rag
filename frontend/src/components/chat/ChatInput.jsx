@@ -40,7 +40,7 @@ export default function ChatInput({
       {/* Preset Prompt Chips */}
       <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
         <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground shrink-0 flex items-center gap-1">
-          <Sparkles size={11} className="text-emerald-400" /> Presets:
+          <Sparkles size={11} className="text-primary" /> Presets:
         </span>
         {promptPresets.map((p, idx) => (
           <button
@@ -48,7 +48,7 @@ export default function ChatInput({
             onClick={() => {
               setQuestion(p.prompt);
             }}
-            className="px-3 py-1 rounded-xl bg-secondary hover:bg-emerald-500/10 text-muted-foreground hover:text-emerald-400 border border-border hover:border-emerald-500/30 text-xs font-semibold shrink-0 transition-all duration-200"
+            className="px-3 py-1 rounded-xl bg-secondary hover:bg-emerald-500/10 text-muted-foreground hover:text-primary border border-border hover:border-emerald-500/30 text-xs font-semibold shrink-0 transition-all duration-200"
           >
             {p.label}
           </button>
@@ -60,7 +60,7 @@ export default function ChatInput({
         {/* Document Filter Pill */}
         {files.length > 0 && (
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-secondary border border-border text-xs shrink-0">
-            <BookOpen size={13} className="text-emerald-400" />
+            <BookOpen size={13} className="text-primary" />
             <select
               value={selectedDocument}
               onChange={(e) => setSelectedDocument(e.target.value)}
@@ -89,7 +89,7 @@ export default function ChatInput({
         <button
           onClick={onSubmit}
           disabled={loading || !question.trim()}
-          className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white flex items-center justify-center shrink-0 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20"
+          className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-primary-foreground flex items-center justify-center shrink-0 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20"
           title="Send Question"
         >
           {loading ? (
@@ -100,11 +100,11 @@ export default function ChatInput({
         </button>
       </div>
 
-      <div className="flex items-center justify-between text-[11px] text-slate-500 px-2">
+      <div className="flex items-center justify-between text-[11px] text-muted-foreground px-2">
         <span className="flex items-center gap-1">
-          <ShieldCheck size={12} className="text-emerald-400" /> Grounded RAG with exact source citations
+          <ShieldCheck size={12} className="text-primary" /> Grounded RAG with exact source citations
         </span>
-        <span className="hidden sm:inline">Press <kbd className="px-1 py-0.2 rounded bg-slate-800 text-slate-400 font-mono text-[10px]">Enter</kbd> to send</span>
+        <span className="hidden sm:inline">Press <kbd className="px-1 py-0.2 rounded bg-secondary text-muted-foreground border border-border font-mono text-[10px]">Enter</kbd> to send</span>
       </div>
     </div>
   );
