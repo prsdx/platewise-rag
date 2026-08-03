@@ -68,7 +68,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
       <div className="flex items-start justify-end gap-3 my-4 animate-fade-in">
         <div className="max-w-2xl bg-emerald-500/10 border border-emerald-500/20 rounded-2xl rounded-tr-sm p-4 shadow-sm">
           <div className="flex items-center justify-between gap-4 mb-1">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 dark:text-emerald-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-500 dark:text-primary">
               {userProfile?.name || "Executive Chef"}
             </span>
           </div>
@@ -77,7 +77,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
           </p>
         </div>
 
-        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-primary flex items-center justify-center shrink-0">
           <User size={16} />
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
   return (
     <div className="flex items-start gap-3 my-4 animate-fade-in">
       <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 shrink-0">
-        <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-emerald-400">
+        <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-primary">
           <Sparkles size={16} />
         </div>
       </div>
@@ -98,12 +98,12 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <span className="font-bold text-xs text-foreground">PlateWise AI</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold border border-emerald-500/20">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-primary text-[10px] font-bold border border-emerald-500/20">
               <ShieldCheck size={11} /> Grounded
             </span>
             {message.is_cached && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold border border-emerald-500/20" title="Instant response from semantic cache">
-                <Zap size={11} className="text-emerald-400 fill-emerald-400" /> Instant Answer ⚡
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-primary text-[10px] font-bold border border-emerald-500/20" title="Instant response from semantic cache">
+                <Zap size={11} className="text-primary fill-emerald-400" /> Instant Answer ⚡
               </span>
             )}
             {message.is_low_confidence && (
@@ -113,7 +113,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
             )}
             {llmModel && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary text-muted-foreground text-[10px] font-bold border border-border">
-                <Cpu size={11} className="text-emerald-400" /> {llmModel.replace("gemini-", "")}
+                <Cpu size={11} className="text-primary" /> {llmModel.replace("gemini-", "")}
               </span>
             )}
           </div>
@@ -121,7 +121,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
           <button
             onClick={copyText}
             className={`p-1.5 rounded-lg border border-border bg-secondary hover:bg-muted transition text-xs flex items-center gap-1 ${
-              copied ? "text-emerald-400 border-emerald-500/30" : "text-muted-foreground"
+              copied ? "text-primary border-emerald-500/30" : "text-muted-foreground"
             }`}
             title="Copy Answer"
           >
@@ -132,7 +132,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
         {/* Decomposed Query Reasoning Trace */}
         {message.reasoning_trace?.is_decomposed && (
           <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 space-y-2 text-xs">
-            <div className="flex items-center gap-1.5 font-bold text-emerald-400">
+            <div className="flex items-center gap-1.5 font-bold text-primary">
               <GitFork size={13} /> Sub-Query Decomposition Active
             </div>
             <p className="text-muted-foreground text-[11px]">
@@ -149,8 +149,8 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
         {/* Message Content */}
         <div className={`text-sm ${message.is_low_confidence ? "p-4 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/5" : ""}`}>
           {message.loading && !message.text ? (
-            <div className="flex items-center gap-2 text-slate-400 py-2">
-              <Loader2 size={16} className="animate-spin text-emerald-400" />
+            <div className="flex items-center gap-2 text-muted-foreground py-2">
+              <Loader2 size={16} className="animate-spin text-primary" />
               <span className="text-xs font-semibold">Generating grounded culinary response...</span>
             </div>
           ) : (
@@ -166,7 +166,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
               className="w-full flex items-center justify-between px-3 py-2 bg-secondary/60 hover:bg-secondary transition text-left text-xs font-semibold text-muted-foreground gap-4"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Search size={13} className="text-emerald-400 shrink-0" />
+                <Search size={13} className="text-primary shrink-0" />
                 <span className="truncate text-foreground text-[11px]">
                   RAG Search: {message.retrievedChunks.length} chunks retrieved ({embedTime})
                 </span>

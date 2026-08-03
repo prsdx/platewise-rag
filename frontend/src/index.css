@@ -145,15 +145,13 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .glass-card-hover:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
+    border-color: #34D399;
+    box-shadow: 0 8px 24px -8px rgba(16, 185, 129, 0.25);
     transform: translateY(-2px);
   }
 
   .glass-header {
-    background: color-mix(in srgb, var(--bg-base) 95%, transparent);
-    backdrop-filter: blur(20px) saturate(1.2);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    background: var(--bg-base);
     border-bottom: 1px solid var(--border-hairline);
   }
 
@@ -182,8 +180,8 @@
   }
   .hover-glow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.08), 0 8px 10px -6px rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.3);
+    border-color: var(--border-hairline);
   }
 
   /* Custom Scrollbar Styling */
@@ -195,11 +193,11 @@
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(150, 150, 150, 0.25);
+    background: #4B4B52;
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(150, 150, 150, 0.45);
+    background: #6B6B72;
   }
 
   /* Floating & Pop Utilities */
@@ -216,7 +214,7 @@
   }
 
   .animate-shimmer {
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     background-size: 200% 100%;
     animation: shimmer 2.5s infinite;
   }
@@ -244,11 +242,11 @@
   @keyframes pulseGlow {
     0%, 100% {
       opacity: 1;
-      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.15));
+      filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.2));
     }
     50% {
-      opacity: 0.85;
-      filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.35));
+      opacity: 0.95;
+      filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.3));
     }
   }
 

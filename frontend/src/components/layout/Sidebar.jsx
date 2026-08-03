@@ -51,7 +51,7 @@ export default function Sidebar({
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 xl:hidden transition-opacity"
+          className="fixed inset-0 bg-black/80 z-40 xl:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -65,14 +65,14 @@ export default function Sidebar({
         <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
-              <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-emerald-400">
+              <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-primary">
                 <Utensils size={18} />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base font-extrabold text-foreground tracking-tight">PlateWise</h1>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-primary border border-emerald-500/20">
                   PRO
                 </span>
               </div>
@@ -102,7 +102,7 @@ export default function Sidebar({
               <Plus size={16} className="group-hover:rotate-90 transition-transform duration-300" />
               <span>New Conversation</span>
             </span>
-            <kbd className="px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono text-emerald-200">
+            <kbd className="px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono text-white/70">
               ⌘K
             </kbd>
           </button>
@@ -125,19 +125,19 @@ export default function Sidebar({
                 }}
                 className={`w-full flex items-center justify-between py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
                   isActive
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm"
+                    ? "bg-primary/10 text-primary border border-primary/20 shadow-sm"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground border border-transparent"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon size={16} className={isActive ? "text-emerald-400" : "text-muted-foreground"} />
+                  <Icon size={16} className={isActive ? "text-primary" : "text-muted-foreground"} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge !== undefined && (
                   <span
                     className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
                       isActive
-                        ? "bg-emerald-500/20 text-emerald-300"
+                        ? "bg-primary/20 text-primary"
                         : "bg-secondary text-muted-foreground"
                     }`}
                   >
@@ -167,10 +167,10 @@ export default function Sidebar({
           <div className="glass-card p-3 rounded-xl border border-border space-y-2">
             <div className="flex justify-between items-center text-[11px]">
               <span className="text-muted-foreground flex items-center gap-1.5">
-                <Layers size={13} className="text-emerald-400" />
+                <Layers size={13} className="text-primary" />
                 Knowledge Base
               </span>
-              <span className="font-mono text-emerald-400 font-bold">{files.length} Files</span>
+              <span className="font-mono text-primary font-bold">{files.length} Files</span>
             </div>
 
             <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
@@ -182,7 +182,7 @@ export default function Sidebar({
 
             <div className="flex justify-between items-center text-[10px] text-muted-foreground">
               <span>{totalChunks} Chunks indexed</span>
-              <span className="text-emerald-400 flex items-center gap-1">
+              <span className="text-primary flex items-center gap-1">
                 <ShieldCheck size={10} /> pgvector
               </span>
             </div>
@@ -190,20 +190,20 @@ export default function Sidebar({
         </div>
 
         {/* User Profile Card & Settings Trigger */}
-        <div className="p-3 border-t border-border bg-card/40 flex items-center justify-between gap-2">
+        <div className="p-3 border-t border-border bg-card flex items-center justify-between gap-2">
           <div
             onClick={onOpenSettings}
             className="flex items-center gap-2.5 min-w-0 cursor-pointer group flex-1 p-1 rounded-lg hover:bg-accent transition-colors"
             title="Edit Profile & Settings"
           >
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-primary/15 text-primary border border-primary/25 flex items-center justify-center shrink-0">
               <User size={15} />
             </div>
             <div className="min-w-0">
               <p className="text-xs font-bold text-foreground truncate max-w-[120px]">
                 {userProfile?.name || user?.email || "Gordon Ramsay"}
               </p>
-              <p className="text-[10px] text-emerald-400 font-mono truncate max-w-[120px]">
+              <p className="text-[10px] text-primary font-mono truncate max-w-[120px]">
                 {userProfile?.role || "Executive Chef"}
               </p>
             </div>

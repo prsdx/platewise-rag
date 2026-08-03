@@ -36,7 +36,7 @@ export default function ToastContainer() {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg border backdrop-blur-sm ${getStyles(
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg border ${getStyles(
             toast.type
           )} animate-in fade-in slide-in-from-right-4 duration-300`}
         >

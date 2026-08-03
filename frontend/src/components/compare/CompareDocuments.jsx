@@ -64,13 +64,13 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
               <GitCompare size={22} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-3">
                 Menu & Recipe Comparator
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   AI Diff Engine
                 </span>
               </h1>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Compare menus, ingredient specs, allergen warnings, or supplier SOPs side-by-side
               </p>
             </div>
@@ -207,7 +207,7 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
         <button
           onClick={handleCompare}
           disabled={loading || files.length < 2}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-sm shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 transition-all duration-300 disabled:opacity-40 flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-primary-foreground font-bold text-sm shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 transition-all duration-300 disabled:opacity-40 flex items-center justify-center gap-2"
         >
           <Sparkles size={18} />
           <span>{loading ? "Analyzing Documents..." : "Run AI Comparison"}</span>

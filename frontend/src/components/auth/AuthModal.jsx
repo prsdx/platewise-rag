@@ -188,7 +188,7 @@ export default function AuthModal() {
 
   return (
     <div 
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background"
       onClick={() => setIsAuthModalOpen(false)}
     >
       {/* Subtle background decoration */}

@@ -121,7 +121,7 @@ export default function AnswerCard({
         {/* Left: Title & Badges */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
-            <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-emerald-400">
+            <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-primary">
               <Sparkles size={16} />
             </div>
           </div>
@@ -130,14 +130,14 @@ export default function AnswerCard({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-primary text-[11px] font-bold border border-emerald-500/20">
               <ShieldCheck size={12} />
               Grounded
             </span>
 
             {llmModel && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground text-[11px] font-bold border border-border">
-                <Cpu size={12} className="text-emerald-400" />
+                <Cpu size={12} className="text-primary" />
                 {llmModel.startsWith("gemini") ? `Gemini: ${llmModel.replace("gemini-", "")}` : llmModel}
               </span>
             )}
@@ -150,7 +150,7 @@ export default function AnswerCard({
             onClick={copyAnswer}
             disabled={!answer}
             className={`p-2 rounded-xl border border-border bg-secondary hover:bg-muted transition text-xs flex items-center gap-1.5 disabled:opacity-30 ${
-              copied ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" : "text-muted-foreground"
+              copied ? "text-primary border-emerald-500/30 bg-emerald-500/10" : "text-muted-foreground"
             }`}
             title="Copy Answer"
           >
@@ -195,7 +195,7 @@ export default function AnswerCard({
         {/* User Question */}
         {question && (
           <div className="rounded-2xl border border-border bg-secondary/40 p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-primary border border-emerald-500/20 flex items-center justify-center shrink-0">
               <User size={15} />
             </div>
             <div className="min-w-0 flex-1">
@@ -217,11 +217,11 @@ export default function AnswerCard({
               className="w-full flex items-center justify-between px-4 py-3 bg-secondary/60 hover:bg-secondary transition text-left text-xs font-semibold text-muted-foreground gap-4"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Search size={14} className="text-emerald-400 shrink-0" />
+                <Search size={14} className="text-primary shrink-0" />
                 <span className="truncate text-foreground">
                   RAG Telemetry: Retrieved {retrievedChunks.length} document passages
                 </span>
-                <span className="hidden sm:inline-flex items-center font-mono text-[10px] bg-muted px-2 py-0.5 rounded text-emerald-400 border border-border">
+                <span className="hidden sm:inline-flex items-center font-mono text-[10px] bg-muted px-2 py-0.5 rounded text-primary border border-border">
                   RRF Hybrid Search ({embedTime})
                 </span>
               </div>
@@ -246,7 +246,7 @@ export default function AnswerCard({
         <div className="rounded-2xl border border-border bg-card/60 p-6 min-h-[140px]">
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 text-muted-foreground py-10">
-              <Loader2 size={26} className="animate-spin text-emerald-400" />
+              <Loader2 size={26} className="animate-spin text-primary" />
               <span className="text-sm font-semibold text-foreground">
                 Generating grounded culinary answer...
               </span>
@@ -273,7 +273,7 @@ export default function AnswerCard({
       <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-3 border-t border-border bg-secondary/40 text-muted-foreground text-xs">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5 font-mono text-[11px]">
-            <Cpu size={13} className="text-emerald-400" />
+            <Cpu size={13} className="text-primary" />
             <span>Embedder: <strong className="text-foreground">all-MiniLM-L6-v2</strong></span>
           </div>
 

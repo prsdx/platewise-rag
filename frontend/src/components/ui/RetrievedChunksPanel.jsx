@@ -31,11 +31,11 @@ export default function RetrievedChunksPanel({
   };
 
   return (
-    <div className="mt-6 border border-border/80 rounded-2xl bg-card/60 backdrop-blur-sm overflow-hidden shadow-sm transition-all duration-300">
+    <div className="mt-6 border border-border rounded-2xl bg-card overflow-hidden shadow-sm transition-all duration-300">
       {/* Panel Header */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full flex items-center justify-between px-5 py-4 bg-secondary/30 hover:bg-secondary/60 transition-colors text-left border-b border-border/60"
+        className="w-full flex items-center justify-between px-5 py-4 bg-secondary hover:bg-muted transition-colors text-left border-b border-border"
       >
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/20">
