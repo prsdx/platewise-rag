@@ -167,7 +167,8 @@ export default function HeroInteractiveBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-vw h-vh pointer-events-none z-0"
+      aria-hidden="true"
+      className="fixed inset-0 h-full w-full pointer-events-none z-0 opacity-15"
     />
   );
 }
