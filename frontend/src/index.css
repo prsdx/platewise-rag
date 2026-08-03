@@ -7,12 +7,12 @@
     --accent-premium: #F59E0B;
     --radius: 0.75rem;
 
-    /* ── Eye-Friendly Light Theme (Soft Paper / Linear Style) ── */
-    --bg-base: #F8FAFC;
+    /* ── Eye-Friendly Light Theme (Warm Paper / Low Blue-Light) ── */
+    --bg-base: #FAF9F7;
     --bg-surface: #FFFFFF;
-    --border-hairline: #E2E8F0;
-    --text-primary: #0F172A;
-    --text-secondary: #64748B;
+    --border-hairline: #E8E5E0;
+    --text-primary: #1C1917;
+    --text-secondary: #78716C;
 
     --background: var(--bg-base);
     --foreground: var(--text-primary);
@@ -22,13 +22,13 @@
     --popover-foreground: var(--text-primary);
     --primary: var(--accent-primary);
     --primary-foreground: #ffffff;
-    --secondary: #F1F5F9;
+    --secondary: #F5F3F0;
     --secondary-foreground: var(--text-primary);
-    --muted: #F1F5F9;
+    --muted: #F5F3F0;
     --muted-foreground: var(--text-secondary);
     --accent: rgba(16, 185, 129, 0.08);
     --accent-foreground: var(--accent-primary);
-    --destructive: #ef4444;
+    --destructive: #DC2626;
     --destructive-foreground: #ffffff;
     --border: var(--border-hairline);
     --input: var(--border-hairline);
@@ -38,46 +38,46 @@
     --sidebar-foreground: var(--text-primary);
     --sidebar-primary: var(--accent-primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #F1F5F9;
+    --sidebar-accent: #F5F3F0;
     --sidebar-accent-foreground: var(--text-primary);
     --sidebar-border: var(--border-hairline);
     --sidebar-ring: var(--accent-primary);
 }
 
 .dark {
-    /* ── Premium Dark Theme (Part 0 Exact Specs) ── */
-    --bg-base: #0A0A0C;        /* page background */
-    --bg-surface: #131316;     /* cards, panels, elevated surfaces */
-    --border-hairline: #232328;
-    --accent-primary: #10B981; /* emerald — buttons, links, active states */
-    --accent-premium: #C9A227; /* muted gold — badges, hero glow */
-    --text-primary: #F5F5F4;
-    --text-secondary: #A1A1AA;
+    /* ── Readable Dark Theme (Solid Surfaces, High Contrast Text) ── */
+    --bg-base: #0F0F12;        /* page background — slightly lifted for depth */
+    --bg-surface: #1A1A1F;     /* cards, panels — opaque, no bleed-through */
+    --border-hairline: #2E2E35; /* visible but not harsh borders */
+    --accent-primary: #34D399; /* brighter emerald for dark bg contrast */
+    --accent-premium: #D4A72C; /* warm gold — badges, hero glow */
+    --text-primary: #ECECEF;   /* near-white, high readability */
+    --text-secondary: #9CA3AF; /* clear mid-gray, not washed out */
 
     --background: var(--bg-base);
     --foreground: var(--text-primary);
     --card: var(--bg-surface);
     --card-foreground: var(--text-primary);
-    --popover: var(--bg-surface);
+    --popover: #1E1E24;        /* slightly elevated over cards */
     --popover-foreground: var(--text-primary);
     --primary: var(--accent-primary);
-    --primary-foreground: #ffffff;
-    --secondary: #1C1C21;
+    --primary-foreground: #0F0F12;
+    --secondary: #232329;
     --secondary-foreground: var(--text-primary);
-    --muted: #1C1C21;
+    --muted: #232329;
     --muted-foreground: var(--text-secondary);
-    --accent: rgba(16, 185, 129, 0.12);
+    --accent: rgba(52, 211, 153, 0.14);
     --accent-foreground: var(--accent-primary);
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
+    --destructive: #F87171;
+    --destructive-foreground: #0F0F12;
     --border: var(--border-hairline);
-    --input: var(--border-hairline);
+    --input: #2E2E35;
     --ring: var(--accent-primary);
 
-    --sidebar: var(--bg-base);
+    --sidebar: #131317;        /* sidebar slightly darker than surface */
     --sidebar-foreground: var(--text-primary);
     --sidebar-primary: var(--accent-primary);
-    --sidebar-primary-foreground: #ffffff;
+    --sidebar-primary-foreground: #0F0F12;
     --sidebar-accent: var(--bg-surface);
     --sidebar-accent-foreground: var(--text-primary);
     --sidebar-border: var(--border-hairline);
@@ -151,14 +151,14 @@
   }
 
   .glass-header {
-    background: color-mix(in srgb, var(--bg-base) 85%, transparent);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--bg-base) 95%, transparent);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
     border-bottom: 1px solid var(--border-hairline);
   }
 
   .glass-sidebar {
-    background: var(--bg-base);
+    background: var(--sidebar);
     border-right: 1px solid var(--border-hairline);
   }
 
