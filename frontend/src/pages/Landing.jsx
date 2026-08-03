@@ -116,7 +116,7 @@ export default function Landing() {
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto overflow-hidden group cursor-default"
+        className="relative pt-40 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto overflow-hidden group cursor-default bg-background/95"
       >
         {/* Mouse Tracking Interactive Spotlight Glow */}
         <div 
@@ -223,7 +223,7 @@ export default function Landing() {
       </section>
 
       {/* ── 3. Stat / Credibility Strip ─────────────────────────── */}
-      <section className="py-8 border-y border-border bg-card/40">
+      <section className="py-8 border-y border-border bg-card">
         <div className="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-center gap-12 text-sm font-semibold text-muted-foreground">
           <div className="flex items-center gap-2">
             <ShieldCheck className="text-primary" size={18} /> Hybrid Retrieval
@@ -251,7 +251,7 @@ export default function Landing() {
       <section id="features" className="py-20 px-6 bg-card border-y border-border">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
           {features.map((f, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-secondary/30 border border-border flex items-start gap-4 hover:border-primary/30 transition-colors">
+            <div key={i} className="p-6 rounded-2xl bg-secondary border border-border flex items-start gap-4 hover:border-primary/30 transition-colors">
               <div className="p-3 rounded-xl bg-background border border-border text-primary shrink-0">
                 {f.icon}
               </div>
@@ -322,7 +322,7 @@ export default function Landing() {
 
         <div className="grid md:grid-cols-3 gap-8 items-start">
           {/* Free Tier */}
-          <div className="p-8 rounded-3xl bg-secondary/30 border border-border hover:border-border/80 transition-colors">
+          <div className="p-8 rounded-3xl bg-secondary border border-border hover:border-border/80 transition-colors">
             <h3 className="text-xl font-bold mb-2">Free</h3>
             <p className="text-sm text-muted-foreground mb-6">Essential RAG for individuals.</p>
             <div className="mb-8"><span className="text-4xl font-extrabold">$0</span><span className="text-muted-foreground">/mo</span></div>
@@ -362,7 +362,7 @@ export default function Landing() {
           </div>
 
           {/* Enterprise Tier */}
-          <div className="p-8 rounded-3xl bg-secondary/30 border border-border">
+          <div className="p-8 rounded-3xl bg-secondary border border-border">
             <h3 className="text-xl font-bold mb-2">Enterprise</h3>
             <p className="text-sm text-muted-foreground mb-6">Custom SLAs and dedicated storage.</p>
             <div className="mb-8"><span className="text-4xl font-extrabold">Custom</span></div>

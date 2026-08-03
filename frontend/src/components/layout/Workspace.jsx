@@ -47,6 +47,7 @@ export default function Workspace({
   const [isCitationPanelOpen, setIsCitationPanelOpen] = useState(false);
   const [comparisonResult, setComparisonResult] = useState("");
   const [selectedDocuments, setSelectedDocuments] = useState([]);
+  const [compareLoading, setCompareLoading] = useState(false);
 
   // Auto-scroll to bottom of chat thread when messages change
   const scrollToBottom = () => {
@@ -154,7 +155,7 @@ export default function Workspace({
             : msg
         )
       );
-    } fontFinally: {
+    } finally {
       setLoading(false);
     }
   };
