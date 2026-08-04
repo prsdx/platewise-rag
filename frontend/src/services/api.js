@@ -257,7 +257,11 @@ export async function clearAllDocuments() {
 export async function getDocuments() {
   try {
     const response = await api.get("/documents");
-    return response.data;
+    const data = response.data;
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.documents)) return data.documents;
+    if (data && Array.isArray(data.files)) return data.files;
+    return [];
   } catch (error) {
     console.error("Failed to get documents:", error);
     return [];

@@ -37,11 +37,12 @@ export default function Sidebar({
   const { user, logout } = useContext(AuthContext);
   const { showToast } = useContext(ToastContext);
 
-  const totalChunks = files.reduce((acc, f) => acc + (f.chunks || 0), 0);
+  const safeFiles = Array.isArray(files) ? files : [];
+  const totalChunks = safeFiles.reduce((acc, f) => acc + (f.chunks || 0), 0);
 
   const navItems = [
     { id: "chat", label: "AI Intelligence Hub", icon: MessageSquare, badge: "RAG" },
-    { id: "vault", label: "Knowledge Vault", icon: Database, badge: files.length },
+    { id: "vault", label: "Knowledge Vault", icon: Database, badge: safeFiles.length },
     { id: "compare", label: "Menu & SOP Comparator", icon: GitCompare },
     { id: "analytics", label: "System Telemetry", icon: BarChart3 },
   ];
@@ -172,13 +173,13 @@ export default function Sidebar({
                 <Layers size={13} className="text-primary" />
                 Knowledge Base
               </span>
-              <span className="font-mono text-primary font-bold">{files.length} Files</span>
+              <span className="font-mono text-primary font-bold">{safeFiles.length} Files</span>
             </div>
 
             <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
-                style={{ width: `${Math.min(100, files.length * 10)}%` }}
+                style={{ width: `${Math.min(100, safeFiles.length * 10)}%` }}
               />
             </div>
 

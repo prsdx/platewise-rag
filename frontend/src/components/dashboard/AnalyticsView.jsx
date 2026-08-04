@@ -17,7 +17,8 @@ import {
 export default function AnalyticsView({ files = [] }) {
   const [refreshing, setRefreshing] = useState(false);
 
-  const totalChunks = files.reduce((acc, f) => acc + (f.chunks || 0), 0);
+  const safeFiles = Array.isArray(files) ? files : [];
+  const totalChunks = safeFiles.reduce((acc, f) => acc + (f.chunks || 0), 0);
 
   const handleRefresh = () => {
     setRefreshing(true);

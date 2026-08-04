@@ -16,6 +16,13 @@
   - [x] Verify build passes without errors (`npm run build` passed in 708ms)
   - [x] Verify core user flows (Landing -> Login -> Dashboard -> Landing) without blank screens
 
+## Part C: Array Guarding & Render Crash Fix
+- [x] **C.1 Defensive Array Guarding Across Frontend Components**
+  - [x] Harden `getDocuments()` in `api.js` to ensure array returns
+  - [x] Harden `ChatHistoryContext.jsx` `localStorage` parser for arrays
+  - [x] Add `Array.isArray()` guards in `Navbar.jsx`, `Sidebar.jsx`, `ChatHistory.jsx`, `KnowledgeVault.jsx`, `CompareDocuments.jsx`, `CompareResult.jsx`, `AnalyticsView.jsx`, `ChatMessage.jsx`, `RetrievedChunksPanel.jsx`, and `SourceCitations.jsx`
+  - [x] Run `npm run build` verification
+
 ## Part B: Unified Theme System (Light + Dark, Dia-Inspired)
 - [x] **B.1 Theme CSS Tokens & Variables**
   - [x] Define Indigo primary theme tokens in `index.css` (`#5863EA` light, `#6E77F2` dark)

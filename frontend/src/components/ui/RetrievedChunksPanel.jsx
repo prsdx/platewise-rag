@@ -19,7 +19,9 @@ export default function RetrievedChunksPanel({
   const [isOpen, setIsOpen] = useState(true);
   const [expandedChunks, setExpandedChunks] = useState({});
 
-  if (!retrievedChunks || retrievedChunks.length === 0) {
+  const safeChunks = Array.isArray(retrievedChunks) ? retrievedChunks : [];
+
+  if (safeChunks.length === 0) {
     return null;
   }
 
@@ -51,14 +53,14 @@ export default function RetrievedChunksPanel({
               </span>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Top {retrievedChunks.length} document passages retrieved via Hybrid RRF (SentenceTransformers + BM25)
+              Top {safeChunks.length} document passages retrieved via Hybrid RRF (SentenceTransformers + BM25)
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-muted-foreground bg-background px-2.5 py-1 rounded-lg border border-border">
-            {retrievedChunks.length} Chunks
+            {safeChunks.length} Chunks
           </span>
           {isOpen ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
         </div>
@@ -67,7 +69,7 @@ export default function RetrievedChunksPanel({
       {/* Panel Content */}
       {isOpen && (
         <div className="p-4 space-y-3 max-h-[500px] overflow-y-auto custom-scrollbar">
-          {retrievedChunks.map((chunk, idx) => {
+          {safeChunks.map((chunk, idx) => {
             const chunkIdKey = `chunk-${chunk.document_name}-p${chunk.page}-c${chunk.chunk}`;
             const isHighlighted = highlightedChunkId === chunkIdKey || highlightedChunkId === chunk.chunk_id;
             const isExpanded = expandedChunks[chunk.chunk_id] ?? true;

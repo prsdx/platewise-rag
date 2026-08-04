@@ -8,7 +8,11 @@ export function ChatHistoryProvider({ children }) {
   const [history, setHistory] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+      return [];
     } catch (e) {
       console.error("Failed to load chat history from localStorage", e);
       return [];

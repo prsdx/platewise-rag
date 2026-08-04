@@ -40,6 +40,8 @@ export default function Navbar({
 
   const currentModelObj = models.find((m) => m.id === selectedModel) || models[0];
 
+  const safeFiles = Array.isArray(files) ? files : [];
+
   return (
     <header className="sticky top-0 z-40 h-16 glass-header flex items-center justify-between px-4 md:px-6 transition-colors duration-200">
       {/* Left: Mobile menu & Context Scope */}
@@ -69,8 +71,8 @@ export default function Navbar({
             onChange={(e) => setSelectedDocument(e.target.value)}
             className="bg-transparent text-foreground font-semibold focus:outline-none cursor-pointer text-xs"
           >
-            <option value="">All Knowledge Files ({filesCount})</option>
-            {files.map((f, i) => (
+            <option value="">All Knowledge Files ({filesCount ?? safeFiles.length})</option>
+            {safeFiles.map((f, i) => (
               <option key={i} value={f.name} className="bg-popover text-foreground">
                 📄 {f.name}
               </option>

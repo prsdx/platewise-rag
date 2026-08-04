@@ -25,7 +25,9 @@ export default function ChatHistory({ onSelectHistory, searchQuery = "" }) {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
 
-  const filteredHistory = history.filter((item) => {
+  const safeHistory = Array.isArray(history) ? history : [];
+
+  const filteredHistory = safeHistory.filter((item) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
@@ -40,7 +42,7 @@ export default function ChatHistory({ onSelectHistory, searchQuery = "" }) {
         <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           Recent Conversations
         </h3>
-        {history.length > 0 && (
+        {safeHistory.length > 0 && (
           <button
             onClick={clearHistory}
             className="text-xs font-semibold text-muted-foreground hover:text-foreground transition"
@@ -51,7 +53,7 @@ export default function ChatHistory({ onSelectHistory, searchQuery = "" }) {
       </div>
 
       <div className="space-y-1 overflow-y-auto flex-1 min-h-0 pr-1">
-        {history.length === 0 ? (
+        {safeHistory.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-3">
             No recent conversations
           </p>

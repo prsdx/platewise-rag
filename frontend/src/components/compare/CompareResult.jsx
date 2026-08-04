@@ -18,6 +18,7 @@ export default function CompareResult({
   documents = [],
 }) {
   const { showToast } = useContext(ToastContext);
+  const safeDocuments = Array.isArray(documents) ? documents : [];
 
   const copyComparison = async () => {
     if (!result) return;
@@ -37,11 +38,11 @@ export default function CompareResult({
     let mimeType = "text/plain";
 
     if (format === "txt") {
-      content = `DOCUMENT COMPARISON\n${"=".repeat(50)}\n\nDocuments: ${documents.join(", ")}\n\n${result}`;
+      content = `DOCUMENT COMPARISON\n${"=".repeat(50)}\n\nDocuments: ${safeDocuments.join(", ")}\n\n${result}`;
       filename += ".txt";
       mimeType = "text/plain";
     } else if (format === "markdown") {
-      content = `# Document Comparison\n\n## Documents Compared\n${documents
+      content = `# Document Comparison\n\n## Documents Compared\n${safeDocuments
         .map((d) => `- ${d}`)
         .join("\n")}\n\n## Comparison Result\n\n${result}`;
       filename += ".md";
@@ -49,7 +50,7 @@ export default function CompareResult({
     } else if (format === "json") {
       content = JSON.stringify(
         {
-          documents,
+          documents: safeDocuments,
           comparison: result,
           generatedAt: new Date().toISOString(),
         },
@@ -146,13 +147,13 @@ export default function CompareResult({
       </div>
 
       {/* Selected Document Pills */}
-      {documents.length > 0 && (
+      {safeDocuments.length > 0 && (
         <div className="px-6 py-3 border-b border-border bg-secondary/20 flex items-center gap-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Compared:
           </span>
           <div className="flex flex-wrap gap-2">
-            {documents.map((doc, index) => (
+            {safeDocuments.map((doc, index) => (
               <span
                 key={index}
                 className="px-2.5 py-0.5 rounded-md bg-card border border-border text-foreground text-xs font-medium flex items-center gap-1 shadow-sm"

@@ -139,7 +139,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
               {message.reasoning_trace.reasoning || "Question split into sub-queries for parallel vector retrieval:"}
             </p>
             <ul className="list-disc list-inside space-y-1 text-[11px] text-foreground font-mono">
-              {message.reasoning_trace.sub_queries?.map((sq, idx) => (
+              {(Array.isArray(message.reasoning_trace.sub_queries) ? message.reasoning_trace.sub_queries : []).map((sq, idx) => (
                 <li key={idx}>"{sq}"</li>
               ))}
             </ul>
@@ -159,7 +159,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
         </div>
 
         {/* Collapsible Chunks Telemetry */}
-        {!message.loading && message.retrievedChunks && message.retrievedChunks.length > 0 && (
+        {!message.loading && Array.isArray(message.retrievedChunks) && message.retrievedChunks.length > 0 && (
           <div className="rounded-xl border border-border bg-secondary/40 overflow-hidden">
             <button
               onClick={() => setShowThinking(!showThinking)}
@@ -189,7 +189,7 @@ export default function ChatMessage({ message, userProfile, onSelectCitation }) 
         )}
 
         {/* Source Citations */}
-        {!message.loading && message.sources && message.sources.length > 0 && (
+        {!message.loading && Array.isArray(message.sources) && message.sources.length > 0 && (
           <SourceCitations sources={message.sources} onSelectCitation={handleSelectCitation} />
         )}
       </div>
