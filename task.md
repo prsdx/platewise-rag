@@ -24,11 +24,11 @@
   - [x] Run `npm run build` verification
 
 ## Part D: Live Deployment Enhancements & Guest Access
-- [/] **D.1 Demo Login & Sample Data Fallback**
-  - [ ] Add `loginAsGuest()` to `AuthContext.jsx`
-  - [ ] Add 1-Click Quick Demo Login button to `AuthModal.jsx`
-  - [ ] Add initial sample documents fallback in `App.jsx`
-  - [ ] Build, commit and push to Vercel deployment (`git push origin main`)
+- [x] **D.1 Demo Login & Sample Data Fallback**
+  - [x] Add `loginAsGuest()` to `AuthContext.jsx`
+  - [x] Add 1-Click Quick Demo Login button to `AuthModal.jsx`
+  - [x] Add initial sample documents fallback in `App.jsx`
+  - [x] Build, commit and push to Vercel deployment (`git push origin main`)
 
 ## Part B: Unified Theme System (Light + Dark, Dia-Inspired)
 - [x] **B.1 Theme CSS Tokens & Variables**
