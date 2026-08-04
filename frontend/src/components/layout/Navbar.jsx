@@ -52,8 +52,16 @@ export default function Navbar({
           <Menu size={18} />
         </button>
 
+        <a href="/" className="flex items-center gap-2 xl:hidden group cursor-pointer">
+          <div className="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 group-hover:scale-105 transition-transform">
+            <span className="font-bold text-primary text-xs">P</span>
+          </div>
+          <span className="font-extrabold text-sm text-foreground group-hover:text-primary transition-colors">PlateWise</span>
+        </a>
+
         {/* Document Scope Pill */}
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary border border-border text-xs">
+
           <BookOpen size={14} className="text-primary" />
           <span className="text-muted-foreground">Context:</span>
           <select

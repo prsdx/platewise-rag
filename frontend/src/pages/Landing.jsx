@@ -75,12 +75,12 @@ export default function Landing() {
 
       {/* ── 1. Navbar ───────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between glass-header">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-[10px] bg-primary/20 flex items-center justify-center border border-primary/30">
+        <a href="/" className="flex items-center gap-3 cursor-pointer group">
+          <div className="w-8 h-8 rounded-[10px] bg-primary/20 flex items-center justify-center border border-primary/30 group-hover:scale-105 transition-transform">
             <span className="font-bold text-primary text-sm">P</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">PlateWise</span>
-        </div>
+          <span className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">PlateWise</span>
+        </a>
         
         <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition-colors">Product</a>
@@ -104,7 +104,7 @@ export default function Landing() {
           </button>
           <button 
             onClick={() => setIsAuthModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-primary hover:bg-emerald-400 text-white font-bold text-sm shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all"
+            className="px-5 py-2.5 rounded-[14px] bg-primary text-white dark:text-slate-900 font-bold text-sm shadow-md hover:opacity-90 transition-all"
           >
             Try PlateWise
           </button>
@@ -120,7 +120,7 @@ export default function Landing() {
       >
         {/* Mouse Tracking Interactive Spotlight Glow */}
         <div 
-          className="pointer-events-none absolute w-[550px] h-[550px] rounded-full bg-emerald-500/15 blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
+          className="pointer-events-none absolute w-[550px] h-[550px] rounded-full bg-indigo-500/15 blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 -z-10"
           style={{ 
             left: `${mousePos.x}px`, 
             top: `${mousePos.y}px`,
@@ -133,32 +133,32 @@ export default function Landing() {
           <line 
             x1="120" y1="120" 
             x2={mousePos.x} y2={mousePos.y} 
-            stroke="#10B981" strokeWidth="1.5" strokeDasharray="6 4"
+            stroke="#5863EA" strokeWidth="1.5" strokeDasharray="6 4"
           />
           <line 
             x1="880" y1="140" 
             x2={mousePos.x} y2={mousePos.y} 
-            stroke="#C9A227" strokeWidth="1.5" strokeDasharray="6 4"
+            stroke="#6E77F2" strokeWidth="1.5" strokeDasharray="6 4"
           />
         </svg>
 
         {/* Floating RAG Intelligence Nodes Reacting to Cursor */}
         <div 
-          className="animate-float-slow absolute top-20 left-4 sm:left-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-emerald-500/40 text-emerald-400 text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
+          className="animate-float-slow absolute top-20 left-4 sm:left-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-indigo-500/40 text-primary text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
           style={{
             transform: `translate(${mousePos.x * 0.025}px, ${mousePos.y * 0.025}px)`
           }}
         >
-          <Zap size={14} className="text-emerald-400 fill-emerald-400 animate-pulse" /> Instant Cache &lt;15ms
+          <Zap size={14} className="text-primary fill-primary animate-pulse" /> Instant Cache &lt;15ms
         </div>
 
         <div 
-          className="animate-float-reverse absolute top-28 right-4 sm:right-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-amber-500/40 text-amber-400 text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
+          className="animate-float-reverse absolute top-28 right-4 sm:right-12 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-card border border-indigo-500/40 text-primary text-xs font-bold shadow-2xl backdrop-blur-md transition-transform duration-200"
           style={{
             transform: `translate(${-mousePos.x * 0.025}px, ${mousePos.y * 0.03}px)`
           }}
         >
-          <ShieldCheck size={14} /> 94.2% RRF Accuracy
+          <ShieldCheck size={14} className="text-emerald-400" /> 94.2% RRF Accuracy
         </div>
 
         <div 
@@ -170,7 +170,7 @@ export default function Landing() {
           <FileText size={14} className="text-emerald-400" /> Multi-SOP Ingestion
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl text-foreground">
+        <h1 className="text-6xl md:text-8xl font-serif-hero tracking-tight mb-6 max-w-4xl text-foreground font-normal">
           Every answer, backed by a source.
         </h1>
 
@@ -181,11 +181,12 @@ export default function Landing() {
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
           <button 
             onClick={() => setIsAuthModalOpen(true)}
-            className="group/btn flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold text-base hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
+            className="group/btn flex items-center gap-2 px-8 py-4 rounded-[14px] bg-primary text-white dark:text-slate-900 font-bold text-base hover:opacity-90 shadow-lg shadow-indigo-500/25 transition-all"
           >
             <span>Try PlateWise Free</span>
             <ArrowRight size={18} className="group-hover/btn:translate-x-1.5 transition-transform duration-200" />
           </button>
+
           <a 
             href="#how-it-works"
             className="group/link flex items-center gap-2 px-8 py-4 rounded-xl bg-secondary/50 hover:bg-secondary border border-border text-foreground font-semibold text-base transition-all"

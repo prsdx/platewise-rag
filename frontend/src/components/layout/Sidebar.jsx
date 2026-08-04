@@ -63,22 +63,22 @@ export default function Sidebar({
       >
         {/* Brand Header */}
         <div className="p-4 border-b border-border flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
+          <a href="/" className="flex items-center gap-3 group cursor-pointer">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-600 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-background rounded-[10px] flex items-center justify-center text-primary">
                 <Utensils size={18} />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-extrabold text-foreground tracking-tight">PlateWise</h1>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-primary border border-emerald-500/20">
+                <h1 className="text-base font-extrabold text-foreground tracking-tight group-hover:text-primary transition-colors">PlateWise</h1>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/10 text-primary border border-indigo-500/20">
                   PRO
                 </span>
               </div>
               <p className="text-[11px] text-muted-foreground">Culinary AI Assistant</p>
             </div>
-          </div>
+          </a>
 
           <button
             onClick={() => setSidebarOpen(false)}
@@ -88,6 +88,7 @@ export default function Sidebar({
           </button>
         </div>
 
+
         {/* New Chat Action */}
         <div className="p-3">
           <button
@@ -96,7 +97,7 @@ export default function Sidebar({
               setActiveMode("chat");
               if (setSidebarOpen) setSidebarOpen(false);
             }}
-            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold text-xs flex items-center justify-between shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 transform hover:-translate-y-0.5 group"
+            className="w-full py-2.5 px-4 rounded-[14px] bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-xs flex items-center justify-between shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all duration-300 transform hover:-translate-y-0.5 group"
           >
             <span className="flex items-center gap-2">
               <Plus size={16} className="group-hover:rotate-90 transition-transform duration-300" />
@@ -107,6 +108,7 @@ export default function Sidebar({
             </kbd>
           </button>
         </div>
+
 
         {/* View Switcher Nav */}
         <div className="px-3 py-2 space-y-1">
