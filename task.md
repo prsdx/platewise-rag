@@ -23,6 +23,13 @@
   - [x] Add `Array.isArray()` guards in `Navbar.jsx`, `Sidebar.jsx`, `ChatHistory.jsx`, `KnowledgeVault.jsx`, `CompareDocuments.jsx`, `CompareResult.jsx`, `AnalyticsView.jsx`, `ChatMessage.jsx`, `RetrievedChunksPanel.jsx`, and `SourceCitations.jsx`
   - [x] Run `npm run build` verification
 
+## Part D: Live Deployment Enhancements & Guest Access
+- [/] **D.1 Demo Login & Sample Data Fallback**
+  - [ ] Add `loginAsGuest()` to `AuthContext.jsx`
+  - [ ] Add 1-Click Quick Demo Login button to `AuthModal.jsx`
+  - [ ] Add initial sample documents fallback in `App.jsx`
+  - [ ] Build, commit and push to Vercel deployment (`git push origin main`)
+
 ## Part B: Unified Theme System (Light + Dark, Dia-Inspired)
 - [x] **B.1 Theme CSS Tokens & Variables**
   - [x] Define Indigo primary theme tokens in `index.css` (`#5863EA` light, `#6E77F2` dark)

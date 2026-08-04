@@ -26,9 +26,25 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }, 1500);
 
-    // Check active sessions and sets the user
+    // Check mock user in localStorage first
+    try {
+      const mockUser = localStorage.getItem("platewise_mock_user");
+      if (mockUser) {
+        const parsed = JSON.parse(mockUser);
+        if (parsed && parsed.uid) {
+          setUser(parsed);
+          setLoading(false);
+          clearTimeout(timer);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Check active Supabase sessions and sets the user
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(normalizeUser(session?.user));
+      if (session?.user) {
+        setUser(normalizeUser(session.user));
+      }
       setLoading(false);
       clearTimeout(timer);
     }).catch(() => {
@@ -38,7 +54,9 @@ export function AuthProvider({ children }) {
 
     // Listen for changes on auth state (sign in, sign out, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(normalizeUser(session?.user));
+      if (session?.user) {
+        setUser(normalizeUser(session.user));
+      }
       setLoading(false);
       clearTimeout(timer);
     });
@@ -47,6 +65,22 @@ export function AuthProvider({ children }) {
       clearTimeout(timer);
       subscription?.unsubscribe();
     };
+  }, []);
+
+  const loginAsGuest = useCallback(() => {
+    const guestUser = {
+      uid: "guest_" + Math.random().toString(36).substring(2, 9),
+      name: "Gordon Ramsay (Demo)",
+      email: "demo@platewise.ai",
+      avatar: null,
+      provider: "demo",
+    };
+    try {
+      localStorage.setItem("platewise_mock_user", JSON.stringify(guestUser));
+    } catch (e) {}
+    setUser(guestUser);
+    setIsAuthModalOpen(false);
+    return guestUser;
   }, []);
 
   const loginWithGoogle = useCallback(async () => {
@@ -100,8 +134,10 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    try {
+      localStorage.removeItem("platewise_mock_user");
+      await supabase.auth.signOut();
+    } catch (e) {}
     setUser(null);
   }, []);
 
@@ -112,6 +148,7 @@ export function AuthProvider({ children }) {
         loading,
         isAuthModalOpen,
         setIsAuthModalOpen,
+        loginAsGuest,
         loginWithGoogle,
         loginWithEmail,
         signupWithEmail,
