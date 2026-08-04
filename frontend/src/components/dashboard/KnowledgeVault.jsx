@@ -201,11 +201,12 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
 
         <button
           onClick={() => setShowUploadModal(true)}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold text-sm shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 transform hover:-translate-y-0.5"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-[14px] bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-sm shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all duration-300 transform hover:-translate-y-0.5"
         >
           <Plus size={18} />
           <span>Upload Document</span>
         </button>
+
       </div>
 
       {/* Analytics / Overview Cards */}

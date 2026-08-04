@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
 
     return () => {
       clearTimeout(timer);
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
@@ -63,6 +63,9 @@ export function AuthProvider({ children }) {
       password,
     });
     if (error) throw error;
+    if (data?.user) {
+      setUser(normalizeUser(data.user));
+    }
     return { user: data.user };
   }, []);
 
@@ -77,6 +80,9 @@ export function AuthProvider({ children }) {
       },
     });
     if (error) throw error;
+    if (data?.user) {
+      setUser(normalizeUser(data.user));
+    }
     return { user: data.user };
   }, []);
 
@@ -99,28 +105,21 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const getIdToken = useCallback(async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    return session?.access_token || null;
-  }, []);
-
-  const value = {
-    user,
-    currentUser: user,
-    loading,
-    isAuthModalOpen,
-    setIsAuthModalOpen,
-    loginWithGoogle,
-    loginWithEmail,
-    signupWithEmail,
-    resetPassword,
-    updateUserProfile,
-    logout,
-    getIdToken,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        loginWithGoogle,
+        loginWithEmail,
+        signupWithEmail,
+        resetPassword,
+        updateUserProfile,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

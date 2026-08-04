@@ -1,18 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/geist";
 
 :root {
-    --accent-primary: #10B981;
-    --accent-premium: #F59E0B;
+    --accent-primary: #5863EA;       /* indigo brand */
+    --accent-contrast: #000000;      /* solid black */
+    --accent-emerald: #10B981;       /* functional success/confidence accent */
     --radius: 0.75rem;
 
-    /* ── Eye-Friendly Light Theme (Warm Paper / Low Blue-Light) ── */
-    --bg-base: #FAF9F7;
+    /* ── Light Mode (Dia-Inspired Unified Theme) ── */
+    --bg-base: #F8F8F8;
     --bg-surface: #FFFFFF;
-    --border-hairline: #E8E5E0;
-    --text-primary: #1C1917;
-    --text-secondary: #78716C;
+    --border-hairline: #E5E5E5;
+    --text-primary: #252525;
+    --text-secondary: #6B7280;
 
     --background: var(--bg-base);
     --foreground: var(--text-primary);
@@ -22,11 +24,11 @@
     --popover-foreground: var(--text-primary);
     --primary: var(--accent-primary);
     --primary-foreground: #ffffff;
-    --secondary: #F5F3F0;
+    --secondary: #EFEFEF;
     --secondary-foreground: var(--text-primary);
-    --muted: #F5F3F0;
+    --muted: #EFEFEF;
     --muted-foreground: var(--text-secondary);
-    --accent: rgba(16, 185, 129, 0.08);
+    --accent: rgba(88, 99, 234, 0.08);
     --accent-foreground: var(--accent-primary);
     --destructive: #DC2626;
     --destructive-foreground: #ffffff;
@@ -34,50 +36,63 @@
     --input: var(--border-hairline);
     --ring: var(--accent-primary);
 
+    --button-primary-bg: #000000;
+    --button-primary-text: #FFFFFF;
+    --button-secondary-bg: #EFEFEF;
+    --button-secondary-text: #252525;
+    --button-primary-radius: 14px;
+    --button-secondary-radius: 20px;
+
     --sidebar: var(--bg-surface);
     --sidebar-foreground: var(--text-primary);
     --sidebar-primary: var(--accent-primary);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #F5F3F0;
+    --sidebar-accent: #EFEFEF;
     --sidebar-accent-foreground: var(--text-primary);
     --sidebar-border: var(--border-hairline);
     --sidebar-ring: var(--accent-primary);
 }
 
 .dark {
-    /* ── Readable Dark Theme (Solid Surfaces, High Contrast Text) ── */
-    --bg-base: #0F0F12;        /* page background — slightly lifted for depth */
-    --bg-surface: #1A1A1F;     /* cards, panels — opaque, no bleed-through */
-    --border-hairline: #2E2E35; /* visible but not harsh borders */
-    --accent-primary: #34D399; /* brighter emerald for dark bg contrast */
-    --accent-premium: #D4A72C; /* warm gold — badges, hero glow */
-    --text-primary: #ECECEF;   /* near-white, high readability */
-    --text-secondary: #9CA3AF; /* clear mid-gray, not washed out */
+    /* ── Dark Mode (Dia-Inspired Unified Theme) ── */
+    --bg-base: #0E0E12;              /* near-black, cool indigo undertone */
+    --bg-surface: #17171D;
+    --border-hairline: #26262E;
+    --accent-primary: #6E77F2;       /* lifted lightness indigo */
+    --accent-contrast: #FFFFFF;      /* inverted fill */
+    --accent-emerald: #10B981;       /* functional success/confidence accent */
+    --text-primary: #F2F2F5;
+    --text-secondary: #9296A6;
 
     --background: var(--bg-base);
     --foreground: var(--text-primary);
     --card: var(--bg-surface);
     --card-foreground: var(--text-primary);
-    --popover: #1E1E24;        /* slightly elevated over cards */
+    --popover: #1C1C24;
     --popover-foreground: var(--text-primary);
     --primary: var(--accent-primary);
-    --primary-foreground: #0F0F12;
-    --secondary: #232329;
+    --primary-foreground: #0E0E12;
+    --secondary: #23232B;
     --secondary-foreground: var(--text-primary);
-    --muted: #232329;
+    --muted: #23232B;
     --muted-foreground: var(--text-secondary);
-    --accent: rgba(52, 211, 153, 0.14);
+    --accent: rgba(110, 119, 242, 0.14);
     --accent-foreground: var(--accent-primary);
     --destructive: #F87171;
-    --destructive-foreground: #0F0F12;
+    --destructive-foreground: #0E0E12;
     --border: var(--border-hairline);
-    --input: #2E2E35;
+    --input: #26262E;
     --ring: var(--accent-primary);
 
-    --sidebar: #131317;        /* sidebar slightly darker than surface */
+    --button-primary-bg: #FFFFFF;
+    --button-primary-text: #0E0E12;
+    --button-secondary-bg: #23232B;
+    --button-secondary-text: #F2F2F5;
+
+    --sidebar: #121217;
     --sidebar-foreground: var(--text-primary);
     --sidebar-primary: var(--accent-primary);
-    --sidebar-primary-foreground: #0F0F12;
+    --sidebar-primary-foreground: #0E0E12;
     --sidebar-accent: var(--bg-surface);
     --sidebar-accent-foreground: var(--text-primary);
     --sidebar-border: var(--border-hairline);
@@ -319,6 +334,201 @@
     0%, 100% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(12px) rotate(-1.5deg); }
   }
+  /* Shifting background gradient animation */
+  .animate-gradient-shift {
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  /* Soft pulse glow indicator */
+  .pulse-glow-green {
+    animation: pulseGreen 2s infinite;
+  }
+
+  /* Glassmorphic SaaS Cards & Borders */
+  .glass-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-hairline);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-hover:hover {
+    border-color: #34D399;
+    box-shadow: 0 8px 24px -8px rgba(16, 185, 129, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .glass-header {
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .glass-sidebar {
+    background: var(--sidebar);
+    border-right: 1px solid var(--border-hairline);
+  }
+
+  .gradient-text-emerald {
+    /* Darker stops preserve readable contrast on the light theme. */
+    background: linear-gradient(135deg, #047857 0%, #0f766e 50%, #0369a1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-amber {
+    background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Hover scale & glow effect */
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hover-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.3);
+    border-color: var(--border-hairline);
+  }
+
+  /* Custom Scrollbar Styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4B4B52;
+    border-radius: 9999px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6B6B72;
+  }
+
+  /* Floating & Pop Utilities */
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-pop-in {
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes popIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.94) translateY(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      opacity: 1;
+      filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.2));
+    }
+    50% {
+      opacity: 0.95;
+      filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.3));
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes drawSparkline {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes pulseGreen {
+    0% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(1.5deg); }
+  }
+
+  @keyframes floatReverse {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(12px) rotate(-1.5deg); }
+  }
 
   .animate-float-slow {
     animation: floatSlow 5s ease-in-out infinite;
@@ -326,6 +536,26 @@
 
   .animate-float-reverse {
     animation: floatReverse 6s ease-in-out infinite;
+  }
+
+  .font-serif-hero {
+    font-family: 'Instrument Serif', Georgia, serif;
+  }
+
+  .btn-primary-dia {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border-radius: var(--button-primary-radius);
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary-dia {
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+    border-radius: var(--button-secondary-radius);
+    font-weight: 600;
+    transition: all 0.2s ease;
   }
 }
 .dark .gradient-text-emerald {

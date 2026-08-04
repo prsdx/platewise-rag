@@ -222,11 +222,12 @@ export default function Workspace({
         <div className="flex-1 max-w-4xl mx-auto w-full py-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center space-y-6 my-auto pt-12 animate-fade-in">
-              <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 mx-auto shadow-2xl shadow-emerald-500/20">
+              <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-indigo-500 to-violet-600 p-0.5 mx-auto shadow-2xl shadow-indigo-500/20">
                 <div className="w-full h-full bg-background rounded-[22px] flex items-center justify-center text-primary">
                   <Utensils size={30} />
                 </div>
               </div>
+
 
               <div className="space-y-2">
                 <h2 className="text-3xl font-extrabold text-foreground tracking-tight">

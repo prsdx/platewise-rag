@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
@@ -12,6 +12,38 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 import AuthModal from "./components/auth/AuthModal";
 import Landing from "./pages/Landing";
 import { getDocuments, clearAllDocuments } from "./services/api";
+
+function reportDebug(hypothesisId, location, msg, data = {}) {
+  fetch("http://127.0.0.1:7777/event", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sessionId: "blank-screen-auth",
+      runId: "pre-fix",
+      hypothesisId,
+      location,
+      msg,
+      data,
+      ts: Date.now(),
+    }),
+  }).catch(() => {});
+}
+
+function RouteDebugLogger({ user, loading }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    // #region debug-point C:route-transition
+    reportDebug("C", "src/App.jsx:RouteDebugLogger", "[DEBUG] Route transition observed", {
+      pathname: location.pathname,
+      hasUser: Boolean(user),
+      loading,
+    });
+    // #endregion
+  }, [location.pathname, user, loading]);
+
+  return null;
+}
 
 function Dashboard() {
   const [files, setFiles] = useState([]);
@@ -39,6 +71,12 @@ function Dashboard() {
         const docs = await getDocuments();
         setFiles(docs || []);
       } catch (err) {
+        // #region debug-point B:dashboard-fetch-error
+        reportDebug("B", "src/App.jsx:Dashboard.fetchDocs", "[DEBUG] Dashboard document fetch failed", {
+          message: err?.message || "unknown",
+          status: err?.response?.status || null,
+        });
+        // #endregion
         console.error("Error fetching indexed documents:", err);
       }
     };
@@ -140,6 +178,35 @@ function Dashboard() {
 function MainApp() {
   const { user, loading } = useContext(AuthContext);
 
+  useEffect(() => {
+    const handleWindowError = (event) => {
+      // #region debug-point B:window-error
+      reportDebug("B", "src/App.jsx:window.error", "[DEBUG] Uncaught window error", {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+      });
+      // #endregion
+    };
+
+    const handleUnhandledRejection = (event) => {
+      // #region debug-point B:unhandled-rejection
+      reportDebug("B", "src/App.jsx:unhandledrejection", "[DEBUG] Unhandled promise rejection", {
+        reason: event.reason?.message || String(event.reason),
+      });
+      // #endregion
+    };
+
+    window.addEventListener("error", handleWindowError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener("error", handleWindowError);
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center text-foreground">
@@ -153,6 +220,7 @@ function MainApp() {
 
   return (
     <BrowserRouter>
+      <RouteDebugLogger user={user} loading={loading} />
       <AuthModal />
       <ToastContainer />
       <Routes>
