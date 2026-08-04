@@ -46,7 +46,7 @@ function getPasswordStrength(password) {
 }
 
 export default function AuthModal() {
-  const { loginWithEmail, signupWithEmail, loginWithGoogle, resetPassword, isAuthModalOpen, setIsAuthModalOpen, user } = useContext(AuthContext);
+  const { loginWithEmail, signupWithEmail, loginWithGoogle, resetPassword, loginAsGuest, isAuthModalOpen, setIsAuthModalOpen, user } = useContext(AuthContext);
   const { showToast } = useContext(ToastContext);
 
   // Modes: 'login' | 'signup' | 'forgot'
@@ -255,6 +255,19 @@ export default function AuthModal() {
           {/* ════════════════ LOGIN MODE ════════════════ */}
           {mode === 'login' && (
             <>
+              {/* 1-Click Guest / Demo Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  loginAsGuest();
+                  if (showToast) showToast('Logged in as Demo Executive Chef ⚡', 'success');
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-sm mb-3 transition-all duration-200 active:scale-[0.98] shadow-sm"
+              >
+                <Sparkles size={16} className="text-emerald-400" />
+                Quick Demo Sign In (1-Click Access)
+              </button>
+
               {/* Google Button */}
               <button 
                 onClick={handleGoogleLogin}

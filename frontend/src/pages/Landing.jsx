@@ -25,7 +25,7 @@ function TwitterIcon({ size = 15, className = "" }) {
 }
 
 export default function Landing() {
-  const { setIsAuthModalOpen } = useContext(AuthContext);
+  const { setIsAuthModalOpen, loginAsGuest } = useContext(AuthContext);
   const { theme, toggleTheme } = useTheme();
   const [activeFaq, setActiveFaq] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 300, y: 200 });
