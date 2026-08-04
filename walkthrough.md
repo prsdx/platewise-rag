@@ -33,3 +33,25 @@
    - **Backend Tests**: 20 out of 20 tests passed (`tests/test_agentic_rag.py`, `test_auth.py`, `test_chunker.py`, `test_csv_reader.py`, `test_embedding_service.py`, `test_eval.py`, `test_health.py`, `test_pdf_parser.py`, `test_rag_pipeline.py`, `test_search.py`, `test_vector_store.py`).
    - **Frontend Build**: `npm run build` compiled in 710ms with 0 errors and 0 warnings.
 
+---
+
+### Part C: `o.map is not a function` Render Crash Fix
+1. **API Service Level Safeguarding**:
+   - Updated `getDocuments()` in [`api.js`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/services/api.js#L257-L266) to strictly validate and return an `Array`, extracting `.documents` or `.files` array if response is an object, or defaulting to `[]`.
+2. **Context State Hardening**:
+   - Hardened `localStorage` JSON parsing in [`ChatHistoryContext.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/context/ChatHistoryContext.jsx#L8-L16) to verify `Array.isArray(parsed)` before updating state.
+3. **Component Array Guarding**:
+   - Added `Array.isArray()` safety checks across:
+     - [`ChatHistory.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/chat/ChatHistory.jsx#L28) (`safeHistory`)
+     - [`Navbar.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/layout/Navbar.jsx#L43) (`safeFiles`)
+     - [`Sidebar.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/layout/Sidebar.jsx#L40) (`safeFiles`)
+     - [`KnowledgeVault.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/dashboard/KnowledgeVault.jsx#L164) (`safeFiles`)
+     - [`CompareDocuments.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/compare/CompareDocuments.jsx#L19) (`safeFiles`)
+     - [`CompareResult.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/compare/CompareResult.jsx#L21) (`safeDocuments`)
+     - [`AnalyticsView.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/dashboard/AnalyticsView.jsx#L20) (`safeFiles`)
+     - [`ChatMessage.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/chat/ChatMessage.jsx#L142) (`sub_queries`, `retrievedChunks`, `sources`)
+     - [`RetrievedChunksPanel.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/ui/RetrievedChunksPanel.jsx#L22) (`safeChunks`)
+     - [`SourceCitations.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/ui/SourceCitations.jsx#L7) (`safeSources`)
+     - [`AnswerCard.jsx`](file:///C:/PROJECTS/PlateWise/platewise-rag/frontend/src/components/answer/AnswerCard.jsx#L39) (`safeSources`, `safeChunks`)
+4. **Build Verification**:
+   - Ran `npm run build` — passed cleanly in 672ms with 0 compilation errors.

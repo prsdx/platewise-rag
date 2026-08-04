@@ -16,12 +16,14 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
   const [comparisonType, setComparisonType] = useState("detailed");
   const [customPrompt, setCustomPrompt] = useState("");
 
+  const safeFiles = Array.isArray(files) ? files : [];
+
   useEffect(() => {
-    if (files.length >= 1 && !document1) {
-      setDocument1(files[0].name);
+    if (safeFiles.length >= 1 && !document1) {
+      setDocument1(safeFiles[0].name);
     }
-    if (files.length >= 2 && (!document2 || document2 === files[0]?.name)) {
-      setDocument2(files[1].name);
+    if (safeFiles.length >= 2 && (!document2 || document2 === safeFiles[0]?.name)) {
+      setDocument2(safeFiles[1].name);
     }
   }, [files]);
 
@@ -78,7 +80,7 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
         </div>
       </div>
 
-      {files.length < 2 && (
+      {safeFiles.length < 2 && (
         <div className="glass-card p-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-300 text-sm flex items-center gap-3">
           <AlertTriangle size={18} className="shrink-0" />
           <span>
@@ -102,7 +104,7 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
               className="w-full rounded-xl border border-border bg-secondary p-3.5 text-sm font-semibold text-foreground focus:outline-none focus:border-amber-500/50 transition-all cursor-pointer"
             >
               <option value="">Select Document A...</option>
-              {files.map((file) => (
+              {safeFiles.map((file) => (
                 <option key={file.name} value={file.name} className="bg-popover text-foreground">
                   📄 {file.name}
                 </option>
@@ -133,7 +135,7 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
               className="w-full rounded-xl border border-border bg-secondary p-3.5 text-sm font-semibold text-foreground focus:outline-none focus:border-amber-500/50 transition-all cursor-pointer"
             >
               <option value="">Select Document B...</option>
-              {files.map((file) => (
+              {safeFiles.map((file) => (
                 <option key={file.name} value={file.name} className="bg-popover text-foreground">
                   📄 {file.name}
                 </option>
@@ -206,7 +208,7 @@ export default function CompareDocuments({ files = [], onCompare, loading }) {
         {/* Run Button */}
         <button
           onClick={handleCompare}
-          disabled={loading || files.length < 2}
+          disabled={loading || safeFiles.length < 2}
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-primary-foreground font-bold text-sm shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 transition-all duration-300 disabled:opacity-40 flex items-center justify-center gap-2"
         >
           <Sparkles size={18} />

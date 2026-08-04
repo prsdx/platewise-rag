@@ -161,7 +161,8 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
   };
 
   // Filtered files
-  const filteredFiles = files.filter((f) => {
+  const safeFiles = Array.isArray(files) ? files : [];
+  const filteredFiles = safeFiles.filter((f) => {
     const matchesSearch = f.name.toLowerCase().includes(searchQuery.toLowerCase());
     const ext = f.name.split(".").pop().toUpperCase();
     const matchesType =
@@ -173,8 +174,8 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
     return matchesSearch && matchesType;
   });
 
-  const totalChunks = files.reduce((acc, f) => acc + (f.chunks || 0), 0);
-  const totalPages = files.reduce((acc, f) => acc + (f.pages || 1), 0);
+  const totalChunks = safeFiles.reduce((acc, f) => acc + (f.chunks || 0), 0);
+  const totalPages = safeFiles.reduce((acc, f) => acc + (f.pages || 1), 0);
 
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar bg-background">
@@ -215,7 +216,7 @@ export default function KnowledgeVault({ files = [], setFiles, onSelectDocumentF
           <div className="flex justify-between items-start">
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Indexed Files</p>
-              <h3 className="text-3xl font-extrabold text-foreground mt-1">{files.length}</h3>
+              <h3 className="text-3xl font-extrabold text-foreground mt-1">{safeFiles.length}</h3>
             </div>
             <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <FileText size={20} />

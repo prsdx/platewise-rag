@@ -4,14 +4,16 @@ import { FileText, BookOpen, ChevronDown, ChevronUp, ExternalLink } from "lucide
 export default function SourceCitations({ sources = [], onSelectCitation = null }) {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  if (!sources || sources.length === 0) {
+  const safeSources = Array.isArray(sources) ? sources : [];
+
+  if (safeSources.length === 0) {
     return null;
   }
 
   // Group by document name
   const groupedSourcesMap = new Map();
   
-  sources.forEach((source, idx) => {
+  safeSources.forEach((source, idx) => {
     let docName = "Source Document";
     let pageNum = null;
     let chunkNum = null;

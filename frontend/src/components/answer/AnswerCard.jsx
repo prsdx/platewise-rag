@@ -36,6 +36,9 @@ export default function AnswerCard({
   const [copied, setCopied] = useState(false);
   const [showThinking, setShowThinking] = useState(false);
 
+  const safeSources = Array.isArray(sources) ? sources : [];
+  const safeChunks = Array.isArray(retrievedChunks) ? retrievedChunks : [];
+
   const copyAnswer = async () => {
     if (!answer) return;
     try {
@@ -61,7 +64,7 @@ export default function AnswerCard({
       mimeType = "text/plain";
     } else if (format === "markdown") {
       content = `# PlateWise AI Answer\n\n${answer}\n\n## Sources\n${
-        sources?.map((s) => `- ${typeof s === "string" ? s : s.document_name}`).join("\n") || "No sources"
+        safeSources.map((s) => `- ${typeof s === "string" ? s : s.document_name}`).join("\n") || "No sources"
       }`;
       filename += ".md";
       mimeType = "text/markdown";
