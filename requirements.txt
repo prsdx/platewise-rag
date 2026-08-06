@@ -10,12 +10,22 @@ python-multipart>=0.0.9
 
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.2.2+cpu; sys_platform != 'darwin'
+# torch 2.2.2 predates numpy 2.x ABI support (added in torch 2.3) - cap numpy or
+# sentence-transformers dies at import with "RuntimeError: Numpy is not available"
+numpy>=1.26,<2.0
 
 # Vector DB (Supabase pgvector) + embeddings
 supabase>=2.0,<3.0
 vecs>=0.4,<1.0
 psycopg2-binary>=2.9,<3.0
 sentence-transformers>=3.0,<4.0
+# transformers 4.49+ moved GenerationMixin and breaks sentence-transformers 3.x
+# imports (auto_factory ImportError) - keep within the era ST 3.4 was built against
+transformers>=4.41,<4.49
+# scipy 1.14+/scikit-learn 1.6+ are built for numpy 2.x (np.long) and break under
+# numpy<2 - pin to the numpy-1.26-compatible era to match the torch 2.2.2 pin above
+scipy>=1.11,<1.14
+scikit-learn>=1.4,<1.6
 
 # Document readers
 pymupdf>=1.24,<2.0
